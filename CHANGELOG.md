@@ -5,62 +5,6 @@ git log --pretty=format:"%H - %s" --no-merges master.. >> ../dif_master.txt
 ### Para generar changelog con commit en rango de dias:
 git log --after="2022-01-04 00:00" --before="2022-01-06 23:59" --pretty=format:"%H - %s"
 
-## Version 2.33.0
-
-HBK
-
-* SQHP-660 URLs dinámicas Seguros - PWA/Firebase (A12)
-
-FIDELIZACION
-
-* SQFYCC-752 Nueva posicionar botón de crear benéfico
-* SQFYCC-786 Homologar rama SQFYCC-164-segmented-benefit-creation
-* SQFYCC-865 Permitir categorización de beneficios segmentados
-* SQFYCC-873 Activar campo benefitDiscount para todas las creaciones de beneficios
-* SQFYCC-901 Mejoras varias para beneficios segmentados
-* SQFYCC-932 Beneficios para todos los productos
-* SQFYCC-961 Nueva Botonera
-* SQFYCC-997 Cambiar el tipo de los beneficios segmentados para que no se visualicen en la PWA antigua
-* SQFYCC-1021 Revisión Admin para c1c2
-
-
-## Changelog
-0dd1563bde9bb99a9b3ee7ec475f0d9609b17008 - [SQFYCC-1021] Fixed lint errors, deleted console.log.
-f9ca21b3d2ed25f6d4a07f9617093c4a0a23d6fd - Fixed overflow bug in header. Fixed the observable that controlled the functionality of the radio buttons codes. Fixed the observable in step seven of benefit creation that didn't add validators to the active fields when editing.
-db88811b41981a1efd4579ca965bee0ce96570df - [SQFYCC-1021] Fixed lint error.
-d53a51a1f994951cfa3c760fa11aa607a5a18651 - Added warning text under header title that shows only when firebase or fstorage is pointing to prod and the url is not the prod url
-f85cc300f93ee382193c7a498dc4d92321de89f3 - Added a line to set model that setted de selectedSegmentationType to the selectedSegmentation of the newBenefitService class.
-478b08b0b241ba37c7cb5a240026fc80ea27b71e - Change the position of the id variable so it can be used by any other functions in ngOnInit. Fixed the functionality that obtains the current codes of the benefit so that now it will not crash after the uploading of multiple files. Reseted the value of both input elements in upload-codes and upload-ruts so that you can trigger the change event with the same file. Fixed a line in the method that updated the benefit codes in the firebase service so that knows what to do if the filePath doesn't exist in the benefit.
-d88af0a75adedad6e3d354b19fa8008a4f67a060 - Added a ternary to the method in firebase.service that updated the stock so now it will not result in NaN. Added an operator to tab-code so if codesStock doesn't exist will show 0 instead of nothing.
-c2e0b81f50d9bcca2da6b88083313064cf2dd632 - [SQFYCC-997] Modified the function that changed the newBenefit.Type if the benefit was segmentated by category so that now it will change the type of all segmented benefits. Modified the function that changed the type if the benefit was segmentated by product or if it required only MCB to use it so that now it will change the type only if the benefit exclusively requires MCB
-ff64fa26bd76eb3153b12391bca283ff4827637c - Fixed lint errors
-0f977a867f1c563e3ae7d6f5db07fd750b3decd1 - [SQFYCC-961] Added a few functions to benefit.service so the benefits can have backwards compatibility
-1ce8a079877c93107520c3acfa6dd18778b2037e - Corrected the text of the new cards so it will look simillar to the older ones
-eae4aa2354fc8cb35242e57512c1f934c6420b91 - Deleted a few fields that i forgot to delete in the previous commit.
-9b6e9bc3853cff146bd498fb4640ecc3c0edb874 - Deleted the fields of the previous cards. Deleted multiple comments and fixed a few lint errors.
-0bcd0fa55a8b45f6c12c05f6bd98bb26ba397b96 - [SQFYCC-961] Modified the new-benefit.ts model to allow the new cards. Added two new checkboxes for the new cards in benefit-step-two.component.html. Added the necessary change to benefit-step-two.component.ts to allow for the debit mastercard vista and debit mastercard cc. Modified the new-benefit-preview.component.ts and .scss so they will work correctly with the new cards
-979239b5185933cf2862e6ef3855610df8f34814 - [SQFYCC-873] Instead of using a new control with ngIf i modified the placeholder to dynamically change his placeholder. Fixed a lint error in 7th step of new benefit creation
-
-## Version 2.32.0
-* SQHP-623 Carga dinámica colecciones ADM - Seguros
-
-## Changelog
-23d256a51e308e60bceb16fbaa4ca8ff9ac38002 - remove position relative
-39a9a4d606b1b1647d1219e576193a2ae1506c94 - clean of the html father
-aecf1d7f7dad05b45215e6bba482b92af6ae0a5c - change the order of the architecture of components
-c93e1adce511c09c1ebfd43f1c64248810af2919 - change the timer of notification
-69c178b82eb5f8363f2513b70c9b9258eef9c664 - delete unnecesary interface xD
-bd72afe54e227c1f69741b0cdfe04c516bc64536 - resolve bug of file input and generate a dinamic component to handle the success and errors
-a27b7ee8e02a8d736e9ef74763a4367ec3dc9836 - fixing lint and update de type of functions
-72e30ad4320fe8ba05999841313ad01bebf4abb9 - dinamic validation on inputs and refactoring html to suport new validations
-1b2c6f8a24dc64989761837176e7e275a02cdee3 - capturing de value of the collection an adding the reset to the reactive form
-ba4a4245c3b08e268a0a037dfb9b062fad8a466e - it develops bulk data upload with unic field
-20485c4cf6c09d89ced905e2c1462f4b30167b89 - implement bulk load, slice in the text document and format rut
-39e1302ec7633ed891ecb5eb74438a5ebb6a79b5 - add remove input fields and read the csv to transform in another object
-777de11be89e218eacde01a70f6c4e70f71bcb0e - finish secure layout
-787879172c89d16db2fa9af970ffdbef196050a0 - Jenkinsfile edited online with Bitbucket
-0bbc6543a819acaec168e99234710dea13a99f7c - first commit integration upload file
-
 ## Version 2.31.0
 
 Fidelizacion:

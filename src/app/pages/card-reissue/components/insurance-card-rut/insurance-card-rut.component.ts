@@ -69,10 +69,9 @@ export class InsuranceCardRutComponent implements OnInit {
   public uploadRuts(): void {
     this.loading = true;
     const fields = this.transformData();
-    const collection = this.getCollectionAndSubCollection(this.collection.value);
     this.firebaseService
       .updloadInsuranceRuts(
-        collection,
+        this.collection.value,
         this.ruts,
         fields,
         this.commit
@@ -92,16 +91,6 @@ export class InsuranceCardRutComponent implements OnInit {
         this.isUploaded = true;
       });
     this.isUploaded = false;
-  }
-
-  private getCollectionAndSubCollection(path){
-    const segments = path.split('/');
-    const topLevelCollection = segments[0];
-    const subcollection = segments[1];
-    return {
-      topLevelCollection,
-      subcollection
-    };
   }
 
   private commit = (percUsersCommitedCard: number) => {

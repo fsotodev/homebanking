@@ -1,7 +1,6 @@
-<div class="step-title">Información adicional</div>
 <div>
   <mat-form-field  class="full-width mt-3" >
-    <input matInput placeholder="Dirección" value="" [(ngModel)]="address" autocomplete="off" >
+    <input matInput placeholder="Direccion" value="" [(ngModel)]="address" autocomplete="off" >
   </mat-form-field>
   <button mat-mini-fab color="primary" (click)="addAddress()" >+</button>
   <ul>
@@ -12,7 +11,7 @@
   </ul>
 
   <mat-form-field class="full-width mt-3">
-    <input matInput placeholder="Teléfono" value="" [(ngModel)]="phone" autocomplete="off" >
+    <input matInput placeholder="Telefono" value="" [(ngModel)]="phone" autocomplete="off" >
   </mat-form-field>
   <button mat-mini-fab color="primary" (click)="addPhone()" >+</button>
   <span class="example-text">Ejem: Local Providencia: +56-984736213</span>
@@ -35,12 +34,6 @@
       </li>
     </ul>
   </div>
-
-  <mat-form-field class="full-width mt-3">
-    <textarea matInput placeholder="Terminos y condiciones"
-      [(ngModel)]="termsAndConditions"></textarea>
-  </mat-form-field>
-
 </div>
 <div>
   <button mat-button matStepperPrevious>Regresar</button>

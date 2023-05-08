@@ -9,7 +9,8 @@ describe('BenefitSegmentsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ BenefitSegmentsComponent ]
-    }).compileComponents();
+    })
+    .compileComponents();
   });
 
   beforeEach(() => {

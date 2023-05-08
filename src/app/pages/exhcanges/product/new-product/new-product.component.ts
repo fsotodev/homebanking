@@ -173,9 +173,9 @@ export class NewProductComponent implements OnInit {
     this.categories = await this.productsService.getCategories();
   }
 
-  getProductGroups = async () => {
+   getProductGroups = async() => {
     this.productGroups = await this.groupService.getAllCGroups();
-  };
+  }
 
   goBack() {
     this.location.back();

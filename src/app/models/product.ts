@@ -35,5 +35,4 @@ export class Product {
     productGroupId: string;
     imageBannerDesktop: string;
     imageBannerMobile: string;
-    invisible?: boolean;
 }

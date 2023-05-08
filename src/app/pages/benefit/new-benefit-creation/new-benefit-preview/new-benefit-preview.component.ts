@@ -18,13 +18,16 @@ export class NewBenefitPreviewComponent implements OnInit {
   }
 
   showCreditCard = () => (
-    this.newBenefitService.modelBenefitOld.newBenefit?.isMasterCardRequired
+    this.newBenefitService.modelBenefitOld.newBenefit?.isMasterCardRequired ||
+      this.newBenefitService.modelBenefitOld.newBenefit?.isCreditCardRequired
   );
 
   debitCard = () => {
     let debitToShow = '';
-    const { isMCDebitVistaRequired, isMCDebitCCRequired } = this.newBenefitService.modelBenefitOld.newBenefit;
-    if(isMCDebitCCRequired || isMCDebitVistaRequired) {
+    const { isDebitCardRequired, isDebitRequired } = this.newBenefitService.modelBenefitOld.newBenefit;
+    if (isDebitRequired) {
+      debitToShow = 'i-category-deb';
+    } else if (isDebitCardRequired && !isDebitRequired) {
       debitToShow = 'i-category-deb-mc';
     }
     return debitToShow;

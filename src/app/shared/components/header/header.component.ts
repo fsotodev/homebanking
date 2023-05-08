@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from '@environments/environment';
 import { AuthFirebaseService } from '@apps/shared/services/auth/auth-firebase.service';
 import { Router } from '@angular/router';
-import { FirebaseService } from '@apps/services/firebase.service';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +13,6 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     public _auth: AuthFirebaseService,
-    private firebaseService: FirebaseService,
     private router: Router
   ) { }
 
@@ -43,13 +41,6 @@ export class HeaderComponent implements OnInit {
       return 'Productos';
     }
     return 'Beneficios';
-  }
-
-  isNotinProdButPointingProd() {
-    const urlProd = 'https://banco-ripley-app.firebaseapp.com/';
-    const isPointingToProd = this.firebaseService.isPointingToProd();
-    const isUrlProd = window.location.href.includes(urlProd);
-    return isPointingToProd && !isUrlProd;
   }
 
 }

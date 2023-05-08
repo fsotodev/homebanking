@@ -26,19 +26,6 @@ export class UploadCodesComponent implements OnInit {
   listBenefitPathcode: string[] = [];
   benefitData: NewBenefit;
   loader = false;
-  loading = true;
-  uploadedCodes = [];
-  segmentation = {
-    segments: [
-      'R_GOLD',
-      'R_SILVER',
-      'R_BRONZE',
-      'RIPLEY_BAJA'
-    ],
-    products: [
-      'MCBLACK'
-    ]
-  };
 
   constructor(
     public newBenefitService: NewBenefitService,
@@ -49,42 +36,13 @@ export class UploadCodesComponent implements OnInit {
     public sanitizer: DomSanitizer,
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    await this.setUploadedCodes();
-    if (this.benefitService.benefitData.benefitInfo.startDate === '') {
-      await this.loadInfo();
-    } else {
-      this.listBenefitPathcode = this.benefitService.benefitData.benefitCodes;
-      this.benefitData = this.benefitService.benefitData.benefitInfo;
-    }
-    this.loading = false;
+    this.listBenefitPathcode = this.benefitService.benefitData.benefitCodes;
+    this.benefitData = this.benefitService.benefitData.benefitInfo;
   }
-  loadInfo = async () => {
-    const benefitRef = await this.firebaseService.getFirebaseCollection('benefits').ref.doc(this.id).get();
-    const benefit = {
-      ...benefitRef.data().newBenefit,
-      id: benefitRef.id,
-      codesStock: benefitRef.data().codesStock,
-      rutsStock: benefitRef.data().rutsStock,
-      codesFilePath: benefitRef.data().codesFilePath
-    } as NewBenefit;
-    const path = benefit.codesFilePath;
-    this.benefitService.setBenefitCodeRut(benefit, path);
-    this.benefitData = benefit;
-    this.listBenefitPathcode = path;
-  };
-  setUploadedCodes = async () => {
-    this.uploadedCodes = [];
-    for (const segmentationType of Object.keys(this.segmentation)) {
-      for (const segment of this.segmentation[segmentationType]) {
-        const codes = await this.firebaseService.getBenefitSegmentCodes(this.id, segment);
-        this.uploadedCodes = this.uploadedCodes.concat(codes);
-      }
-    }
-    this.uploadedCodes = this.uploadedCodes.map(u => u.id);
-  };
-  async uploadBenefitCode(event: FileList, segment: string, inputElement) {
+
+  async uploadBenefitCode(event: FileList) {
     this.loader = true;
     this.resultFile = null;
     this.benefitDataCsv = [];
@@ -95,7 +53,6 @@ export class UploadCodesComponent implements OnInit {
       if (fileExtension !== 'csv') {
         this.loader = false;
         this.modalDialogService.openModal('csvUploadError');
-        inputElement.value = null;
         return false;
       }
       parse(event.item(0), {
@@ -103,12 +60,6 @@ export class UploadCodesComponent implements OnInit {
           // @ts-ignore
           this.benefitDataCsv.push(...result.data[0]);
           this.csvData = this.parseData(result.data, 'benefitCodes');
-          inputElement.value = null;
-          if (this.someCodeIsDuplicated()) {
-            this.loader = false;
-            this.modalDialogService.openModal('duplicatedBenefitCodeError');
-            return false;
-          }
           if (this.benefitDataCsv[0] !== this.id) {
             this.loader = false;
             this.modalDialogService.openModal('idUploadError');
@@ -137,17 +88,12 @@ export class UploadCodesComponent implements OnInit {
       this.listBenefitPathcode = await snap.data().codesFilePath;
     });
   }
-  someCodeIsDuplicated(){
-    return this.csvData.some(d => this.uploadedCodes.includes(`${d.benefitId}${d.code}`));
-  }
-  uploadFile = async (segment: string) => {
-    this.firebaseService.uploadBenefitsBatch(`benefits/${this.id}/${segment}`, this.csvData, this.commit, this.resultFile.name, segment)
-      .then(async () => {
+
+  uploadFile = () => {
+    this.firebaseService.uploadBenefitsBatch('benefitCodes', this.csvData, this.commit, this.resultFile.name)
+      .then(() => {
         this.isUploadingCodes = false;
-        await this.checkCodesFilesPath();
-        this.modalDialogService.openModal('csvUploadFileSuccess');
-        await this.setUploadedCodes();
-        await this.loadInfo();
+        this.checkCodesFilesPath();
         this.isUploadingCodes = true;
       })
       .catch((e) => {

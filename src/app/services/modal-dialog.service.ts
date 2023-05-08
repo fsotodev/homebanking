@@ -14,8 +14,7 @@ export class ModalDialogService {
     public materialDialog: MatDialog
   ) { }
 
-  // tipos de modal: genericError, deleteConfirm, deleteConfirmProduct, saveSuccess,
-  // updateCancel, publishSuccess, updateCancel, sendEpuPushConfirm
+  // tipos de modal: genericError, deleteConfirm, saveSuccess, updateCancel, publishSuccess, updateCancel, sendEpuPushConfirm
   openModal(modalType: string, params: any = null): Promise<string> {
     if (!this.modalDialogRef) {
       const modalConfig = new MatDialogConfig();
@@ -136,9 +135,6 @@ export class ModalDialogService {
       modalType: 'sendEpuPushConfirm'
     };
     this.modalDialogRef = this.materialDialog.open(BenefitTagModalComponent, modalConfig);
-    this.modalDialogRef.afterClosed().subscribe(data => {
-      this.modalDialogRef = null;
-    })
   }
 
 }

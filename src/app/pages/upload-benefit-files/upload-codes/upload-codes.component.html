@@ -6,101 +6,24 @@
       </p>
     </div>
   </mat-card>
-  <mat-card *ngIf="!loading" class="main-container-form">
+  <mat-card class="main-container-form">
     <mat-card-content class="container-info-form">
       <div class="full-width mt-3">
-        <div class="segment-section">
-          Segmentos
-          <mat-accordion >
-            <mat-expansion-panel *ngFor="let segment of segmentation.segments; let i=index">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  {{segment}}
-                </mat-panel-title>
-                <mat-panel-description>
-                  Stock: {{benefitData.codesStats && benefitData.codesStats[segment]?.stock || 0}}
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <div>
-                <div class="upload-image">
-                  <input class="custom-file-input" type="file" (change)="uploadBenefitCode($event.target.files, segment, $event.target)" accept=".csv">
-                  <div class="name-archive">
-                  </div>
-                  <div *ngIf="loader" class="overlay">
-                    <div class="center">
-                      <mat-progress-spinner diameter=50 mode="indeterminate" color="accent">
-                      </mat-progress-spinner>
-                    </div>
-                  </div>
-                  <span class="tip-image">Ejemplo CSV: IdBeneficio,Código,Periodo (AAAA-M)</span><br />
-                  <span class="tip-image">Sin títulos en la primera fila del CSV, solo datos </span><br /><br />
-                </div>
-                <button mat-raised-button class="button-quaternaty" (click)="uploadFile(segment)" [disabled]="isUploadingCodes">Cargar
-                  archivo
-                </button>
-                <mat-card-content class="container-path-form">
-                  <section class="special-info">
-                    <span class="title-section">Historial
-                      Codigos Variables
-                      <ul *ngIf="benefitData.codesStats && benefitData.codesStats[segment]?.filePath" class="table table-bordered table-condensed table-striped" fixed-header>
-                        <li *ngFor="let item of benefitData.codesStats[segment]?.filePath.slice().reverse(); let i = index">
-                          {{item}}
-                        </li>
-                      </ul>
-                    </span>
-                  </section>
-                  <br>
-                </mat-card-content>
-              </div>
-            </mat-expansion-panel>
-          </mat-accordion>
+        <div class="upload-image">
+          <input class="custom-file-input" type="file" (change)="uploadBenefitCode($event.target.files)" accept=".csv">
+          <div class="name-archive">
+          </div>
+          <div *ngIf="loader" class="overlay">
+            <div class="center">
+              <mat-progress-spinner diameter=50 mode="indeterminate" color="accent">
+              </mat-progress-spinner>
+            </div>
+          </div>
+          <span class="tip-image">Ejemplo CSV: IdBeneficio,Código,Periodo (AAAA-M)</span><br />
+          <span class="tip-image">Sin títulos en la primera fila del CSV, solo datos </span><br /><br />
         </div>
-        <div class="segment-section">
-          Productos
-          <mat-accordion>
-            <mat-expansion-panel *ngFor="let product of segmentation.products; let i=index">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  {{product}}
-                </mat-panel-title>
-                <mat-panel-description>
-                  Stock: {{benefitData.codesStats && benefitData.codesStats[product]?.stock || 0}}
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <div>
-                <div class="upload-image">
-                  <input class="custom-file-input" type="file" (change)="uploadBenefitCode($event.target.files, null, $event.target)" accept=".csv">
-                  <div class="name-archive">
-                  </div>
-                  <div *ngIf="loader" class="overlay">
-                    <div class="center">
-                      <mat-progress-spinner diameter=50 mode="indeterminate" color="accent">
-                      </mat-progress-spinner>
-                    </div>
-                  </div>
-                  <span class="tip-image">Ejemplo CSV: IdBeneficio,Código,Periodo (AAAA-M)</span><br />
-                  <span class="tip-image">Sin títulos en la primera fila del CSV, solo datos </span><br /><br />
-                </div>
-                <button mat-raised-button class="button-quaternaty" (click)="uploadFile(product)" [disabled]="isUploadingCodes">Cargar
-                  archivo
-                </button>
-                <mat-card-content class="container-path-form">
-                  <section class="special-info">
-                    <span class="title-section">Historial
-                      Codigos Variables
-                      <ul *ngIf="benefitData.codesStats && benefitData.codesStats[segment]?.filePath" class="table table-bordered table-condensed table-striped" fixed-header>
-                        <li *ngFor="let item of benefitData.codesStats[segment]?.filePath.slice().reverse(); let i = index">
-                          {{item}}
-                        </li>
-                      </ul>
-                    </span>
-                  </section>
-                  <br>
-                </mat-card-content>
-              </div>
-            </mat-expansion-panel>
-          </mat-accordion>
-        </div>
+        <button mat-raised-button class="button-quaternaty" (click)="uploadFile()" [disabled]="isUploadingCodes">Cargar
+          archivo</button>
       </div>
       <div>
         <h3>{{benefitData.title}}</h3>
@@ -110,6 +33,19 @@
       </div>
       <br>
     </mat-card-content>
+    <mat-card-content class="container-info-form">
+      <section class="special-info">
+      <span class="title-section">Historial
+        Codigos Variables
+        <ul class="table table-bordered table-condensed table-striped" fixed-header>
+          <li *ngFor="let item of listBenefitPathcode.slice().reverse(); let i = index">
+            {{item}}
+          </li>
+        </ul>
+      </span>
+    </section>
+      <br>
+      </mat-card-content>
       <br>
       <button mat-raised-button class="button-quaternaty" style="margin-bottom: 20px; margin-left: 50px;" onclick="window.history.go(-1); return false;">Regresar</button>
   </mat-card>

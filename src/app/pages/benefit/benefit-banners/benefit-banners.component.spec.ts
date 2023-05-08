@@ -9,7 +9,8 @@ describe('BenefitBannersComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ BenefitBannersComponent ]
-    }).compileComponents();
+    })
+    .compileComponents();
   });
 
   beforeEach(() => {

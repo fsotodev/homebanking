@@ -1,5 +1,3 @@
-import { Collapsible } from './collapsible';
-import { SegmentationItem } from './segmentationItem';
 
 export class NewBenefit {
     public id: string;
@@ -14,15 +12,12 @@ export class NewBenefit {
     public benefitDiscount: string;
     public durationText: string;
     public isLocallyConsume: boolean;
+    public isPickup: boolean;
     public isDelivery: boolean;
+    public isDebitCardRequired: boolean;
+    public isCreditCardRequired: boolean;
     public isMasterCardRequired: boolean;
-    public isMasterCardBlackRequired: boolean;
-    public isMCDebitVistaRequired: boolean;
-    public isMCDebitCCRequired: boolean;
-    public isDebitCardRequired: boolean; //Propiedad de Debit Mastercard, necesaria por retrocompatibilidad.
-    public isCreditCardRequired: boolean; //Propiedad de C. Ripley, necesaria por retrocompatibilidad.
-    public isDebitRequired: boolean; //Propiedad de Debito Ripley, necesaria por retrocompatibilidad.
-
+    public isDebitRequired: boolean;
     public cardText: string;
     public benefitShortDescrption: string;
     public benefitDescription: string;
@@ -35,17 +30,13 @@ export class NewBenefit {
     public type: string;
     public typeId: string;
     public news: boolean;
-
     public hasAdditionalGoldBenefit: boolean;
     public hasAdditionalSilverBenefit: boolean;
     public goldBenefitDiscount: string;
     public silverBenefitDiscount: string;
     public goldBenefitDetail: string;
     public silverBenefitDetail: string;
-
     public goldSilverInformationDiscount: string;
-    public selectedSegmentation: string;
-    public segmentationInfo: SegmentationItem[];
     public durationBenefitStart: string;
     public dirationBenefitEnd: string;
     public orderPriority: number;
@@ -70,10 +61,6 @@ export class NewBenefit {
     public showLink: boolean;
     public rutsFilePath: Array<string>;
     public rutsUnassignFilePath: Array<string>;
-    public tags: Array<any>;
-    public collapsibles: Collapsible;
-    public codesStats: any;
-
 
     constructor() {
       this.codesFilePath = [];
@@ -87,13 +74,11 @@ export class NewBenefit {
       this.benefitDiscount = '';
       this.durationText = '';
       this.isLocallyConsume = false;
+      this.isPickup = false;
       this.isDelivery = false;
-      this.isMasterCardRequired = false;
-      this.isMasterCardBlackRequired = false;
-      this.isMCDebitVistaRequired = false;
-      this.isMCDebitCCRequired = false;
       this.isDebitCardRequired = false;
       this.isCreditCardRequired = false;
+      this.isMasterCardRequired = false;
       this.isDebitRequired = false;
       this.cardText = '';
       this.benefitShortDescrption = '';
@@ -137,8 +122,5 @@ export class NewBenefit {
       this.showLink = false;
       this.rutsFilePath = [];
       this.rutsUnassignFilePath = [];
-      this.tags = [];
-      this.collapsibles = new Collapsible();
-      this.codesStats = {};
     }
 }

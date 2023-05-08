@@ -7,7 +7,6 @@
       <div class="container-title">
         <p class="main-title">Administrador de <span class="title-highlighted">{{ adminLabel() }}</span>
         </p>
-        <p class="warning-text" *ngIf="isNotinProdButPointingProd()">¡Esto está apuntando a ambiente productivo!</p>
       </div>
     </div>
     <div class="col">
@@ -49,6 +48,9 @@
 
           <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('on-off')"
                   [matMenuTriggerFor]="config">Config PWA</button>
+
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('web-rpgo')"
+                  [matMenuTriggerFor]="WebRPGo">Web RPGo</button>
 
           <button mat-menu-item (click)="logout()">Salir<mat-icon class="i-close-sesion"></mat-icon></button>
         </mat-menu>
@@ -220,6 +222,9 @@
 
         </mat-menu>
         <!-- /Config -->
+        <mat-menu #WebRPGo="matMenu">
+                <button mat-menu-item (click)="navigateTo('webrpgo-menu-config')">Configuración menu</button>
+        </mat-menu>
 
         <div class="menu-user">
           <h6 class="gretting-user">¡Hola, {{ user.displayName }}!</h6>

@@ -63,6 +63,7 @@ import { FeaturedRedeemComponent } from './pages/exhcanges/group/featured-redeem
 import { DeleteProductTransactionsComponent } from './pages/delete-product-transactions/delete-product-transactions.component';
 import { BenefitSegmentsComponent } from './pages/benefit/benefit-segments/benefit-segments.component';
 import { BenefitBannersComponent } from './pages/benefit/benefit-banners/benefit-banners.component';
+import { WebrpgoMenuConfigComponent } from './pages/webrpgo/webrpgo-menu-config/webrpgo-menu-config.component';
 
 
 
@@ -143,7 +144,8 @@ export const appRoutes: Routes = [
       { path: 'list-group', component: ListGroupComponent, canActivate: [AuthGuard], data: { controlName: 'list-group' } },
       { path: 'featured-redeem', component: FeaturedRedeemComponent, canActivate: [AuthGuard], data: { controlName: 'featured-redeem' } },
       { path: 'delete-product-transactions', component: DeleteProductTransactionsComponent, canActivate: [AuthGuard], data: { controlName: 'delete-product-transactions' } },
-      { path: 'benefit-segments', component: BenefitSegmentsComponent, canActivate: [AuthGuard], data: { controlName: 'benefit-segments' } }
+      { path: 'benefit-segments', component: BenefitSegmentsComponent, canActivate: [AuthGuard], data: { controlName: 'benefit-segments' } },
+      { path: 'webrpgo-menu-config', component: WebrpgoMenuConfigComponent, canActivate: [AuthGuard], data: { controlName: 'webrpgo-menu-config' } }
     ]
   },
   { path: '**', redirectTo: '/home'}

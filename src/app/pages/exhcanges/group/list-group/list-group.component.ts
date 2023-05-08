@@ -18,7 +18,7 @@ export class ListGroupComponent implements OnInit {
   public groupsDataSource: Group[] = [];
   public groupsDataSourceBack: Group[] = [];
   public dragEnabled = false;
-  public isEditing = false;
+  public isEditing: boolean = false;
   public displayedColumns = [
     'order',
     'name',
@@ -26,6 +26,7 @@ export class ListGroupComponent implements OnInit {
     'active',
     'statusToogle'
   ];
+  
 
   constructor(
     private groupService: GroupService,
@@ -37,22 +38,28 @@ export class ListGroupComponent implements OnInit {
     this.getProductGroupList();
   }
 
+  private async getProductGroupList() {
+    this.isLoading = true;
+    this.groupsDataSource = await this.groupService.getAllCGroups();
+    this.isLoading = false;
+  }
+
   toggleEditing = () => {
     this.groupsDataSourceBack = JSON.parse(JSON.stringify(this.groupsDataSource));
     this.isEditing = true;
     this.table.renderRows();
-  };
+  }
 
   cancelEditing = () => {
     this.groupsDataSource = [...this.groupsDataSourceBack];
     this.groupsDataSourceBack = [];
     this.isEditing = false;
     this.table.renderRows();
-  };
+  }
   toggleChange = (index, status) => {
     this.groupsDataSource[index].active = !status;
     this.table.renderRows();
-  };
+  }
 
   dropTable(event: CdkDragDrop<Group[]>) {
     const prevIndex = this.groupsDataSource.findIndex((d) => d === event.item.data);
@@ -62,11 +69,11 @@ export class ListGroupComponent implements OnInit {
   }
   setOrder = () => {
     this.groupsDataSource = this.groupsDataSource.map((group, index) => ({...group, order: index + 1}));
-  };
+  }
 
-  saveChanges = async () => {
+  saveChanges = async() => {
     try {
-      const batch = this.firebaseService.getNewBatch();
+      let batch = this.firebaseService.getNewBatch();
       this.groupsDataSource.forEach(group => {
         const ref = this.firebaseService.getFirebaseCollection('productGroup').doc(group.id).ref;
         const obj = {...group};
@@ -81,11 +88,7 @@ export class ListGroupComponent implements OnInit {
     } catch (error) {
       console.log(error);
     }
-  };
 
-  private async getProductGroupList() {
-    this.isLoading = true;
-    this.groupsDataSource = await this.groupService.getAllCGroups();
-    this.isLoading = false;
   }
+
 }

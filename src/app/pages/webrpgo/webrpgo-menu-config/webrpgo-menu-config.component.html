@@ -1,0 +1,142 @@
+<div class="main-container">
+    <mat-card class="container-info group-flex">
+      <div class="container-title">
+        <p class="title">
+          Configuracion menu-config
+        </p>
+      </div>
+      <div class="container-actions group-flex">
+        <button
+          *ngIf="!isEditing && !isCreating"
+          (click)="createCategory()"
+          mat-raised-button
+          color="primary">
+          Nuevo Item
+      </button>
+        <button
+          *ngIf="!isEditing && !isCreating"
+          (click)="toggleEditing()"
+          mat-raised-button
+          color="primary">
+          Editar
+        </button>
+        <button
+          *ngIf="isEditing || isCreating"
+          [disabled]="isCreating && !(formGroup.valid && formGroup.get('icon').value && formGroup.get('icon').value !== '')"
+          mat-raised-button
+          (click)="saveChanges()"
+          color="primary">
+          Guardar
+        </button>
+        <button
+          *ngIf="isEditing"
+          (click)="cancelEditing()"
+          mat-raised-button
+          color="primary">
+          Cancelar
+        </button>
+        <button
+          *ngIf="isCreating"
+          (click)="cancelCreating()"
+          mat-raised-button
+          color="primary">
+          Cancelar
+        </button>
+      </div>
+    </mat-card>
+    <mat-card class="main-container-form">
+      <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+      <table
+        mat-table
+        #table
+        *ngIf="!loading && !isCreating"
+        [dataSource]="MenuListArray"
+        class="main-table"
+        cdkDropList
+        [cdkDropListData]="isEditing ? groupsDataSource : []"
+        (cdkDropListDropped)="dropTable($event)">
+  
+        <ng-container matColumnDef="orderMenuItem">
+            <th mat-header-cell *matHeaderCellDef>Orden</th>
+            <td mat-cell *matCellDef="let element">
+              <span *ngIf="!isEditing">{{ element.orderMenuItem }}
+              </span>
+              <mat-icon 
+                class="i-menu"
+                *ngIf="isEditing" 
+                (mouseenter)="dragEnabled = true"
+                (mouseleave)="dragEnabled = false"
+              ></mat-icon>
+            </td>
+          </ng-container>
+
+        <ng-container matColumnDef="titleMenuItem">
+          <th mat-header-cell *matHeaderCellDef>Título Menú</th>
+          <td mat-cell *matCellDef="let element">
+            <span *ngIf="!isEditing">{{ element.titleMenuItem }}</span>
+            <input
+              *ngIf="isEditing"
+              matInput
+              type="text"
+              [(ngModel)]="element.titleMenuItem"
+              class="input-name"
+            />
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="urlMenuItem">
+          <th mat-header-cell *matHeaderCellDef>Ícono</th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <img
+              *ngIf="element.urlMenuItem"
+              class="category-icon"
+              [src]="element.urlMenuItem"
+              alt="Icono"
+              width="32px"
+            />
+            <button mat-button
+              color="primary"
+              *ngIf="isEditing"
+              (click)="fileInput.click()"
+            >
+              Editar
+            </button>
+            <button mat-button
+              color="warn"
+              *ngIf="isEditing"
+              (click)="deleteIcon(i)"
+            >
+              Eliminar
+            </button>
+            <input hidden
+              (change)="uploadIconFile($event.target.files, i)"
+              #fileInput
+              type="file"
+              accept=".png, .jpg, .svg, .jpeg"
+            />
+          </td>
+        </ng-container>
+        <button mat-menu-item (click)="deleteCampaign(element)" >
+          <button class="i-delete"></button>
+          <span>Eliminar</span>
+        </button>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" cdkDrag [cdkDragData]="row" [cdkDragDisabled]="!dragEnabled"></tr>
+  
+      
+      </table>
+
+      <div class="container-buttons">
+        <button
+          mat-button
+          (click)="goBack()"
+          class="i-left-arrow button-tertiary"
+        >
+          volver
+        </button>
+      </div>
+    </mat-card>
+  </div>
+  

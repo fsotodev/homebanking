@@ -64,7 +64,6 @@
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let element" class="actions-table">
               <button (click)="editProduct(element)" class="i-edit" [disabled]="modifyingProduct"></button>
-              <button (click)="deleteProduct(element)" class="i-delete" [disabled]="modifyingProduct"></button>
             </mat-cell>
           </ng-container>
 

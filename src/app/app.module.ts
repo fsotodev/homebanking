@@ -19,10 +19,6 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-//Clase para traducir MatPaginator
-import { PaginatorEs } from './services/paginator-es';
 
 // Pages
 import { HomeComponent } from './pages/home/home.component';
@@ -138,25 +134,21 @@ import { UploadCodesComponent } from './pages/upload-benefit-files/upload-codes/
 import { TabCodeComponent } from './pages/upload-benefit-files/tab-code/tab-code.component';
 import { TabRutComponent } from './pages/upload-benefit-files/tab-rut/tab-rut.component';
 import { UploadRutsComponent } from './pages/upload-benefit-files/upload-ruts/upload-ruts.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { BenefitStepSixComponent } from './pages/benefit/new-benefit-creation/benefit-step-six/benefit-step-six.component';
-import { BenefitStepSixListComponent } from './pages/benefit/new-benefit-creation/benefit-step-six-list/benefit-step-six-list.component';
-import { BenefitStepSixAddComponent } from './pages/benefit/new-benefit-creation/benefit-step-six-add/benefit-step-six-add.component';
-import { BenefitStepSevenComponent } from './pages/benefit/new-benefit-creation/benefit-step-seven/benefit-step-seven.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { CollapsibleService } from './services/collapsible.service';
 import { CampaignModule } from '@apps/modules/campaign/campaign.module';
 import { ListGroupComponent } from './pages/exhcanges/group/list-group/list-group.component';
 import { FeaturedRedeemComponent } from './pages/exhcanges/group/featured-redeem/featured-redeem.component';
 import { StatusPipe } from './shared/utils/status-pipe';
 import { DeleteProductTransactionsComponent } from './pages/delete-product-transactions/delete-product-transactions.component';
 import { DeleteProductTransactionsDialogComponent }
-  from './pages/delete-product-transactions/dialog/delete-product-transactions-dialog.component';
+from './pages/delete-product-transactions/dialog/delete-product-transactions-dialog.component';
 import { BenefitSegmentsComponent } from './pages/benefit/benefit-segments/benefit-segments.component';
 import { BenefitBannersComponent } from './pages/benefit/benefit-banners/benefit-banners.component';
 import { InsuranceCardRutComponent } from './pages/card-reissue/components/insurance-card-rut/insurance-card-rut.component';
 import { NotificationComponent } from './pages/card-reissue/components/notification/notification.component';
+import { WebrpgoMenuConfigComponent } from './pages/webrpgo/webrpgo-menu-config/webrpgo-menu-config.component';
+import { WebRPGOService } from './services/webrpgo.service';
+import { WebMenuListUseCase } from './usecase/WebMenuList';
+import { DeleteMenuListUseCase } from './usecase/DeleteMenuList';
 
 
 @NgModule({
@@ -236,10 +228,6 @@ import { NotificationComponent } from './pages/card-reissue/components/notificat
     BenefitStepThreeComponent,
     BenefitStepFourComponent,
     BenefitStepFiveComponent,
-    BenefitStepSixComponent,
-    BenefitStepSixListComponent,
-    BenefitStepSixAddComponent,
-    BenefitStepSevenComponent,
     NewBenefitPreviewComponent,
     ExternalComponent,
     InternalComponent,
@@ -256,7 +244,8 @@ import { NotificationComponent } from './pages/card-reissue/components/notificat
     DeleteProductTransactionsDialogComponent,
     BenefitSegmentsComponent,
     BenefitBannersComponent,
-    InsuranceCardRutComponent
+    InsuranceCardRutComponent,
+    WebrpgoMenuConfigComponent
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -282,11 +271,6 @@ import { NotificationComponent } from './pages/card-reissue/components/notificat
     MatTooltipModule,
     MatSnackBarModule,
     MatButtonToggleModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDialogModule,
-    MatPaginatorModule,
-    MatSelectModule,
     CampaignModule
   ],
   providers: [
@@ -306,8 +290,9 @@ import { NotificationComponent } from './pages/card-reissue/components/notificat
     CategoryService,
     ExportService,
     UtilsService,
-    CollapsibleService,
-    {provide: MatPaginatorIntl, useClass: PaginatorEs}
+    WebRPGOService,
+    WebMenuListUseCase,
+    DeleteMenuListUseCase
   ],
   bootstrap: [AppComponent],
   entryComponents: [

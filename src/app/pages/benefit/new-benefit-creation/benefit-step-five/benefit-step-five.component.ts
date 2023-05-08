@@ -22,7 +22,7 @@ export class BenefitStepFiveComponent implements OnInit {
   fifthStepForm: FormGroup;
 
   constructor(
-    public newBenefitService: NewBenefitService,
+    private newBenefitService: NewBenefitService,
     private modalDialogService: ModalDialogService,
     private router: Router,
     private benefitsService: BenefitsService) { }

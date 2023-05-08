@@ -1,4 +1,3 @@
-<div class="step-title">Acciones</div>
 <div [formGroup]="fifthStepForm">
   <p class="title-section title-image">Acción de botón multi-funcional</p>
   <mat-slide-toggle class="full-width" formControlName="showLink" [(ngModel)]='show'></mat-slide-toggle>
@@ -33,24 +32,14 @@
   </div>
   <mat-form-field class="full-width mt-3">
     <input matInput placeholder="Texto para compartir" formControlName="shareText" [(ngModel)]="shareText">
-    <mat-hint>URL del beneficio del sitio público</mat-hint>
   </mat-form-field>
-
-  <div class="mt-2">
-    <button mat-button matStepperPrevious>Regresar</button>
-    <button mat-raised-button class="button-primary text-white mt-3" matStepperNext [disabled]="!fifthStepForm.valid"
-      (click)="saveStepFive()">Siguiente</button>
-    <button mat-raised-button class="button-secundary mt-3" [disabled]="!fifthStepForm.valid"
-      (click)="saveStepFive()">Previsualizar</button>
-  </div>
- <!--
   <div>
-    <div *ngIf="newBenefitService.selectedSegmentationType == 'sinsegmentacion'">
-      <button mat-button matStepperPrevious>Regresar</button>
-    <button mat-raised-button class="button-primary text-white mt-3" matStepperNext [disabled]="!fifthStepForm.valid"
-      (click)="saveStepFive()">Siguiente</button>
-    <button mat-raised-button class="button-secundary mt-3" [disabled]="!fifthStepForm.valid"
-      (click)="saveStepFive()">Previsualizar</button>
+  
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-raised-button class="button-secundary mt-3" [disabled]="!fifthStepForm.valid" (click)="saveStepFive()">Previsualizar</button>
+      <button mat-button class="button-secondary" [disabled]="!fifthStepForm.valid" (click)="saveBenefit()">Guardar</button>
+      <button mat-button class="button-primary" [disabled]="!fifthStepForm.valid" (click)="publishBenefit()">Publicar</button>
+    </div>
   </div>
-  -->
 </div>

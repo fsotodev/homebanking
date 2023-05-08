@@ -19,28 +19,6 @@ export class BenefitsService {
   isModifyingBenefitData = false;
   isCreatingAndBack = false;
   idBenefit: string;
-  segmentationConfig: any;
-  defaultSegmentationConfig = [
-    {type: 'segmentacion',
-      values: [
-        { id: 'gold', text: 'Promocion adicional gold', has: 'hasAdditionalGoldBenefit',
-          detail:'goldBenefitDetail', discount: 'goldBenefitDiscount' },
-        { id: 'silver', text: 'Promocion adicional silver', has: 'hasAdditionalSilverBenefit',
-          detail:'silverBenefitDetail', discount: 'silverBenefitDiscount'},
-        { id: 'plus', text: 'Promocion adicional Plus' },
-        { id: 'ripley_baja', text: 'Promocion adicional Gama baja' }
-      ]},
-    { type: 'productos',
-      values: [
-        { id: 'Mastercard Black', text: 'Promocion adicional MasterCard Black' }
-      ]},
-    { type: 'plan',
-      values: [
-        { id: 'Plan Pro', text: 'Plan Pro' },
-        { id: 'Plan Light', text: 'Plan Light' },
-        { id: 'Plan Black', text: 'Plan Black' }
-      ]}];
-
   benefitData = {
     benefitInfo: {} = new NewBenefit(),
     benefitCodes: []
@@ -83,20 +61,8 @@ export class BenefitsService {
     return this.isModifyingBenefitData;
   }
 
-  async getSegmentationConfig(): Promise<any[]> {
-    if(!this.segmentationConfig){
-      const snaptshot = await this.firebaseService.getData('benefits');
-      this.segmentationConfig =  (!!snaptshot.data() && !!snaptshot.data().segmentationTypes)
-        ? snaptshot.data().segmentationTypes : this.defaultSegmentationConfig;
-    }
-    return this.segmentationConfig;
-  }
-
-  getDefaultSegmentationConfig() {
-    return this.defaultSegmentationConfig;
-  }
   async getBenefitsList(): Promise<Array<Array<Benefit>>> {
-    const benefitsList: Array<Array<Benefit>> = [[], [], [], [], [], [], [], [], []];
+    const benefitsList: Array<Array<Benefit>> = [[], [], [], [], [], [], [], []];
     const querySnapshot = await this.firebaseService.getFirebaseCollection('benefits')
       .ref.orderBy('newBenefit').get();
     if (querySnapshot.docs.length > 0) {
@@ -112,7 +78,6 @@ export class BenefitsService {
         case 'beautyfans': benefitsList[5].push(doc); break;
         case 'fitnessfans': benefitsList[6].push(doc); break;
         case 'regional': benefitsList[7].push(doc); break;
-        case 'plan': benefitsList[8].push(doc); break;
         default: benefitsList[1].push(doc); break;
         }
       });
@@ -211,8 +176,6 @@ export class BenefitsService {
   }
 
   addNewBenefit(benefit: Benefit): Promise<any> {
-    this.updateNewBenefitProperties(benefit);
-    console.log(benefit);
     const benefitToAdd = this.generateBenefitData(benefit);
     return this.firebaseService.getFirebaseCollection('benefits')
       .add(benefitToAdd)
@@ -221,47 +184,12 @@ export class BenefitsService {
   }
 
   updateBenefit(benefit: Benefit): Promise<any> {
-    this.updateNewBenefitProperties(benefit);
     const benefitToUpdate = this.generateBenefitData(benefit);
     return this.firebaseService.getFirebaseCollection('benefits')
       .doc(benefit.id)
       .set(benefitToUpdate, { merge: true })
       .then(() => true)
       .catch((error) => error);
-  }
-
-  updateNewBenefitProperties(benefit: Benefit) {
-    this.updateDebitCardRequired(benefit);
-    this.updateTypeIfMCBlackOnly(benefit);
-    if(!!benefit.newBenefit.selectedSegmentation && benefit.newBenefit.selectedSegmentation !== 'sinsegmentacion') {
-      this.updateBenefitDiscount(benefit);
-      this.updateOldBenefitType(benefit);
-    }
-  }
-
-  updateDebitCardRequired(benefit: Benefit) {
-    benefit.newBenefit.isDebitCardRequired = benefit.newBenefit.isMCDebitCCRequired || benefit.newBenefit.isMCDebitVistaRequired;
-  }
-
-  updateTypeIfMCBlackOnly(benefit: Benefit) {
-    const isOnlyMCBRequired = (benefit.newBenefit.isMasterCardBlackRequired &&
-      !benefit.newBenefit.isMCDebitCCRequired && !benefit.newBenefit.isMCDebitVistaRequired &&
-      !benefit.newBenefit.isMasterCardRequired);
-    if(isOnlyMCBRequired) {
-      benefit.newBenefit.type = 'soloMCB';
-    }
-  }
-
-  updateBenefitDiscount(benefit: Benefit){
-    const ripleyBajaInfo = benefit.newBenefit.segmentationInfo.filter(
-      (segmentInfo) => segmentInfo.id === 'ripley_baja' && segmentInfo.active);
-    if(benefit.newBenefit.selectedSegmentation === 'segmentacion' && ripleyBajaInfo.length > 0) {
-      benefit.newBenefit.benefitDiscount = ripleyBajaInfo[0].discount;
-    }
-  }
-
-  updateOldBenefitType(benefit: Benefit) {
-    benefit.newBenefit.type = 'segmentado';
   }
 
   updateWelcomepackImage(benefit: { id: string; companyImageUrlWelcome: string }): Promise<any> {
@@ -352,6 +280,7 @@ export class BenefitsService {
   }
 
   public updateCategory(type: BenefitCategory): Promise<any> {
+    console.log(type);
     const typeToUpdate = this.generateCategoryData(type);
     return this.firebaseService.getFirebaseCollection('benefitCategories')
       .doc(type.id)

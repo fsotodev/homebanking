@@ -4,8 +4,8 @@
   <div class="drawer-container">
     <div class="drawer-side" mode="side" opened>
       <button mat-raised-button *ngFor="let group of benefitCategories; let i = index" 
-      class="type-button" [color]=" i===selectedTypeIndex ? 'primary' : null" (click)="selectType(i, true)" >
-        <span class="md-chip" [class.total]="i<2">
+      class="type-button" [color]=" i===selectedTypeIndex ? 'primary' : null" (click)="selectType(i)" >
+        <span class="md-chip total">
           {{ group.publishedBenefit.length }}  
           <span class="i-eye-gray i-eye-inline"></span>
         </span> 
@@ -18,48 +18,12 @@
       <ng-container *ngIf="!loadingData && hasAccess">
         <mat-card class="main-table" *ngIf="!loadingData">
           <div class="search">
-
-            <span class="form-field-container">
-              <mat-form-field appearance="fill" class="form-field-select" *ngIf="![1,2].includes(selectedTypeIndex)">
-                <mat-label>Plan</mat-label>
-                <mat-select (selectionChange)="applyFilterSelect($event, 'plan')"[(ngModel)]="matSelectPlan">
-                  <mat-option>Ninguno</mat-option>
-                  <ng-container *ngFor="let item of segmentationList">
-                    <mat-option *ngIf="item.id === 'plan'" [value]="item">{{item.text | titlecase}}</mat-option>
-                  </ng-container>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field appearance="fill" class="form-field-select" *ngIf="![0,2].includes(selectedTypeIndex)">
-                <mat-label>Producto</mat-label>
-                <mat-select (selectionChange)="applyFilterSelect($event, 'producto')" [(ngModel)]="matSelectProduct">
-                  <mat-option>Ninguno</mat-option>
-                  <ng-container *ngFor="let item of segmentationList">
-                    <mat-option *ngIf="item.id === 'productos'" [value]="item">{{item.text | titlecase}}</mat-option>
-                  </ng-container>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field appearance="fill" class="form-field-select" *ngIf="![0,1,2].includes(selectedTypeIndex)">
-                <mat-label>Categoria</mat-label>
-                <mat-select (selectionChange)="applyFilterSelect($event, 'categoria')" [(ngModel)]="matSelectCategory">
-                  <mat-option>Ninguno</mat-option>
-                  <ng-container *ngFor="let item of segmentationList">
-                    <mat-option *ngIf="item.id === 'segmentacion' && item.text !=='ripley_baja'" [value]="item">{{item.text | titlecase}}</mat-option>
-                    <mat-option *ngIf="item.text === 'ripley_baja'" [value]="item">Gama Baja</mat-option>
-                  </ng-container>
-                </mat-select>
-              </mat-form-field>
-            </span>
-
-
-            <mat-checkbox *ngIf="![0,1,2].includes(selectedTypeIndex)" class="published-check"
-              [(ngModel)]="withoutSegmentation" (change)="this.onlyWithoutSegmentation($event)">Sin segmentación</mat-checkbox>
-              
-            <mat-checkbox class="published-check" [(ngModel)]="onlyPublished" (change)="this.onlyPublishedAndVigent($event)">Públicos y vigentes</mat-checkbox>
+            <mat-checkbox class="published-check" [(ngModel)]="onlyPublished">Mostrar solo beneficios visibles (publicados y vigentes). </mat-checkbox>
             <input type="text" (keyup)="applyFilter($event.target.value)" placeholder="Buscar..."
               class="input-search i-search">
           </div>
           <mat-tab-group class="tab-content">
-            <mat-tab [label]="reduceStringLength(benefitCategories[selectedTypeIndex].type.type + ' - ' + benefitCategories[selectedTypeIndex].type.sectionTitle)" class="title-tab">
+            <mat-tab [label]="categories[selectedTypeIndex].type + ' - ' + categories[selectedTypeIndex].sectionTitle" class="title-tab">
               <div class="dates-table">
                 <div *ngIf="benefitsList.length === 0" class="empty-message">Aún no hay beneficios creados.</div>
                 <mat-table *ngIf="benefitsList.length > 0" #benefitTable [dataSource]="benefitsDataSource">
@@ -96,6 +60,13 @@
                       <span [class.active]="this.validities[benefit.id]" *ngIf="benefit.newBenefit.startDate">
                        {{benefit.newBenefit?.startDate | date:'dd/MM/yyyy'}} a {{benefit.newBenefit?.endDate | date:'dd/MM/yyyy'}} 
                       </span>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- status Column -->
+                  <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef>Visible</mat-header-cell>
+                    <mat-cell *matCellDef="let benefit"> 
                       <div class="i-eye-gray" *ngIf="this.validities[benefit.id] && isPublished(benefit)"></div>
                     </mat-cell>
                   </ng-container>
@@ -132,13 +103,14 @@
                   </ng-container>
 
                   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></mat-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns; let i = index" 
+                    [class.hidden]="onlyPublished && (!this.validities[row.id] || !isPublished(row))"></mat-row>
                 </mat-table>
               </div>
             </mat-tab>
           </mat-tab-group>
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleccionar página"></mat-paginator>
           <div class="container-new-benefit">
+            <span class="title-button" (click)="addNewBenefit()">Nuevo beneficio</span>
             <button mat-fab class="button-new-benefit" (click)="addNewBenefit()">+</button>
           </div>
         </mat-card>

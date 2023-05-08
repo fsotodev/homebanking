@@ -47,7 +47,7 @@ export class UploadRutsComponent implements OnInit {
     });
   }
 
-  async uploadBenefitRuts(event: FileList, unassign: boolean, inputElement) {
+  async uploadBenefitRuts(event: FileList, unassign?: boolean) {
     this.loader = true;
     this.benefitDataCsv = [];
     this.csvData = [];
@@ -56,7 +56,6 @@ export class UploadRutsComponent implements OnInit {
       if (fileExtension !== 'csv') {
         this.loader = false;
         this.modalDialogService.openModal('csvUploadError');
-        inputElement.value = null;
         return false;
       }
       parse(event.item(0), {
@@ -64,7 +63,6 @@ export class UploadRutsComponent implements OnInit {
           // @ts-ignore
           this.benefitDataCsv.push(...result.data[0]);
           this.csvData = this.parseData(result.data, 'benefitRuts');
-          inputElement.value = null;
           if (this.benefitDataCsv[0] !== this.id) {
             this.loader = false;
             this.modalDialogService.openModal('idUploadError');
@@ -82,7 +80,6 @@ export class UploadRutsComponent implements OnInit {
               this.isUploadingCodes = false;
               this.loader = false;
               this.modalDialogService.openModal('csvUploadSuccess');
-              // inputElement.value = null;
             })
             .catch(() => {
               this.isUploadingCodes = false;

@@ -9,7 +9,8 @@ describe('FeaturedRedeemComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ FeaturedRedeemComponent ]
-    }).compileComponents();
+    })
+    .compileComponents();
   });
 
   beforeEach(() => {

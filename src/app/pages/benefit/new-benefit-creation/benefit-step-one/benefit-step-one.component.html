@@ -1,18 +1,5 @@
 <ng-template matStepLabel onclick="saveStepOne()">Primer paso</ng-template>
-
-<div class="step-title ">
-  Estructura del beneficio
-</div>
-<div [formGroup]="firstStepForm"  *ngIf="!isLoading">
-
-  <mat-form-field class="full-width">
-    <mat-label>Segmentación</mat-label>
-    <mat-select [(ngModel)]="selectedSegmentation" formControlName="segmentationType" (selectionChange)="changeSegmentationTypes()"
-      [disabled]="benefitService.getIsModifyingBoolean()">
-      <mat-option *ngFor="let type of segmentationTypes" value="{{type.value}}">{{type.text}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-
+<div [formGroup]="firstStepForm" *ngIf="!isLoading">
   <mat-form-field class="full-width">
     <mat-label>Tipo de plantilla</mat-label>
     <mat-select [(ngModel)]="selectedTemplate" formControlName="templateType" (selectionChange)="changeTemplateTypes()">
@@ -22,9 +9,8 @@
 
   <mat-form-field class="full-width">
     <mat-label>Tipo de categoria</mat-label>
-    <mat-select #selectCategory [(ngModel)]="selectedCategory" formControlName="type">
-      <mat-option *ngFor="let type of categoryTypes" [class.inactive] = "!type.active" 
-        [disabled]="type.id === 'personal' && selectedSegmentation !== 'sinsegmentacion'"
+    <mat-select [(ngModel)]="selectedCategory" formControlName="type" >
+      <mat-option *ngFor="let type of categoryTypes" [class.inactive] = "!type.active"
         value="{{type.id}}">{{type.text}}</mat-option>
     </mat-select>
   </mat-form-field>
@@ -33,10 +19,8 @@
     <p class="title-section title-image">Es Novedad?</p>
     <mat-slide-toggle [(ngModel)]='checkedNews' formControlName="news">{{checkedNews?'Si':'No'}}</mat-slide-toggle>
   </div>
-  <mat-form-field class="full-width temporality-wrrapper">
+  <mat-form-field class="full-width">
     <input matInput placeholder="Temporalidad" formControlName="listHeaderText"[(ngModel)]="listHeaderText">
-    <mat-hint>Max 16 caracteres</mat-hint>
-    <mat-error *ngIf="listHeaderText">Max 16 caracteres</mat-error>
   </mat-form-field>
 
   <div class="full-width">

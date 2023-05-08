@@ -10,7 +10,7 @@
     <mat-card-content class="container-info-form">
       <div class="full-width mt-3">
         <div class="upload-image">
-          <input class="custom-file-input" type="file" (change)="uploadBenefitRuts($event.target.files, false, $event.target)" accept=".csv">
+          <input class="custom-file-input" type="file" (change)="uploadBenefitRuts($event.target.files)" accept=".csv">
           <div class="name-archive">
             {{ listBenefitPathRut.length ? '' : 'Ningún archivo cargado.' }}</div>
         </div>
@@ -54,7 +54,7 @@
             <div class="upload-button-quaternaty">
               <button mat-raised-button class="button-quaternaty">des-asignar ruts</button>
               <input id="uploadInputRut" class="file-input" type="file"
-                (change)="uploadBenefitRuts($event.target.files, true, $event.target)" accept=".csv">
+                (change)="uploadBenefitRuts($event.target.files, true)" accept=".csv">
               <div class="name-archive">
                 {{ rutsUnassignFilePath.length ? '' : 'Ningún archivo cargado.' }}</div>
               <span class="tip-image">Ejemplo CSV: IdBeneficio,Rut</span><br />

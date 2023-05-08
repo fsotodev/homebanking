@@ -97,13 +97,6 @@ export class Utils {
       leftButton: '',
       rightButton: 'reintentar'
     },
-    duplicatedBenefitCodeError: {
-      title: 'Uno o más códigos ya fueron cargados anteriormente, inténtalo <span class="text-highlight-modal">nuevamente</span>.',
-      titleColor: 'warning',
-      desc: '',
-      leftButton: '',
-      rightButton: 'reintentar'
-    },
     columnUploadError: {
       title: 'La cantidad de columnas del csv no corresponde, inténtalo <span class="text-highlight-modal">nuevamente</span>.',
       titleColor: 'warning',
@@ -160,14 +153,6 @@ export class Utils {
       title: '¿Seguro deseas eliminar este <span class="text-highlight-modal">beneficio</span>?',
       titleColor: 'warning',
       desc: 'Al eliminar perderás todos datos del beneficio.',
-      leftButton: 'cerrar',
-      rightButton: 'aceptar'
-    },
-    deleteConfirmProduct: {
-      title: '¿Seguro deseas eliminar este <span class="text-highlight-modal">producto</span>?',
-      titleColor: 'warning',
-      desc: 'Al eliminarlo no podrás acceder al producto ni cargarle codigos.<br>' +
-        'Sin embargo aún podrás descargar los codigos asociados a este producto.',
       leftButton: 'cerrar',
       rightButton: 'aceptar'
     },

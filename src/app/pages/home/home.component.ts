@@ -1,11 +1,16 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Benefit, BenefitCategory } from '../../models/benefit';
+import { Benefit, BenefitType, BenefitCategory } from '../../models/benefit';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { BenefitsService } from '../../services/benefits.service';
 import { ModalDialogService } from '../../services/modal-dialog.service';
 import { AuthFirebaseService } from '@apps/shared/services/auth/auth-firebase.service';
-import { MatPaginator } from '@angular/material/paginator';
+import { CampaignService } from '../../services/campaign.service';
+import { Subscription } from 'rxjs/';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { NewBenefit } from '@apps/models/new-benefit';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-home',
@@ -14,9 +19,6 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild(MatTable) benefitTable: MatTable<any>;
-  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
-    this.benefitsDataSource.paginator = paginator;
-  }
   modifiyingBenefit = false;
   loadingData = false;
   benefitOrder = 0;
@@ -26,6 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     'order',
     'periodicity',
     'title',
+    'status',
     'startDate',
     'statusToogle',
     'modifyOrDelete'
@@ -44,25 +47,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     ,{ id: 'restofans',ref: 'restofan'}
     ,{ id: 'weekly',ref: 'weekly'}
     ,{ id: 'personal',ref: 'personal'}];
-  filterButtonList: SegmentationOption[] = [];
-  filterSelectObj: Record<string, SegmentationOption> = {};
-  matSelectPlan: Record<string, string>;
-  matSelectProduct: Record<string, string>;
-  matSelectCategory: Record<string, string>;
-  withoutSegmentation: boolean;
-  selectedType: string;
-  segmentationConfig: any[];
-  segmentationList: any;
+
   constructor(
     private benefitsService: BenefitsService,
     private router: Router,
     private modalDialogService: ModalDialogService,
-    private auth: AuthFirebaseService
+    private auth: AuthFirebaseService,
+    private campaign: CampaignService,
+    private aFirestore: AngularFirestore,
   ) { }
 
   async ngOnInit() {
     await this.getBenefitsList();
-    await this.configSegmentationList();
   }
 
   filterPredicate = (data: any, filter) => {
@@ -73,82 +69,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  //Filtra los datos actuales del data source de manera que sólo
-  //muestre aquellos que esten publicados y vigentes
-  onlyPublishedAndVigent(event) {
-    if(event.checked) {
-      this.filterPublishedAndVigent();
-    } else if (Object.keys(this.filterSelectObj).length >= 1) {
-      this.filterBasedOnSelectObj();
-    } else {
-      this.selectType(this.selectedTypeIndex, false);
-      if(this.withoutSegmentation) {
-        this.filterWithoutSegmentation();
-      }
-    }
-  }
-
-  filterPublishedAndVigent() {
-    const currentBenefitsDS: Array<Benefit> = this.benefitsDataSource.data as Array<Benefit>;
-    this.benefitsDataSource.data = currentBenefitsDS.filter(
-      (benefit => (this.isPublished(benefit)) && (this.isVigent(benefit.newBenefit.startDate, benefit.newBenefit.endDate)))
-    );
-  }
-
-  //Filtra los datos de la categoria actual para mostrar
-  //sólo los beneficios sin segmentar.
-  onlyWithoutSegmentation(event) {
-    if (event.checked) {
-      if(Object.keys(this.filterSelectObj).length > 0) {
-        this.unselectAllSelectFilters();
-      }
-      this.filterWithoutSegmentation();
-    } else {
-      this.selectType(this.selectedTypeIndex, false);
-    }
-    if(this.onlyPublished) {
-      this.filterPublishedAndVigent();
-    }
-  }
-
-  filterWithoutSegmentation() {
-    const currentBenefitsCategories = this.benefitCategories[this.selectedTypeIndex].benefitList as Array<any>;
-    this.benefitsDataSource.data = currentBenefitsCategories.filter(
-      benefit => !benefit.newBenefit.selectedSegmentation || benefit.newBenefit.selectedSegmentation === 'sinsegmentacion'
-    );
-  }
-
-  reduceStringLength(matTabContent: string) {
-    let checkLengthAndReduce = matTabContent.length > 32 ? (matTabContent.substring(0,31) + '...'): matTabContent;
-    if (window.innerWidth < 1517) {
-      checkLengthAndReduce = matTabContent.length > 25 ? (matTabContent.substring(0,24) + '...'): matTabContent;
-    }
-    return checkLengthAndReduce;
-  }
-
-  public selectType(index: number, calledFromTemplate: boolean) {
-    if(calledFromTemplate) {
-      this.unselectAllSelectFilters();
-      this.withoutSegmentation = false;
-      this.onlyPublished = false;
-      this.benefitsDataSource.paginator.firstPage();
-    }
+  public selectType(index: number) {
     this.selectedTypeIndex = index;
-    this.benefitsDataSource.data = this.benefitCategories[index].benefitList;
+    this.benefitsDataSource.data = this.benefitsList.filter( benefit => benefit.newBenefit.typeId === this.categories[index].id);
   }
 
-  async configSegmentationList() {
-    this.segmentationConfig = await this.benefitsService.getSegmentationConfig();
-    this.segmentationList = [];
-    for(const segmentation of this.segmentationConfig) {
-      for(const item of segmentation.values) {
-        this.segmentationList.push({
-          id: segmentation.type,
-          text: item.id
-        });
-      }
-    }
-  }
 
   async getCategories() {
     this.categories = await this.benefitsService.getCategories();
@@ -189,8 +114,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.groupBenefitByType(this.categories, this.benefitsList);
     this.benefitsDataSource.data = this.benefitsList;
     this.benefitsDataSource.filterPredicate = this.filterPredicate;
-    const calledFromTemplate = false;
-    this.selectType(0, calledFromTemplate);
+    this.selectType(0);
   }
 
   async replaceDoc(data: any) {
@@ -219,9 +143,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   groupBenefitByType(categories: BenefitCategory[], benefitsList: Benefit[]) {
     this.benefitCategories = [];
-    this.benefitCategories.push(this.getPlanType());
-    this.benefitCategories.push(this.getProductType());
-
     categories.forEach( type => {
       const groupList = benefitsList.filter(benefit => type.id === benefit.newBenefit.typeId);
       const publishedBenefit = groupList.filter(
@@ -233,20 +154,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         publishedBenefit
       });
     });
+
   }
 
-  getPlanType() {
-    return { type: { type: 'plan', order: -3, sectionTitle: 'Planes', active:true, id: 'plan'  },
-      benefitList: this.benefitsList.filter(benefit =>  benefit.newBenefit.selectedSegmentation === 'plan'),
-      publishedBenefit: this.benefitsList.filter(benefit =>  benefit.newBenefit.selectedSegmentation === 'plan'
-      && (this.isPublished(benefit)) && this.isVigent(benefit.newBenefit.startDate, benefit.newBenefit.endDate))};
-  }
-  getProductType() {
-    return { type: { type: 'productos', order: -2, sectionTitle: 'Productos', active:true, id: 'productos' },
-      benefitList: this.benefitsList.filter(benefit => benefit.newBenefit.selectedSegmentation === 'productos'),
-      publishedBenefit: this.benefitsList.filter(benefit => benefit.newBenefit.selectedSegmentation === 'productos'
-      && (this.isPublished(benefit)) && this.isVigent(benefit.newBenefit.startDate, benefit.newBenefit.endDate))};
-  }
   isPublished(benefit: Benefit) {
     return (benefit.newBenefit.type !== 'personal' && benefit.newBenefit.status === 'Publicado')
       || (benefit.newBenefit.type === 'personal' && benefit.newBenefit.statusPersonalBenefit === 'Publicado');
@@ -309,7 +219,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   toggleChange(benefit: Benefit) {
     this.modifiyingBenefit = true;
-
     if (benefit.newBenefit.type === 'personal') {
       benefit.newBenefit.statusPersonalBenefit = benefit.newBenefit.statusPersonalBenefit === 'Publicado' ? 'No Publicado' : 'Publicado';
       benefit.statusPersonalBenefit = benefit.newBenefit.statusPersonalBenefit;
@@ -321,9 +230,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     this.benefitsService.updateBenefit(benefit)
       .then(() => {
-        if (this.onlyPublished) {
-          this.updateTableAfterPublicationChange(benefit);
-        }
         this.modifiyingBenefit = false;
       })
       .catch(() => {
@@ -331,13 +237,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         benefit.newBenefit.status = benefit.newBenefit.status === 'Publicado' ? 'No Publicado' : 'Publicado';
         benefit.status = benefit.newBenefit.status;
       });
-  }
-
-  updateTableAfterPublicationChange(benefit: Benefit) {
-    const newDataSource = [...this.benefitsDataSource.data];
-    const index = newDataSource.indexOf(benefit);
-    newDataSource.splice(index, 1);
-    this.benefitsDataSource.data = newDataSource;
   }
 
   setOrderOnBenefit(benefit: Benefit) {
@@ -350,54 +249,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         }); // Faltaría capturar el error y mostarlo en una modal de error.
     }
-  }
-
-  //Esta función verifica el valor del select y lo agrega al objeto this.filterSelectObj
-  //o lo quita de ella y luego aplica el filtro.
-  applyFilterSelect(event, selectType: string) {
-    if(event.value === undefined) {
-      delete this.filterSelectObj[selectType];
-    } else {
-      if(this.withoutSegmentation) {
-        this.withoutSegmentation = false;
-      }
-      this.selectedType = event.value.id;
-      const criterio = new SegmentationOption(event.value.id, event.value.text);
-      this.filterSelectObj[selectType] = criterio;
-    }
-    this.filterBasedOnSelectObj();
-  }
-
-  filterBasedOnSelectObj() {
-    if(Object.keys(this.filterSelectObj).length === 0){
-      this.selectType(this.selectedTypeIndex, false);
-    } else {
-      const currentBenefitsCategories = this.benefitCategories[this.selectedTypeIndex].benefitList as Array<any>;
-      this.benefitsDataSource.data = currentBenefitsCategories.filter(
-        benefit => this.verifyBenefitBasedOnSelectObj(benefit)
-      );
-    }
-    if (this.onlyPublished) {
-      this.filterPublishedAndVigent();
-    }
-  }
-
-  verifyBenefitBasedOnSelectObj(benefit: Benefit)  {
-    const valuesFilterSelectObj = Object.values(this.filterSelectObj);
-    return valuesFilterSelectObj.some(
-      filterValue => this.isBenefitSegmentatedAndValid(filterValue, benefit)
-    );
-  }
-
-  isBenefitSegmentatedAndValid(item, benefit: Benefit) {
-    return benefit.newBenefit.selectedSegmentation !== 'sinsegmentacion' && benefit.newBenefit.segmentationInfo?.some(
-      segmentationItem => segmentationItem.id === item.value && segmentationItem.active
-    );
-  }
-
-  unselectAllSelectFilters() {
-    this.matSelectPlan = this.matSelectProduct = this.matSelectCategory = undefined;
-    this.filterSelectObj = {};
   }
 
   applyFilter(filterValue: string) {
@@ -438,13 +289,3 @@ export class HomeComponent implements OnInit, OnDestroy {
     };
   }
 }
-
-class SegmentationOption {
-  public type: string;
-  public value: string;
-
-  constructor(type: string, value: string) {
-    this.type = type;
-    this.value = value;
-  }
-};

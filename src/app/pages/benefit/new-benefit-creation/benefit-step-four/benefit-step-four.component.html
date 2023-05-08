@@ -1,10 +1,37 @@
-<div class="step-title">Vigencias y Códigos</div>
-
 <div [formGroup]="fourthStepForm">
   <mat-form-field class="full-width">
     <input matInput placeholder="Sitio web" formControlName="siteUrl" [(ngModel)]="siteUrl">
   </mat-form-field>
-
+  <mat-form-field class="full-width mt-3">
+    <textarea matInput placeholder="Terminos y condiciones" formControlName="termsAndCondition"
+      [(ngModel)]="termsAndConditions"></textarea>
+  </mat-form-field>
+  <div class="full-width">
+    <p class="title-section title-image">Promocion adicional gold</p>
+    <mat-slide-toggle class="full-width" formControlName="hasAdditionalGoldBenefit" [(ngModel)]='isGold'>
+    </mat-slide-toggle>
+    <mat-form-field class="full-width" *ngIf="isGold">
+      <input matInput placeholder="Promocion adicional" formControlName="goldBenefitDiscount"
+        [(ngModel)]="goldBenefitDiscount">
+    </mat-form-field>
+    <mat-form-field class="full-width" *ngIf="isGold">
+      <input matInput placeholder="Detalle descuento" formControlName="goldBenefitDetail"
+        [(ngModel)]="goldBenefitDetail">
+    </mat-form-field>
+  </div>
+  <div class="full-width">
+    <p class="title-section title-image">Promocion adicional silver</p>
+    <mat-slide-toggle class="full-width" formControlName="hasAdditionalSilverBenefit" [(ngModel)]='isSilver'>
+    </mat-slide-toggle>
+    <mat-form-field class="full-width" *ngIf="isSilver">
+      <input matInput placeholder="Promocion adicional" formControlName="silverBenefitDiscount"
+        [(ngModel)]="silverBenefitDiscount">
+    </mat-form-field>
+    <mat-form-field class="full-width" *ngIf="isSilver">
+      <input matInput placeholder="Detalle descuento" formControlName="silverBenefitDetail"
+        [(ngModel)]="silverBenefitDetail">
+    </mat-form-field>
+  </div>
   <div class="full-width">
     <p class="title-section title-image">Vigencia del beneficio</p>
     <mat-form-field class="wt-5 mr-2">
@@ -27,28 +54,26 @@
     <input matInput placeholder="Orden de prioridad" value="" type="number" formControlName="orderPriority"
       [(ngModel)]="orderPriority">
   </mat-form-field>
-  <div *ngIf="newBenefitService.modelBenefitOld.newBenefit.type !== 'restofan'">
+  <div *ngIf="id !== null  && newBenefitService.modelBenefitOld.newBenefit.type !== 'restofan'">
     <div class="full-width">
-      <p class="title-section title-image">Códigos del beneficio</p>
-      <mat-radio-group formControlName="codeType" [(ngModel)]="optType" (change)="fireUniqueCodeValue()">
-        <mat-radio-button class="mr-2" value="normal" >Normal</mat-radio-button>
-        <mat-radio-button class="mr-2" value="barcode" >Barra</mat-radio-button>
+      <p class="title-section title-image">Codigos del beneficio</p>
+      <mat-radio-group formControlName="codeType" [(ngModel)]="optType" (click)="selectOptCode()">
+        <mat-radio-button class="mr-2" value="normal">Normal</mat-radio-button>
+        <mat-radio-button class="mr-2" value="barcode">Barra</mat-radio-button>
         <mat-radio-button class="mr-2" value="withoutCodeOpt">Sin codigo</mat-radio-button>
       </mat-radio-group>
     </div>
     <div class="full-width" *ngIf="optType !== 'withoutCodeOpt'">
-      <mat-radio-group class="full-width" formControlName="optCode" [(ngModel)]="optCode" (change)="fireUniqueCodeValue()">
-        <mat-radio-button class="mr-2" value="variable" *ngIf="newBenefitService.selectedSegmentationType !== 'plan'
-         && newBenefitService.selectedSegmentationType !== 'productos'">Variable</mat-radio-button>
+      <mat-radio-group class="full-width" formControlName="optCode" [(ngModel)]="optCode">
+        <mat-radio-button class="mr-2" value="variable">Variable</mat-radio-button>
         <mat-radio-button class="mr-2" value="unique">Unico</mat-radio-button>
       </mat-radio-group>
-      <div>
-        <mat-form-field class="full-width mt-2" *ngIf="optCode === 'unique'">
-          <input matInput [placeholder]="this.newBenefitService.selectedSegmentationType === 'sinsegmentacion' ?
-          this.placeHolderUniqueCodeDefault : 'Texto APP no actualizada'" formControlName="uniqueCode" [(ngModel)]="uniqueCode">
-        </mat-form-field>
-      </div>
     </div>
+  </div>
+  <div>
+    <mat-form-field class="full-width mt-2" *ngIf="optCode == 'unique'">
+      <input matInput placeholder="Ingrese codigo" formControlName="uniqueCode" [(ngModel)]="uniqueCode">
+    </mat-form-field>
   </div>
   <div class="mt-2">
     <button mat-button matStepperPrevious>Regresar</button>

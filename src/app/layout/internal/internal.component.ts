@@ -150,6 +150,12 @@ export class InternalComponent implements OnInit {
         {id: 'sub-campaign-engine-2', name: 'Login', navigateTo: 'login-config'},
         {id: 'sub-campaign-engine-3', name: 'Login Embebido', navigateTo: 'embedded-login-config'},
         {id: 'sub-campaign-engine-4', name: 'Carga de RUT', navigateTo: 'card-reissue-config'}]
+    },
+    {
+      id: 'webrpgo-config',
+      name: 'Web RPGo config',
+      icon: 'i-ticket',
+      submenus: [{id: 'sub-config-menu', name: 'Configuracion Menu', navigateTo: 'webrpgo-config-menu'}]
     }
   ];
 

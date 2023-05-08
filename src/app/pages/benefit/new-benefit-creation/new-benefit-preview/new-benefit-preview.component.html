@@ -12,11 +12,15 @@
     </div>
     <div class="advice-user">
       <div
-        *ngIf="newBenefitService.modelBenefitOld.newBenefit?.isLocallyConsume || newBenefitService.modelBenefitOld.newBenefit?.isDelivery"
+        *ngIf="newBenefitService.modelBenefitOld.newBenefit?.isLocallyConsume || newBenefitService.modelBenefitOld.newBenefit?.isPickup || newBenefitService.modelBenefitOld.newBenefit?.isDelivery"
         class="restofans-icon">
         <div
           [ngClass]="newBenefitService.modelBenefitOld.newBenefit?.isLocallyConsume ? 'category-button-icon' : 'category-button-icon-opacity'"
           class="i-category-restofan category-button-icon"></div>
+
+        <div
+          [ngClass]="newBenefitService.modelBenefitOld.newBenefit?.isPickup ? 'category-button-icon' : 'category-button-icon-opacity'"
+          class="i-category-pickup category-button-icon"></div>
 
         <div
           [ngClass]="newBenefitService.modelBenefitOld.newBenefit?.isDelivery ? 'category-button-icon' : 'category-button-icon-opacity'"
@@ -65,11 +69,15 @@
       <div class="discount-benefit-list">{{newBenefitService.modelBenefitOld.newBenefit?.benefitDiscount}}</div>
       <div class="advice-user">
         <div
-          *ngIf="newBenefitService.modelBenefitOld.newBenefit?.isLocallyConsume || newBenefitService.modelBenefitOld.newBenefit?.isDelivery"
+          *ngIf="newBenefitService.modelBenefitOld.newBenefit?.isLocallyConsume || newBenefitService.modelBenefitOld.newBenefit?.isPickup || newBenefitService.modelBenefitOld.newBenefit?.isDelivery"
           class="restofans-icon-detail">
           <div
             [ngClass]="newBenefitService.modelBenefitOld.newBenefit?.isLocallyConsume ? 'category-button-icon' : 'category-button-icon-opacity'"
             class="i-category-restofan category-button-icon"></div>
+
+          <div
+            [ngClass]="newBenefitService.modelBenefitOld.newBenefit?.isPickup ? 'category-button-icon' : 'category-button-icon-opacity'"
+            class="i-category-pickup category-button-icon"></div>
 
           <div
             [ngClass]="newBenefitService.modelBenefitOld.newBenefit?.isDelivery ? 'category-button-icon' : 'category-button-icon-opacity'"

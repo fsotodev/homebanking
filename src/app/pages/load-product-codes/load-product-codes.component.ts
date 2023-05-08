@@ -67,7 +67,7 @@ export class LoadProductCodesComponent implements OnInit {
     this.formGroup = new FormGroup({
       technicalDate: new FormControl('', Validators.required)
     });
-    this.products = this.filterInvisibleProducts(await this.productTransactionService.getProducts());
+    this.products = await this.productTransactionService.getProducts();
     this.products.sort((a, b) => a.fullName.toLowerCase().localeCompare(b.fullName.toLowerCase()));
     this.inactiveProducts = this.products.filter(product => !product.active);
     this.products = this.products.filter(product => product.active);
@@ -306,12 +306,5 @@ export class LoadProductCodesComponent implements OnInit {
         console.error(error);
         this.errorUploadingCodes = true;
       });
-  }
-
-  private filterInvisibleProducts(productsList: any) {
-    const filteredProducts = productsList.filter(
-      (product) => product.invisible === undefined || product.invisible === false
-    );
-    return filteredProducts;
   }
 }

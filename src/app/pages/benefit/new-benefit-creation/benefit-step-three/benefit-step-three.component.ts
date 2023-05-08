@@ -14,8 +14,6 @@ export class BenefitStepThreeComponent implements OnInit {
   addressList: string[] = [];
   phoneList: string[] = [];
   scheduleList: string[] = [];
-  termsAndConditions: string;
-
   constructor(public newBenefitService: NewBenefitService) { }
 
   ngOnInit() {
@@ -26,8 +24,6 @@ export class BenefitStepThreeComponent implements OnInit {
     this.addressList = this.newBenefitService.modelBenefitOld.newBenefit.addressList;
     this.phoneList = this.newBenefitService.modelBenefitOld.newBenefit.phoneList;
     this.scheduleList = this.newBenefitService.modelBenefitOld.newBenefit.bussinessHourList;
-    this.termsAndConditions = this.newBenefitService.modelBenefitOld.newBenefit.termsAndCondition;
-
   }
   addAddress = () => {
     if (this.address === undefined || this.address.trim() === '') {
@@ -69,8 +65,6 @@ export class BenefitStepThreeComponent implements OnInit {
     this.newBenefitService.modelBenefitOld.newBenefit.addressList = this.addressList;
     this.newBenefitService.modelBenefitOld.newBenefit.phoneList = this.phoneList;
     this.newBenefitService.modelBenefitOld.newBenefit.bussinessHourList = this.scheduleList;
-    this.newBenefitService.modelBenefitOld.newBenefit.termsAndCondition =
-      this.termsAndConditions === undefined ? '' : this.termsAndConditions.toString();
   };
 
 }

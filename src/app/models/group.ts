@@ -6,11 +6,12 @@ export class Group {
     public name: string;
     public icon: string;
 
+
     constructor() {
-      this.groupId = '';
-      this.active = false;
-      this.order = 1;
-      this.name = '';
-      this.icon = '';
+        this.groupId = '';
+        this.active = false;
+        this.order = 1;
+        this.name = '';
+        this.icon = '';
     }
 }

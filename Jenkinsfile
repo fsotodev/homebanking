@@ -95,7 +95,7 @@ pipeline {
             steps {
                 container ('runner' ) {
                     script {
-                         if ("${GIT_BRANCH}" == 'development') {
+                         if ("${GIT_BRANCH}" == 'SQFYCC-786-admin-homologar-rama-FYCCN-164') {
                             slackNotif.initStageMessage()
                             withCredentials([file(credentialsId: 'banco-ripley-app-dev', variable: 'GC_KEY')]) {
                                 sh '''
@@ -111,6 +111,37 @@ pipeline {
                             }
                             slackNotif.updateStageMessage("DEPLOYING DEV")
                         }
+                        // if ("${GIT_BRANCH}" == 'development') {
+                        //     slackNotif.initStageMessage()
+                        //     withCredentials([file(credentialsId: 'banco-ripley-app-dev', variable: 'GC_KEY')]) {
+                        //         sh '''
+                        //         set +x
+                        //         export $(cat JenkinsParams)
+                        //         gcloud config set project banco-ripley-app-dev
+                        //         gcloud config set account devop-user@banco-ripley-app-dev.iam.gserviceaccount.com
+                        //         gcloud auth activate-service-account devop-user@banco-ripley-app-dev.iam.gserviceaccount.com --key-file=${GC_KEY}
+                        //         export GOOGLE_APPLICATION_CREDENTIALS=${GC_KEY}
+                        //         export FIREBASE_TOKEN=$(gcloud auth application-default print-access-token)
+                        //         npm run deploy-jenkins:dev
+                        //         '''
+                        //     }
+                        //     slackNotif.updateStageMessage("DEPLOYING DEV")
+                        // }
+                        // else if ("${GIT_BRANCH}" == 'feature/jenkins-pipeline') {
+                        //     //no hay pp por ahora, deploy dummy para probar dependencias
+                        //     ENV="pp"
+                        //     withCredentials([file(credentialsId: 'banco-ripley-app', variable: 'GC_KEY')]) {
+                        //     sh '''
+                        //         export $(cat JenkinsParams)
+                        //         gcloud config set project banco-ripley-app
+                        //         gcloud config set account devop-user@banco-ripley-app.iam.gserviceaccount.com
+                        //         gcloud auth activate-service-account devop-user@banco-ripley-app.iam.gserviceaccount.com --key-file=${GC_KEY}
+                        //         export GOOGLE_APPLICATION_CREDENTIALS=${GC_KEY}
+                        //         export FIREBASE_TOKEN=$(gcloud auth application-default print-access-token)
+                        //         npm run build:prod && firebase use banco-ripley-app
+                        //         '''
+                        //     }
+                        // }
                         else if ("${GIT_BRANCH}" == 'master') {
                             slackNotif.initStageMessage()
                             withCredentials([file(credentialsId: 'banco-ripley-app', variable: 'GC_KEY')]) {

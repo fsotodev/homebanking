@@ -4,7 +4,6 @@ import { Product } from '@apps/models/product';
 import { ProductsService } from '@apps/services/products.service';
 import { GroupService } from '@apps/services/group.service';
 import { Group } from '@apps/models/group';
-import { ModalDialogService } from '@apps/services/modal-dialog.service';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
@@ -32,7 +31,6 @@ export class ListProductComponent implements OnInit {
     private router: Router,
     private productSvc: ProductsService,
     private groupService: GroupService,
-    private modalDialogService: ModalDialogService,
   ) { }
 
   ngOnInit() {
@@ -46,24 +44,6 @@ export class ListProductComponent implements OnInit {
   public editProduct(element: any) {
     const navigationExtras: NavigationExtras = { queryParams: { id: element.id } };
     this.router.navigate(['/new-product'], navigationExtras);
-  }
-
-  public deleteProduct(element: any) {
-    this.modifyingProduct = true;
-    this.modalDialogService.openModal('deleteConfirmProduct')
-      .then((btnPressed)=> {
-        if(btnPressed === 'right') {
-          this.makeProductInvisible(element);
-        } else {
-          this.modifyingProduct = false;
-        }
-      });
-  }
-
-  public makeProductInvisible(element: any) {
-    const productData = { invisible: true, active: false, category: element.category, sku: element.id } as Product;
-    this.updateProduct(element.id, productData);
-
   }
 
   public toggleChange(element: any) {
@@ -93,20 +73,12 @@ export class ListProductComponent implements OnInit {
   private async getProductList() {
     this.isLoading = true;
     const groups = await this.groupService.getAllCGroups();
-    const products = this.filterInvisibleProducts(await this.productSvc.getAllProducts());
+    const products = await this.productSvc.getAllProducts();
     this.productsDataSource.data = products.map(product => {
-      const groupName = product.productGroupId && product.productGroupId !== '' ?
-        groups.find(g => g.id === product.productGroupId).name : 'N/A';
-      return {...product, groupName };
+      const groupName = product.productGroupId && product.productGroupId !== '' ? groups.find(g => g.id === product.productGroupId).name : 'N/A';
+      return {...product, groupName }
     });
     this.modifyingProduct = false;
     this.isLoading = false;
-  }
-
-  private filterInvisibleProducts(productsList: any) {
-    const filteredProducts = productsList.filter(
-      (product) => product.invisible === undefined || product.invisible === false
-    );
-    return filteredProducts;
   }
 }

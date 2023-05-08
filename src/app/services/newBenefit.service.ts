@@ -10,8 +10,6 @@ export class NewBenefitService {
   modelBenefitOld: Benefit = new Benefit();
   isSavingBenefit: boolean;
   isModifyingBenefit: boolean;
-  selectedSegmentationType: string;
-  selectedIsUniqueCode: boolean;
   constructor() { }
 
 }

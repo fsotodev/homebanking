@@ -6,6 +6,7 @@ import { BenefitsService } from '@apps/services/benefits.service';
 
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { BenefitCategory, BenefitType } from '@apps/models/benefit';
+import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 
 @Component({
   selector: 'app-benefit-step-one',
@@ -14,38 +15,9 @@ import { BenefitCategory, BenefitType } from '@apps/models/benefit';
 })
 export class BenefitStepOneComponent implements OnInit {
   @Output() msgTemplateType = new EventEmitter<string>();
-  @Output() segmentationChange = new EventEmitter<string>();
   checkedNews = false;
-  segmentationTypes: DropdownElement[] = [
-    {
-      text: 'Categoría',
-      value: 'segmentacion',
-      id: 'segmentacion',
-      active: true
-    },
-    {
-      text: 'Productos',
-      value: 'productos',
-      id: 'productos',
-      active: true
-    },
-    {
-      text: 'Plan',
-      value: 'plan',
-      id: 'plan',
-      active: true
-    },
-    {
-      text: 'Sin segmentación',
-      value: 'sinsegmentacion',
-      id: 'sinsegmentacion',
-      active: true
-    }
-  ];;
   templateTypes: DropdownElement[] = [];
   categoryTypes: DropdownElement[] = [];
-  categoryTypesArray: DropdownElement[] = [];
-  selectedSegmentation = '';
   selectedTemplate: string;
   selectedCategory: string;
   selectedCategoryId: string;
@@ -82,6 +54,7 @@ export class BenefitStepOneComponent implements OnInit {
     }
   };
 
+
   constructor(
     private newBenefitService: NewBenefitService,
     private benefitService: BenefitsService,
@@ -92,25 +65,23 @@ export class BenefitStepOneComponent implements OnInit {
     this.isLoading = true;
     this.templateTypes = templateTypesDymmy;
     this.setModel();
-    setTimeout(() => {
-      this.selectedSegmentation = this.newBenefitService.modelBenefitOld.newBenefit.selectedSegmentation === undefined ||
-      this.newBenefitService.modelBenefitOld.newBenefit.selectedSegmentation === this.segmentationTypes[3].value ?
-        this.segmentationTypes[3].value : this.newBenefitService.modelBenefitOld.newBenefit.selectedSegmentation;
-      this.changeSegmentationTypes();
-    }, 100);
     this.firstStepForm = new FormGroup({
-      segmentationType: new FormControl(''),
       templateType: new FormControl('', [
         // Validators.required
       ]),
-      listHeaderText: new FormControl('', Validators.compose([Validators.maxLength(16)])),
+      listHeaderText: new FormControl('',
+        // Validators.compose([
+        //   Validators.maxLength(35),
+        //   Validators.required
+        // ])
+      ),
       type: new FormControl('', [
         // Validators.required
       ]),
       news: new FormControl('')
     });
-    this.categoryTypesArray = await this.getCategoryTypes();
-    this.categoryTypes = this.categoryTypesArray;
+    this.categoryTypes = await this.getCategoryTypes();
+
     this.isLoading = false;
   }
 
@@ -132,8 +103,6 @@ export class BenefitStepOneComponent implements OnInit {
   }
 
   setModel = () => {
-    this.selectedSegmentation = this.newBenefitService.modelBenefitOld.newBenefit.selectedSegmentation;
-    this.newBenefitService.selectedSegmentationType = this.newBenefitService.modelBenefitOld.newBenefit.selectedSegmentation;
     this.selectedTemplate = this.newBenefitService.modelBenefitOld.newBenefit.templateType;
     this.listHeaderText = this.newBenefitService.modelBenefitOld.newBenefit.listHeaderText;
     this.selectedCategory = this.newBenefitService.modelBenefitOld.newBenefit.typeId;
@@ -142,7 +111,6 @@ export class BenefitStepOneComponent implements OnInit {
     this.catalogImage = this.newBenefitService.modelBenefitOld.newBenefit.cardImageUrl;
     this.detailImage = this.newBenefitService.modelBenefitOld.newBenefit.mainImageUrl;
     this.companyImage = this.newBenefitService.modelBenefitOld.newBenefit.logoImageUrl;
-    this.selectedSegmentation = this.newBenefitService.modelBenefitOld.newBenefit.selectedSegmentation;
   };
 
   isStepOneCompleted = () => !(this.firstStepForm.valid);
@@ -154,14 +122,6 @@ export class BenefitStepOneComponent implements OnInit {
   sendTemplate() {
     this.msgTemplateType.emit(this.selectedTemplate);
   }
-
-  changeSegmentationTypes = () => {
-    this.newBenefitService.selectedSegmentationType = this.selectedSegmentation;
-    this.fireSegmentationChange();
-    if(this.selectedCategory === 'personal' && this.selectedSegmentation !== 'sinsegmentacion') {
-      this.selectedCategory = undefined;
-    }
-  };
 
   uploadBenefitImage(event: FileList, type: string) {
     if (event.length <= 0) {
@@ -185,10 +145,6 @@ export class BenefitStepOneComponent implements OnInit {
       });
   }
 
-  fireSegmentationChange() {
-    this.segmentationChange.emit(this.selectedSegmentation);
-  }
-
   saveStepOne = () => {
     this.newBenefitService.modelBenefitOld.newBenefit.templateType =
       this.selectedTemplate === undefined ? '' : this.selectedTemplate.toString();
@@ -208,8 +164,6 @@ export class BenefitStepOneComponent implements OnInit {
       this.detailImage === undefined ? '' : this.detailImage.toString();
     this.newBenefitService.modelBenefitOld.newBenefit.logoImageUrl =
       this.companyImage === undefined ? '' : this.companyImage.toString();
-    this.newBenefitService.modelBenefitOld.newBenefit.selectedSegmentation =
-      this.selectedSegmentation === undefined ? '' : this.selectedSegmentation;
   };
 }
 
@@ -220,26 +174,7 @@ export interface DropdownElement {
   id: string;
 }
 
-const templateTypes: DropdownElement[] = [
-  {
-    text: 'Restofans',
-    value: 'restofans',
-    id: 'restofans',
-    active: true
-  },
-  {
-    text: 'General',
-    value: 'general',
-    id: 'general',
-    active: true
-  },
-  {
-    text: 'OPEX',
-    value: 'opex',
-    id: 'opex',
-    active: true
-  }
-];
+
 
 const templateTypesDymmy: DropdownElement[] = [
   {
@@ -261,3 +196,4 @@ const templateTypesDymmy: DropdownElement[] = [
     active: true
   }
 ];
+

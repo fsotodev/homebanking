@@ -1,6 +1,6 @@
 {
   "name": "admin-benefits",
-  "version": "2.33.0",
+  "version": "2.31.0",
   "license": "MIT",
   "scripts": {
     "build:dev": "ng build --configuration=dev",
