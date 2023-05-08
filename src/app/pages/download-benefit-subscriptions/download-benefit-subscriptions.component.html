@@ -1,0 +1,41 @@
+<div class="main-container">
+    <mat-card class="container-info">
+        <div class="container-title">
+            <p class="title"> Subscripciones a Beneficios</p>
+        </div>
+    </mat-card>
+    <mat-card class="main-container-form">
+      <mat-card-content class="container-info-form">
+        <div class="upload-button-quaternaty">
+          <div class="info-section">
+            <div class="tip-image">Descarga de la información de clientes que se han subscrito a un beneficio (Formato Excel).</div>
+          </div>
+          <div class="container-form" [formGroup]="formGroup">
+            <section class="dates-info">
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="ID de Beneficio"
+                  (input)="onSearchChange()" formControlName="benefitId" required>
+                <mat-hint>Ej: QIMHT899xdLKmlFXnXp7</mat-hint>
+              </mat-form-field>
+            </section>
+          </div>
+          <span class="strong" *ngIf="benefitExist">Beneficio de: "{{foundBenefit?.companyName}}"</span>
+          <span class="warning" *ngIf="showWarn">No se encontró beneficio con ID: "{{formGroup.get('benefitId')?.value}}"</span>
+          <br>
+
+          <div class="upload-button-quaternaty">
+            <button mat-raised-button class="button-quaternaty" [disabled]="loading || formGroup.invalid"
+              (click)="checkBenefit()">Buscar beneficio</button>
+            <button mat-raised-button class="button-quaternaty" [disabled]="loading || !benefitExist"
+              (click)="downloadFile()">Descargar suscripciones</button>
+            <div class="info-section">
+              <div>Se descargarán las <span class="strong">suscripciones</span> para el beneficio especificado</div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+      <div class="container-buttons">
+        <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">Volver</button>
+      </div>
+    </mat-card>
+</div>

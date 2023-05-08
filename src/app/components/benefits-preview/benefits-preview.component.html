@@ -1,0 +1,64 @@
+<div id="sticky">
+  <div class="main-screen" [ngStyle]="{'background': containerBackgroundColor}">
+    <div class="container-top" [ngStyle]="{'background': containerTopBackgroundColor}">
+      <div *ngIf="exitButton && exitButton.show" class="exit-button-container" [ngClass]="{'right': !!exitButton.right}">
+        <div class="exit-button" [innerHtml]="utils.sanitizeHtml(exitButton.text)" [ngStyle]="{'color': exitButton.color}">
+        </div>
+      </div>
+      <p *ngIf="mainTitle && mainTitle.show" 
+        class="main-title" 
+        [innerHTML]="utils.sanitizeHtml(mainTitle.text)" 
+        [ngClass]="mainTitle.class" 
+        [ngStyle]="{'color': mainTitle.color}">
+      </p>
+      <div class="promotion-slider-container" *ngIf="useSlider">
+        <swiper #benefitSlides class="promotion-slider" [config]="slideOptions" (slideChange)="onSlideChange()">
+          <div *ngFor="let benefit of sliderBenefits; let i = index">
+            <div class="promotion-slider-box"
+                [ngStyle]="{'background-image': utils.getScssUrl(getPromotionImage(benefit))}">
+                <div class="box-info-promotion">
+                  <p class="company-promotion">{{ benefit && benefit.companyName || 'Sin título' }}</p>
+                  <p class="box-discount">{{ benefit && benefit.title || 'Sin descuento' }}</p>
+                  <p class="box-detail">{{ benefit && benefit.subtitle || 'Sin subtítulo' }}</p>
+                </div>
+              </div>
+          </div>
+        </swiper>
+        <div class="aux-swiper">
+          <div *ngFor="let benefit of sliderBenefits; let i = index" class="aux-dot"
+            [ngClass]="{'active': isSlideActive(i)}"></div>
+        </div>
+      </div>
+      <div class="wave-container" [ngStyle]="waveStyle"></div>
+    </div>
+    <div class="container-bottom align-left" [ngClass]="{'with-footer': false}">
+      <p *ngIf="subTitle.show" class="sub-title" [innerHTML]="utils.sanitizeHtml(subTitle.text)"
+        [ngStyle]="{'color': subTitle.color}"></p>
+
+      <!-- <div *ngIf="screen.infoBox.show" class="info-box">
+        <img *ngIf="!!screen.infoBox.iconURL" class="icon" [src]="screen.infoBox.iconURL">
+        <p *ngIf="!!screen.infoBox.text" class="text" [innerHTML]="utils.sanitizeHtml(screen.infoBox.text)"></p>
+      </div> -->
+
+      <div class="promotion-list" [ngClass]="{'extra-margin': false}">
+        <button *ngFor="let benefit of listBenefits" class="promotion-card promotion-normal">
+
+          <div class="box-image-company" col-3>
+            <img [src]="getPromotionMiniImage(benefit)">
+          </div>
+          <div class="box-info-promotion" col>
+            <p class="company-promotion">
+              {{ benefit && benefit.companyName || 'Sin título' }}
+              <span class="tag" *ngIf="!!benefit.weekDaysTag?.length && benefit.weekDaysTag && !isFromWelcomepackForm">{{ benefit.weekDaysTag }}</span>
+              <span class="tag" *ngIf="!!benefit.weekdays?.length && benefit.weekdays[0] && isFromWelcomepackForm">{{ benefit.weekdays[0] }}</span>
+            </p>
+            <div class="box-inline-container">
+              <p class="box-discount">{{ benefit && benefit.listTitleText || 'Sin dscto' }}</p>
+            </div>
+            <p class="box-detail">{{ benefit  && benefit.listSubtitleText || 'Sin subtítulo' }}</p>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

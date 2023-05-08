@@ -1,0 +1,349 @@
+<div class="main-container">
+    <mat-card class="container-info">
+      <div class="container-title">
+        <p class="title"> {{ id ? 'Actualizar' : 'Nueva' }}
+          <span class="title-highlighted">Campaña: Simulador {{ titleSimulation }}</span>
+        </p>
+      </div>
+    </mat-card>
+    <mat-card class="main-container-form">
+      <mat-card-content class="container-info-form">
+        <div class="container-form" [formGroup]="campaignForm">
+          <section class="date-box benefit-header-box">
+            <section class="dates-info">
+
+              <!-- Core -->
+              <section>
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.activePWA" [ngModelOptions]="{ standalone: true }">Activo en PWA
+                  </mat-checkbox>
+                </div>
+
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.totem" [ngModelOptions]="{ standalone: true }">Mostrar en Totem
+                  </mat-checkbox>
+                </div>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text" [readonly]="id"
+                    placeholder="Id de campaña"
+                    formControlName="id"
+                    [(ngModel)]="campaign.id"
+                    required
+                    maxlength="35">
+                  <mat-hint>Sin espacios, Ej: banner-{{ description }}-2.5mm </mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.id ? campaign.id.length : 0 }} / 35</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Prioridad"
+                    formControlName="priority"
+                    [(ngModel)]="campaign.priority"
+                    onkeydown="return event.keyCode !== 69" required>
+                  <mat-hint>Ej: 2</mat-hint>
+                </mat-form-field>
+              </section>
+
+              <!-- Visual -->
+              <section>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text"
+                    placeholder="Título"
+                    formControlName="title"
+                    [(ngModel)]="campaign.title"
+                    maxlength="30">
+                  <mat-hint>Ej: Simular {{ description }}</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.title ? campaign.title.length : 0 }} / 30</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Monto"
+                    formControlName="amount"
+                    [(ngModel)]="campaign.amount"
+                    onkeydown="return event.keyCode !== 69"
+                    required>
+                  <mat-hint>Ej: 12</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Cuotas"
+                    formControlName="quota"
+                    [(ngModel)]="campaign.quota"
+                    onkeydown="return event.keyCode !== 69"
+                    required>
+                  <mat-hint>Ej: 12</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text" *ngIf="typeSimulation === 'avsavSimulation'">
+                  <mat-label>Tipo de campaña</mat-label>
+                  <mat-select formControlName="offerType" [(ngModel)]="campaign.offerType">
+                    <mat-option value="av">Avance</mat-option>
+                    <mat-option value="sav">Super Avance</mat-option>
+                    <mat-option value="both">Ambos</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <app-load-file-button *ngIf="campaign"
+                  [fileFirebaseUrl]="fileFirebaseUrl"
+                  [fileUrl]="fileUrl"
+                  [text]="'Cargar imagen Mobile'"
+                  [extensions]="extensions"
+                  [emitUrl]="true"
+                  [showUrl]="false"
+                  [folder]="uploadFolder"
+                  (url)="receiveUrl($event, 'mobileUrl')"
+                  [isLoading]="isUploadingImage"
+                  [inputUrl]="campaign.mobileUrl"
+                  [description]="'Dimensiones: 880 x 440 px'">
+                </app-load-file-button>
+
+                <app-load-file-button *ngIf="campaign"
+                  [fileFirebaseUrl]="fileFirebaseUrl"
+                  [fileUrl]="fileUrl"
+                  [text]="'Cargar imagen Desktop'"
+                  [extensions]="extensions"
+                  [emitUrl]="true"
+                  [showUrl]="false"
+                  [folder]="uploadFolder"
+                  (url)="receiveUrl($event, 'desktopUrl')"
+                  [isLoading]="isUploadingImage"
+                  [inputUrl]="campaign.desktopUrl"
+                  [description]="'Dimensiones: 196 x 420 px'">
+                </app-load-file-button>
+
+                <div class="special-info">
+                  <div class="buttons-box">
+                    <div class="upload-button-quaternaty">
+                      <button mat-raised-button class="button-quaternaty">Subir ruts</button>
+                      <input id="uploadInputCampaignRut" class="file-input" type="file"
+                             (change)="showModalConfirmation($event.target.files, true)" accept=".csv"
+                             [disabled]="uploadingRuts">
+                      <div *ngIf="uploadingRuts" class="spinner-button">
+                        <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                      </div><br><br>
+                      <mat-progress-bar color="primary" mode="determinate" [value]="rutUploadingProgress">
+                      </mat-progress-bar>
+                      <span class="tip-image">Seleccionar un archivo CSV con el nombre de la campaña</span><br />
+                      <span class="tip-image">Ejemplo CSV: Rut</span><br />
+                      <span class="tip-image">Sin títulos en la primera fila del CSV, solo datos </span><br />
+                      <div *ngIf="!!uploadingRuts" class="upload-info-section">
+                        <span class="title-section">Subiendo Ruts a la campaña, esto puede tardar varios minutos</span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </section>
+
+              <!-- Filters -->
+              <section>
+                <br>
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.allUsers" [ngModelOptions]="{ standalone: true }">Sin rutero
+                  </mat-checkbox>
+                </div>
+
+                <!-- Av -->
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.av.active" [ngModelOptions]="{ standalone: true }">Filtro de avance activo
+                  </mat-checkbox>
+                </div>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Monto máximo de avance"
+                    formControlName="avMax"
+                    [(ngModel)]="campaign.filters.av.max"
+                    onkeydown="return event.keyCode !== 69"
+                    required>
+                  <mat-hint>Ej: 2500000</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Monto mínimo de avance"
+                    formControlName="avMin"
+                    [(ngModel)]="campaign.filters.av.min"
+                    onkeydown="return event.keyCode !== 69"
+                    required>
+                  <mat-hint>Ej: 100000</mat-hint>
+                </mat-form-field>
+
+                <!-- Sav -->
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.sav.active" [ngModelOptions]="{ standalone: true }">Filtro de super avance activo
+                  </mat-checkbox>
+                </div>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Monto máximo de super avance"
+                    formControlName="savMax"
+                    [(ngModel)]="campaign.filters.sav.max"
+                    onkeydown="return event.keyCode !== 69"
+                    required>
+                  <mat-hint>Ej: 2500000</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Monto mínimo de super avance"
+                    formControlName="savMin"
+                    [(ngModel)]="campaign.filters.sav.min"
+                    onkeydown="return event.keyCode !== 69"
+                    required>
+                  <mat-hint>Ej: 100000</mat-hint>
+                </mat-form-field>
+
+                <!-- Consumo -->
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.consumer.active" [ngModelOptions]="{ standalone: true }">Filtro de consumo activo
+                  </mat-checkbox>
+                </div>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                         placeholder="Monto máximo de consumo"
+                         formControlName="consumerMax"
+                         [(ngModel)]="campaign.filters.consumer.max"
+                         onkeydown="return event.keyCode !== 69"
+                         required>
+                  <mat-hint>Ej: 2500000</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                         placeholder="Monto mínimo de consumo"
+                         formControlName="consumerMin"
+                         [(ngModel)]="campaign.filters.consumer.min"
+                         onkeydown="return event.keyCode !== 69"
+                         required>
+                  <mat-hint>Ej: 100000</mat-hint>
+                </mat-form-field>
+
+                <!-- Segment -->
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.segment" [ngModelOptions]="{ standalone: true }">Filtro por categoría activo
+                  </mat-checkbox>
+                </div>
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentRipley"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Ripley
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentOne"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría One
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentBronze"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Plus
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentSilver"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Silver
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentGold"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Gold
+                  </mat-checkbox>
+                </div>
+
+                <!-- Product -->
+                <mat-form-field class="input-info field-text">
+                  <mat-label>Condicion de filtro de productos</mat-label>
+                  <mat-select formControlName="haveProductCondition" [(ngModel)]="campaign.filters.haveProductCondition">
+                    <mat-option value="or">ó / or / ||</mat-option>
+                    <mat-option value="and">y / and / &&</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.hasSA" [ngModelOptions]="{ standalone: true }">Cuenta Vista
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.hasTR" [ngModelOptions]="{ standalone: true }">Tarjeta Ripley
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.hasTRM" [ngModelOptions]="{ standalone: true }">Tarjeta Ripley Mastercard
+                  </mat-checkbox>
+                </div>
+
+                <!-- Platform and NFC -->
+                <div class="platform-filter">
+                  <div>
+                    <mat-checkbox [(ngModel)]="campaign.filters.platform.on"
+                      (change)="platformFilterChange($event)"
+                      [ngModelOptions]="{ standalone: true }">
+                      Filtro por plataforma activo
+                    </mat-checkbox>
+                  </div>
+                  <div>
+                    <mat-checkbox [(ngModel)]="campaign.filters.platform.nfc"
+                      [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!campaign.filters.platform.on">
+                      Filtro por NFC activo
+                    </mat-checkbox>
+                  </div>
+                  <mat-form-field class="input-info field-text">
+                    <mat-label>Selección de Plataformas</mat-label>
+                    <mat-select multiple [(ngModel)]="campaign.filters.platform.allowedPlatforms" [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!campaign.filters.platform.on">
+                      <mat-option *ngFor="let platform of platformsList" [value]="platform">{{ platform }}</mat-option>
+                    </mat-select>
+                    <mat-hint>Puedes seleccionar más de una</mat-hint>
+                  </mat-form-field>
+                </div>
+              </section>
+
+            </section>
+          </section>
+        </div>
+        <div *ngIf="campaign" class="container-view-mobile" id="sticky">
+
+          <div class="banners-container">
+            <div class="banner">
+              <p>Mobile</p>
+              <div class="title">{{ campaign.title }}</div>
+              <div class="img-container mobile">
+                <img class="banner-img mobile" [src]="campaign.mobileUrl || ''">
+              </div>
+            </div>
+            <div class="banner">
+              <p>Desktop</p>
+              <div class="title"></div>
+              <div class="img-container">
+                <img class="banner-img" [src]="campaign.desktopUrl || ''">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </mat-card-content>
+      <div class="container-buttons">
+        <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">volver</button>
+        <div *ngIf="!id" class="main-buttons">
+          <button mat-raised-button (click)="saveCampaign()" class="button-primary"
+            [disabled]="!campaignForm.valid || idValidator()">Crear</button>
+        </div>
+        <div *ngIf="id" class="main-buttons">
+          <button mat-raised-button (click)="updateCampaign()" class="button-primary"
+                  [disabled]="!campaignForm.valid">Actualizar</button>
+        </div>
+      </div>
+    </mat-card>
+  </div>

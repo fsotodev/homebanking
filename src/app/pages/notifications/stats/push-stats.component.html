@@ -1,0 +1,129 @@
+<div class="main-container">
+  <mat-card *ngIf="!isLoading" class="container-info">
+    <div class="container-title">
+      <p class="title"> Estadísticas de
+        <span class="title-highlighted">Notificaciones Push</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-table">
+    <mat-tab-group class="tab-content" [selectedIndex]="tabSelected" (selectedTabChange)="tabChanged($event)">
+      <mat-tab *ngFor="let type of tabsIterator" [label]="tabNames[type]" class="title-tab">
+        <div class="toolbar">
+          <div class="search">
+            <mat-form-field>
+              <mat-select placeholder="Estadísticas por campaña" [(value)]="statusLimit" (change)="reloadMarketingCampaigns()">
+                <mat-option *ngFor="let limit of limitSelectForStatus" [value]="limit">
+                  {{ limit }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div [formGroup]="filterForms[type]" class="search">
+            <input [formControlName]="type" type="text" placeholder="Buscar en tabla" class="input-search i-search">
+          </div>
+          <div *ngIf="type === 'marketing'" class="search" [formGroup]="addForms[type]">
+            <input [formControlName]="type" type="text" placeholder="Buscar Campaña (Título o ID)"
+              class="input-search i-search">
+            <div class="container-error">
+              <mat-error class="error-message" *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+            </div>
+          </div>
+        </div>
+        <div class="dates-table">
+          <mat-progress-spinner *ngIf="isLoadingData" mode="indeterminate" class="spinner home-spinner">
+          </mat-progress-spinner>
+          <!-- <div class="empty-message">Aún no hay beneficios creados.</div>  -->
+          <mat-table *ngIf="!isLoadingData" #table [dataSource]="dataSources[type]">
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+              <mat-cell *matCellDef="let campaign"> {{campaign.campaignId}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="mktName">
+              <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+              <mat-cell *matCellDef="let campaign"> {{campaign.name}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="type">
+              <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+              <mat-cell *matCellDef="let campaign"> {{campaign.id}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="title">
+              <mat-header-cell *matHeaderCellDef> Título </mat-header-cell>
+              <mat-cell *matCellDef="let campaign"> {{campaign.options.pushTitle}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="description">
+              <mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
+              <mat-cell *matCellDef="let campaign"> {{campaign.options.pushDescription}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="sentDate">
+              <mat-header-cell *matHeaderCellDef> Fecha envío </mat-header-cell>
+              <mat-cell *matCellDef="let campaign"> {{campaign.sendDateToShow}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="category">
+              <mat-header-cell *matHeaderCellDef> Categoría </mat-header-cell>
+              <mat-cell *matCellDef="let pushStats" matTooltip=""> {{pushStats.categoryName}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+              <mat-cell *matCellDef="let pushStats" matTooltip=""> {{pushStats.fullName}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="sent">
+              <mat-header-cell *matHeaderCellDef> Total enviadas </mat-header-cell>
+              <mat-cell *matCellDef="let pushStats" matTooltip=""> {{valueToShow(pushStats.totalPushSent)}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="readFromSystem">
+              <mat-header-cell *matHeaderCellDef> Leídas de sistema</mat-header-cell>
+              <mat-cell *matCellDef="let pushStats" matTooltip=""> {{valueToShow(pushStats.tapsFromSystem)}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="readFromTray">
+              <mat-header-cell *matHeaderCellDef> Leídas de buzón </mat-header-cell>
+              <mat-cell *matCellDef="let pushStats" matTooltip=""> {{valueToShow(pushStats.tapsFromTray)}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="totalRuts">
+              <mat-header-cell *matHeaderCellDef> Total Ruts </mat-header-cell>
+              <mat-cell *matCellDef="let pushStats" matTooltip=""> {{valueToShow(pushStats.totalUsersSent)}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="totalTokens">
+              <mat-header-cell *matHeaderCellDef> Total enviadas </mat-header-cell>
+              <mat-cell *matCellDef="let pushStats" matTooltip=""> {{valueToShow(pushStats.totalPushSent)}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="totalUniqueRut">
+              <mat-header-cell *matHeaderCellDef> Apertura rut único </mat-header-cell>
+              <mat-cell *matCellDef="let pushStats" matTooltip="">
+                <div *ngIf="!isLoading">{{valueToShow(pushStats.tapsFromSystemOrTray)}}</div>
+                <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" class="spinner table-spinner">
+                </mat-progress-spinner>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="ratio">
+              <mat-header-cell *matHeaderCellDef> Ratio </mat-header-cell>
+              <mat-cell *matCellDef="let pushStats" matTooltip="">
+                <div *ngIf="!isLoading">{{valueToShow(toPercent((pushStats.tapsFromSystemOrTray /
+                  pushStats.totalPushSent) * 100))}}%</div>
+                <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" class="spinner table-spinner">
+                </mat-progress-spinner>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+              <mat-cell *matCellDef="let campaign" class="actions-table">
+                <button *ngIf="!isDownloadable(campaign)" [disabled]="campaign.downloading" class="i-eye-gray"
+                  (click)="showData(campaign)"></button>
+                <button *ngIf="isDownloadable(campaign)" [disabled]="campaign.downloading" class="i-csv-download"
+                  (click)="downloadData(campaign, 'csv')"></button>
+                <button *ngIf="isDownloadable(campaign)" [disabled]="campaign.downloading" class="i-excel-download"
+                  (click)="downloadData(campaign, 'xlsx')"></button>
+                <div *ngIf="campaign.downloading" class="spinner-button">
+                  <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                </div>
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns[type]"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns[type];"
+              [ngClass]="{'highlight': row?.campaignId === highlightedId}"></mat-row>
+          </mat-table>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

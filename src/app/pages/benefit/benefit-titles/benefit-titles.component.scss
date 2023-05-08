@@ -1,0 +1,143 @@
+@import '../../../../global.scss';
+
+.benefit-container {
+  width: 100%;
+  
+  .benefit-container-section {
+    margin-top: 20px;
+
+    .benefit-table {
+      width: 100%;
+      .th-code {
+        width: 20%;
+        height: 60px;
+      }
+      .th-title {
+        width: 30%;
+      }
+      .th-order {
+        width: 15%;
+      }
+      .th-icon {
+        width: 15%;
+        text-align: center;
+      }
+      .th-enabled {
+        width: 20%;
+      }
+
+      .benefit-code {
+        margin-top: 4px;
+        display: inline-block;
+
+      }
+      .benefit-title {
+        width: 90%;
+        margin-top: 4px;
+      }
+
+      .benefit-order {
+        width: 90%;
+        margin-top: 4px;
+      }
+
+      .td-icon {
+        text-align: center;
+      }
+      .category-icon {
+        width: 32px;
+        cursor:pointer;
+      }
+      .category-no-icon {
+        color:red;
+        cursor:pointer;
+      }
+      .icon-button {
+        margin-left: 15px;
+      }
+    }
+  }
+}
+
+.main-buttons {
+  color: white;
+}
+.group-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.container-actions {
+  margin-right: 10px;
+  button + button {
+    margin-left: 5px;
+}
+}
+.main-table {
+  width: 1130px;
+  background-color: $white;
+  padding: 0;
+  margin: 0px auto;
+  .mat-header-cell {
+    color: $purple;
+    text-transform: uppercase;
+    font-family: $font-semibold;
+  }
+}
+
+.input-name {
+  border: 0;
+  border-bottom: 1px solid $purple;
+  font-size: 12.5px;
+  font-family: $font-semibold;
+  color: $purple;
+  width: 90%;
+  &:hover {
+    cursor: auto;
+  }
+
+  &:focus {
+    outline-color: $white;
+  }
+}
+
+.mat-column-order {
+  width: 100px;
+}
+.mat-column-active {
+  width: 80px;
+}
+.mat-column-icon {
+  width: 230px;
+}
+.mat-column-ref {
+  width: 150px;
+}
+
+.personal-form {
+  margin-top: 20px;
+}
+
+.add-row {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  .row-btn {
+    margin-left: 20px;
+    cursor: pointer;
+  }
+}
+
+.create-benefit-container {
+  padding:25px;
+  width: 500px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.types-footer-row td{
+  font-style: italic;
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="190px" viewBox="0 0 10 190" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47 (45396) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Card/Debit-big" transform="translate(-294.000000, 0.000000)">
+            <g id="img-tarjeta">
+                <g id="Group" transform="translate(294.000000, 0.000000)">
+                    <polygon id="guion" fill="#A73E92" points="0.779296875 189.933333 9.77929687 189.933333 9.77929687 119 0.779296875 119"></polygon>
+                    <polygon id="guion" fill="#FFAE47" points="0.779296875 122.733333 9.77929687 122.733333 9.77929687 86 0.779296875 86"></polygon>
+                    <polygon id="guion" fill="#FF1C33" points="0.779296875 95 9.77929687 95 9.77929687 0 0.779296875 0"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

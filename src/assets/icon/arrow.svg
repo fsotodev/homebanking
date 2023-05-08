@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="8px" height="12px" viewBox="0 0 8 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>Shape</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Icon/Arrow/Purple" fill-rule="nonzero" fill="#4F2D7F">
+            <path d="M3.46753724,6 L7.13457407,2.33296317 C7.57514064,1.89294051 7.57514064,1.17171671 7.13457407,0.731694051 L6.73371288,0.330832861 C6.2931463,-0.11027762 5.57246642,-0.11027762 5.13189985,0.330832861 L0.326460752,5.13627195 C0.0898601853,5.37232861 -0.0151143189,5.68942776 0.00174687086,6.00054391 C-0.0151143189,6.31111615 0.0898601853,6.6282153 0.326460752,6.86427195 L5.13189985,11.6691671 C5.57246642,12.1102776 6.2931463,12.1102776 6.73371288,11.6691671 L7.13457407,11.2683059 C7.57514064,10.8288272 7.57514064,10.1076034 7.13457407,9.66758074 L3.46753724,6 Z" id="Shape" transform="translate(3.732499, 6.000000) scale(-1, 1) translate(-3.732499, -6.000000) "></path>
+        </g>
+    </g>
+</svg>

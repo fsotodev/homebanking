@@ -1,0 +1,110 @@
+<div class="step-title">Detalles del beneficio</div>
+<div [formGroup]="secondStepForm">
+  <mat-form-field class="full-width mt-3 error-wrapper">
+    <input matInput placeholder="Nombre de comercio" formControlName="title" [(ngModel)]="title">
+    <mat-hint>Max 19 caracteres</mat-hint>
+    <mat-error *ngIf="title">Max 19 caracteres</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="full-width error-wrapper">
+    <mat-label>Tags</mat-label>
+    <mat-chip-list #chipList aria-label="Tags">
+      <mat-chip 
+        *ngFor="let tag of tags"
+        (removed)="remove(tag)"
+        (click)="selectTag(tag)"
+        >{{tag.text}}
+        <mat-icon class="i-eye-gray" *ngIf="tag.view" ></mat-icon>
+        <button matChipRemove>
+          <mat-icon class="i-close"></mat-icon>
+        </button>
+      </mat-chip>
+      <input
+        placeholder="Agregar tag..."
+        #tagInput
+        formControlName="tagCtrl"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event)">
+    </mat-chip-list>
+    <mat-hint>* Para permitir la visualización del tag para el cliente, haz click sobre el tag a mostrar. Recuerda que se mostrarán maximo dos tag por beneficio.
+    </mat-hint>
+
+  </mat-form-field>
+  <mat-form-field class="full-width subtitle-wrapper">
+    <input matInput placeholder="Subtitulo" formControlName="subtitle" [(ngModel)]="subtitle">
+  </mat-form-field>
+  <mat-form-field class="full-width error-wrapper">
+    <input matInput [placeholder]="newBenefitService.selectedSegmentationType === 'sinsegmentacion' ? 'Descuento':'Descuento Tachado'" formControlName="benefitDiscount" [(ngModel)]="benefitDiscount">
+    <mat-hint>Max 40 caracteres</mat-hint>
+    <mat-error *ngIf="benefitDiscount">Max 40 caracteres</mat-error>
+  </mat-form-field>
+
+  <div class="full-width">
+    <section class="example-section" *ngIf="newBenefitService.modelBenefitOld.newBenefit.templateType === 'restofans'">
+      <p class="title-section title-image">Tipo de consumo</p>
+      <mat-checkbox class="example-margin" formControlName="isLocallyConsume" [(ngModel)]="consumption">Consumo en local</mat-checkbox>
+      <mat-checkbox class="example-margin" formControlName="isDelivery" [(ngModel)]="delivery">Delivery</mat-checkbox>
+    </section>
+  </div>
+
+  <div class="full-width">
+    <section class="product-options">
+      <p class="title-section title-image">Tipo de producto</p>
+      <mat-checkbox *ngIf="!isProductSegmented()" class="example-margin" formControlName="isMasterCardRequired" [(ngModel)]="masterCard">C. MasterCard (TAM)</mat-checkbox>
+      <mat-checkbox class="example-margin" formControlName="isMasterCardBlackRequired" [(ngModel)]="masterCardBlack">MasterCard Black (MCB)</mat-checkbox>
+      <mat-checkbox *ngIf="!isProductSegmented()" class="example-margin" formControlName="isMCDebitVistaRequired" [(ngModel)]="debitoMCVista">Débito MasterCard Vista (DMCV)</mat-checkbox>
+      <mat-checkbox *ngIf="!isProductSegmented()" class="example-margin" formControlName="isMCDebitCCRequired" [(ngModel)]="debitoMCCuentaCorriente">Débito MasterCard CC (DMCC)</mat-checkbox>
+    </section>
+  </div>
+
+  <mat-form-field class="full-width mt-3">
+    <input matInput placeholder="Producto para acceder al beneficio" formControlName="cardText" [(ngModel)]="cardText">
+  </mat-form-field>
+
+  <mat-form-field class="full-width mt-3">
+    <input matInput placeholder="Descripcion corta" formControlName="benefitShortDescrption" [(ngModel)]="benefitShortDescrption">
+    <mat-hint>Max 25 caracteres</mat-hint>
+    <mat-error *ngIf="benefitShortDescrption">Max 25 caracteres</mat-error>
+
+  </mat-form-field>
+
+  <mat-form-field class="full-width mt-3">
+    <textarea matInput placeholder="Descripcion larga" formControlName="benefitDescription" [(ngModel)]="benefitDescription"></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="full-width mt-3" *ngIf="newBenefitService.modelBenefitOld.newBenefit.templateType === 'restofans'">
+    <input matInput placeholder="Cobertura de reparto" formControlName="coverage" [(ngModel)]="coverage">
+  </mat-form-field>
+
+  <div *ngIf="newBenefitService.modelBenefitOld.newBenefit.templateType === 'opex'">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Precio tarjeta Ripley" formControlName="cardPrice" [(ngModel)]="cardPrice" type="number">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Precio normal producto" formControlName="normalPrice" [(ngModel)]="normalPrice" type="number">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Ripley puntos" formControlName="ripleyPoints" [(ngModel)]="ripleyPoints" type="number">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Precio internet" formControlName="internetPrice" [(ngModel)]="internetPrice" type="number">
+    </mat-form-field>
+
+    <mat-form-field class="full-width mt-3">
+      <input matInput placeholder="Lista SKU" value="" formControlName="sku" [(ngModel)]="sku" autocomplete="off">
+    </mat-form-field>
+    <button mat-mini-fab color="primary" (click)="addSku()">+</button>
+    <ul>
+      <li class="full-width" *ngFor="let skuItem of skuList; let i = index">
+        <button class="btn-delete-list" mat-mini-fab color="warn" (click)="deleteSku(i)">-</button>
+        <p>{{skuItem}}</p>
+      </li>
+    </ul>
+  </div>
+</div>
+<div>
+  <button mat-button matStepperPrevious>Regresar</button>
+  <button mat-raised-button class="button-primary text-white mt-3" matStepperNext [disabled]="!secondStepForm.valid" (click)="saveStepTwo()">Siguiente</button>
+  <button mat-raised-button class="button-secundary mt-3" [disabled]="!secondStepForm.valid" (click)="saveStepTwo()">Previsualizar</button>
+</div>

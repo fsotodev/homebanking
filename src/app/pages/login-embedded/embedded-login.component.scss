@@ -1,0 +1,84 @@
+@import '../../../global.scss';
+
+.mat-card-content>:first-child, .mat-card>:first-child {
+  margin-top: 15px;
+}
+
+.main-container {
+  .main-container-form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 1070px;
+    background-color: $white;
+    padding: 0 30px;
+    margin: 2px auto;
+    font-family: $font-bold;
+
+    .row {
+      display: flex;
+      width: 1070px;
+      flex-direction: row;
+    }
+
+    .buttons-container {
+      flex-direction: row-reverse;
+    }
+
+    .display-container {
+      width: 1070px;
+
+      .screen-container {
+        display: flex;
+        justify-content: space-around;
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 800px;
+        height: 500px;
+        margin: auto;
+        @media (max-width: 780px) {
+          background: none;
+          flex-direction: column;
+          justify-content: center;
+        }
+      }
+
+      .background {
+        display: flex;
+        flex-direction: row;
+        margin: auto;
+
+        .login-box {
+          background-size: contain;
+        }
+        .frame-img-1 {
+          align-self: flex-end;
+          width: 366px;
+          height: 546px;
+          margin-right: 12px;
+          @media (max-width: 780px) {
+            display: none;
+          }
+        }
+        .frame-img-2 {
+          align-self: flex-end;
+          width: 332px;
+          height: 546px;
+          @media (max-width: 780px) {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .buttons-container {
+      margin-bottom: 15px;
+
+      .main-buttons {
+        .button-quaternaty {
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+}

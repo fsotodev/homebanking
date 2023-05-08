@@ -1,0 +1,57 @@
+@import '../../../../global.scss';
+
+.main-container .main-container-form .container-info-form .container-form .date-box,
+.upload-button-quaternaty {
+  width: 50%;
+  margin-top: 40px;
+}
+
+.main-buttons {
+  color: white;
+}
+
+.name-archive {
+  font-size: 12.5px;
+  color: $pink;
+  width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  cursor: default;
+}
+
+.button-quaternaty {
+  margin-bottom: 10px;
+}
+
+::ng-deep {
+  .spinner-button {
+    width: 148px;
+    height: 18px;
+    display: inline-block;
+    vertical-align: middle;
+
+    mat-progress-spinner.spinner.mat-progress-spinner.mat-progress-spinner-indeterminate-animation.mat-accent {
+      width: 18px !important;
+      height: 18px !important;
+
+      svg {
+        width: 18px !important;
+        height: 18px !important;
+
+        circle {
+          stroke: $purple;
+        }
+      }
+    }
+  }
+}
+
+.i-copy {
+  cursor: pointer;
+}
+
+.spinner-button {
+  padding: 0 0 6px 32px;
+}

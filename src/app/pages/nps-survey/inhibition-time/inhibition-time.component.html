@@ -1,0 +1,44 @@
+<div class="main-container">
+    <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+    <ng-container *ngIf="!isLoading">
+        <mat-card class="container-info">
+            <div class="container-title">
+                <p class="title"> Encuestas NPS
+                    <span class="title-highlighted">Tiempo de Inhibición</span>
+                </p>
+            </div>
+            <mat-card class="main-table">
+                <div *ngIf="!isLoading" class="tab-content">
+                    <div class="dates-table">
+                        <mat-table [dataSource]="inhibitionTime">
+                            <ng-container matColumnDef="flowType">
+                                <mat-header-cell *matHeaderCellDef> Tipo de Flujo </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.flowType}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="description">
+                                <mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
+                                <mat-cell class="subtitle-font" *matCellDef="let element"> Este tiempo inhibe que aparezca el modal en {{element.description}}. </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="days">
+                                <mat-header-cell *matHeaderCellDef> Días </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <input matInput type="number" placeholder="days" [(ngModel)]="element.days"
+                    (change)="setDaysOnSurvey(element)" class="input-survey">
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+                        </mat-table>
+                    </div>
+                </div>
+            </mat-card>
+        </mat-card>
+        <br>
+        <div class="main-buttons">
+            <button mat-raised-button (click)="saveChanges()" class="button-primary">Guardar</button>
+        </div>
+    </ng-container>
+</div>

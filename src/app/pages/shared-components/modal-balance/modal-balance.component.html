@@ -1,0 +1,12 @@
+<div class="modal-container">
+  <div class="box-info-modal">
+    <h1 mat-dialog-title class="title-modal title-modal-{{modalData?.titleColor}}"
+     [innerHTML]="modalData?.title"></h1>
+     <hr>
+    <p mat-dialog-content class="messege-modal"> <b> $ {{ giftCardBalance === -1 ? 'Error al obtener el saldo' : giftCardBalance }}</b></p>
+  </div>
+  <br><br>
+  <mat-dialog-actions class="box-button-modal">
+    <button class="mat-raised-button button-primary" (click)="closeModal('right')">Cerrar</button>
+  </mat-dialog-actions>
+</div>

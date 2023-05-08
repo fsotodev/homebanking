@@ -1,0 +1,20 @@
+.mat-card-content { margin-bottom: 0; }
+
+.mat-raised-button.search-rut-button { margin-top: 10px; }
+
+span {
+    &.text-bold { font-family: "Montserrat Semibold"; }
+}
+
+.container-info-form.search-rut-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-info.field-text { width: 20%; }
+
+.upload-instructions { margin-top: 10px; }
+
+.main-container .main-container-form .container-info-form.record-section {
+    flex-direction: column;
+}

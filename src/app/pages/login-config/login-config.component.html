@@ -1,0 +1,142 @@
+<div class="main-container">
+  <mat-progress-spinner *ngIf="loading && !loadingWhiteList" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+  <mat-card *ngIf="!loading" class="container-info">
+    <div class="container-title">
+      <p class="title">Login <span class="title-highlighted">PWA</span></p>
+    </div>
+  </mat-card>
+
+  <mat-card class="main-container-form">
+    <mat-card class="main-table">
+      <mat-tab-group class="tab-content" [selectedIndex]="tabSelected" (selectedTabChange)="tabChanged($event)">
+        <mat-tab label="Dígitos Verificadores" class="title-tab" *ngIf="!loading">
+          <mat-card-content class="container-info-form">
+            <div class="container-form" [formGroup]="platformForm">
+              <br>
+              <section class="dates-info platforms-info">
+                <mat-form-field>
+                  <mat-label>Selecciona la plataforma</mat-label>
+                  <mat-select [disabled]="saving" formControlName="platformMap" [(ngModel)]="platformName" (selectionChange)="select($event.value)">
+                    <mat-option value="desktop">Desktop</mat-option>
+                    <mat-option value="android">Android</mat-option>
+                    <mat-option value="ios">IOS</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </section>
+              <h3 *ngIf="!!platformName && !loadDigits">Dígitos Verificadores</h3>
+              <div *ngIf="!!platformName && !loadDigits" class="digits-box">
+                <section formArrayName="groups" *ngFor="let order of platformForm.controls.groups.controls; let i = index" class="date-box digit">
+                  <mat-checkbox [disabled]="saving" [formControlName]="i" class="example-margin"> {{digits[i].digit}}</mat-checkbox>
+                </section>
+              </div>
+            </div>
+          </mat-card-content>
+          <div class="container-buttons">
+            <button mat-button (click)="goHome()" class="i-left-arrow button-tertiary">Home</button>
+            <div class="login-buttons">
+              <div class="main-buttons">
+                <button mat-raised-button [disabled]="saving" (click)="disable()" class="button-tertiary">Quitar todos</button>
+              </div>
+              <div class="main-buttons">
+                <button mat-raised-button (click)="submit()" class="button-primary"
+                        [disabled]="disabledSave()">Guardar</button>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Count Limit/Plataformas" class="title-tab" *ngIf="!loading">
+          <mat-card-content class="container-info-form">
+            <div class="container-form" [formGroup]="platformForm">
+              <br>
+              <section class="dates-info platforms-info">
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                         placeholder="Count Limit"
+                         formControlName="countLimit"
+                         [(ngModel)]="loginConfig.throttling.countLimit"
+                         onkeydown="return event.keyCode !== 69"
+                         required>
+                  <mat-hint>Ej: 3</mat-hint>
+                </mat-form-field>
+              </section>
+              <mat-label class="user-location">Plataformas que pueden hacer login: </mat-label>
+              <div class="user-location checkbox">
+                <mat-checkbox [disabled]="saving" [(ngModel)]="loginConfig.channelConfig.android.enabled" [ngModelOptions]="{ standalone: true }">Android</mat-checkbox>
+              </div>
+              <div class="user-location checkbox">
+                <mat-checkbox [disabled]="saving" [(ngModel)]="loginConfig.channelConfig.ios.enabled" [ngModelOptions]="{ standalone: true }">IOS</mat-checkbox>
+              </div>
+              <div class="user-location checkbox">
+                <mat-checkbox [disabled]="saving" [(ngModel)]="loginConfig.channelConfig.browser.enabled" [ngModelOptions]="{ standalone: true }">Browser</mat-checkbox>
+              </div>
+            </div>
+          </mat-card-content>
+          <div class="container-buttons">
+            <button mat-button (click)="goHome()" class="i-left-arrow button-tertiary">Home</button>
+            <div class="main-buttons">
+              <button mat-raised-button (click)="submitPlatforms()" class="button-primary">Guardar</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="White List" class="title-tab" *ngIf="!loading">
+          <mat-card-content class="container-info-form">
+            <div class="container-form" [formGroup]="platformForm">
+              <mat-label class="user-location">Configuración Whitelist </mat-label>
+              <div class="user-location">
+                <mat-checkbox [disabled]="saving" [(ngModel)]="loginConfig.whiteListActive" [ngModelOptions]="{ standalone: true }">Activar</mat-checkbox>
+              </div>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text"
+                       placeholder="Collección"
+                       formControlName="collection"
+                       [(ngModel)]="loginConfig.whiteListCollection"
+                       [disabled]="true"
+                       disabled
+                       readonly>
+              </mat-form-field>
+              <div class="upload-button-quaternaty">
+                <button mat-raised-button class="button-quaternaty" [disabled]="loadingCsv">Subir archivo
+                  <input #inputFile class="file-input" type="file" (change)="uploadFile($event.target.files)" accept=".csv"
+                         [disabled]="loadingWhiteList">
+                </button>
+                <div class="info-section">
+                  <div *ngIf="file"> {{ file[0]?.name }}
+                    {{ loadingWhiteList && !validFile? '(Validando archivo...)' : validFile ? '(Archivo válido)': '(Archivo no válido)'}}
+                  </div>
+                  <div *ngIf="!validFile" class="tip-image">Formato de archivo: .csv</div>
+                  <br>
+                  <div class="upload-instructions">
+                    <span class="title-instructions">IMPORTANTE A CONSIDERAR PARA CARGA DE ARCHIVOS </span><br>
+                    - Archivo <span class="text-bold">formato .csv</span>.<br>
+                    - <span class="text-bold">Una sola columna</span>.<br>
+                    - Sin cabecera, es decir, el archivo debe contener <span class="text-bold">únicamente ruts</span>.<br>
+                    - Formato de <span class="text-bold"> ruts con dv, sin puntos, sin guión y con k minúscula</span>.<br>
+                    - La columna contenedora de los ruts, no debe tener ningún tipo de <span class="text-bold">formato especial aplicado</span>.<br>
+                    - El archivo debe contener<span class="text-bold">máximo 1.000.000 de ruts</span>.<br>
+                    - Al subir un nuevo archivo, la lista existente de ruts en la colección <span class="text-bold">se sobrescribe</span>.<br>
+                  </div>
+                </div>
+                <div *ngIf="loadingWhiteList && validFile" class="upload-info-section">
+                  <span class="title-section">Subiendo códigos: {{ percUsersCommited}}%</span>
+                  <section class="progress-bar-section">
+                    <mat-progress-bar color="primary" mode="determinate" [value]="progressWhiteList">
+                    </mat-progress-bar>
+                  </section>
+                </div>
+              </div>
+
+            </div>
+          </mat-card-content>
+          <div class="container-buttons">
+            <button mat-button (click)="goHome()" class="i-left-arrow button-tertiary">Home</button>
+            <div class="main-buttons">
+              <button mat-raised-button (click)="uploadCodes(); inputFile.value = ''" class="button-primary"
+                      [disabled]="!validFile || loadingWhiteList === true">Cargar</button>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </mat-card>
+</div>
+

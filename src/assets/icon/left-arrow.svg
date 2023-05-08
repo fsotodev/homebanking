@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="9px" height="17px" viewBox="0 0 9 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <title>left-arrow</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="button/principal-volver" transform="translate(-12.000000, -11.000000)" fill="#4F2D7F" fill-rule="nonzero">
+            <g id="left-arrow" transform="translate(12.000000, 11.000000)">
+                <path d="M7.94285714,16.1258741 C8.05714286,16.2377622 8.2,16.2937063 8.35714286,16.2937063 C8.51428571,16.2937063 8.65714286,16.2377622 8.77142857,16.1258741 C9,15.9020979 9,15.5384615 8.77142857,15.3146853 L1.48571429,8.18181818 L8.77142857,1.04895105 C9,0.825174825 9,0.461538462 8.77142857,0.237762238 C8.54285714,0.013986014 8.17142857,0.013986014 7.94285714,0.237762238 L0.228571429,7.77622378 C9.85808657e-14,8 9.85808657e-14,8.36363636 0.228571429,8.58741259 L7.94285714,16.1258741 L7.94285714,16.1258741 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

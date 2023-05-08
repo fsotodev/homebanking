@@ -1,0 +1,93 @@
+<ng-template matStepLabel onclick="saveStepOne()">Primer paso</ng-template>
+
+<div class="step-title ">
+  Estructura del beneficio
+</div>
+<div [formGroup]="firstStepForm"  *ngIf="!isLoading">
+
+  <mat-form-field class="full-width">
+    <mat-label>Segmentación</mat-label>
+    <mat-select [(ngModel)]="selectedSegmentation" formControlName="segmentationType" (selectionChange)="changeSegmentationTypes()"
+      [disabled]="benefitService.getIsModifyingBoolean()">
+      <mat-option *ngFor="let type of segmentationTypes" value="{{type.value}}">{{type.text}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Tipo de plantilla</mat-label>
+    <mat-select [(ngModel)]="selectedTemplate" formControlName="templateType" (selectionChange)="changeTemplateTypes()">
+      <mat-option *ngFor="let type of templateTypes" value="{{type.value}}">{{type.text}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Tipo de categoria</mat-label>
+    <mat-select #selectCategory [(ngModel)]="selectedCategory" formControlName="type">
+      <mat-option *ngFor="let type of categoryTypes" [class.inactive] = "!type.active" 
+        [disabled]="type.id === 'personal' && selectedSegmentation !== 'sinsegmentacion'"
+        value="{{type.id}}">{{type.text}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="full-width">
+    <p class="title-section title-image">Es Novedad?</p>
+    <mat-slide-toggle [(ngModel)]='checkedNews' formControlName="news">{{checkedNews?'Si':'No'}}</mat-slide-toggle>
+  </div>
+  <mat-form-field class="full-width temporality-wrrapper">
+    <input matInput placeholder="Temporalidad" formControlName="listHeaderText"[(ngModel)]="listHeaderText">
+    <mat-hint>Max 16 caracteres</mat-hint>
+    <mat-error *ngIf="listHeaderText">Max 16 caracteres</mat-error>
+  </mat-form-field>
+
+  <div class="full-width">
+    <p class="title-section title-image">Subir imagenes</p>
+
+    <div class="full-width">
+      <mat-label>Imagen de catalogo</mat-label>
+      <div class="upload-image">
+        <input class="custom-file-input" type="file" (change)="uploadBenefitImage($event.target.files, 'catalog')"
+          accept=".png,.jpg,.svg" [disabled]="isUploadingCatalog">
+        <div class="name-archive" *ngIf="!isUploadingCatalog">
+          {{ catalogImage ? catalogImage : 'Imagen de catalogo.' }}</div>
+      </div>
+      <div *ngIf="isUploadingCatalog" class="spinner-button">
+        <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+      </div>
+      <span class="tip-image">Formato: 311x116.Extensión imagen: .png .jpg .svg</span>
+    </div>
+
+    <div class="full-width mt-3">
+      <mat-label>Imagen de detalle</mat-label>
+      <div class="upload-image">
+        <input class="custom-file-input" type="file" (change)="uploadBenefitImage($event.target.files, 'detail')"
+          accept=".png,.jpg,.svg" [disabled]="isUploadingDetail">
+        <div class="name-archive" *ngIf="!isUploadingDetail">
+          {{ detailImage ? detailImage : 'Imagen de detalle.' }}</div>
+      </div>
+      <div *ngIf="isUploadingDetail" class="spinner-button">
+        <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+      </div>
+      <span class="tip-image">Formato: 944x244.Extensión imagen: .png .jpg .svg</span>
+    </div>
+
+    <div class="full-width mt-3">
+      <mat-label>Imagen de empresa</mat-label>
+      <div class="upload-image">
+        <input class="custom-file-input" type="file" (change)="uploadBenefitImage($event.target.files, 'company')"
+          accept=".png,.jpg,.svg" [disabled]="isUploadingCompany">
+        <div class="name-archive" *ngIf="!isUploadingCompany">
+          {{ companyImage ? companyImage : 'Imagen de empresa.' }}</div>
+      </div>
+      <div *ngIf="isUploadingCompany" class="spinner-button">
+        <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+      </div>
+      <span class="tip-image">Formato: 154x154. Extensión imagen: .png .jpg .svg</span>
+    </div>
+
+  </div>
+</div>
+<div>
+  <button mat-button onclick="window.history.go(-1); return false;" >Regresar</button>
+  <button mat-raised-button class="button-primary text-white mt-3" matStepperNext [disabled]="isStepOneCompleted()" (click)="saveStepOne()">Siguiente</button>
+  <button mat-raised-button class="button-secundary mt-3" [disabled]="isStepOneCompleted()" (click)="saveStepOne()">Previsualizar</button>
+</div>

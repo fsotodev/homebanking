@@ -1,0 +1,46 @@
+/**
+Variables para Acordeon basado en bootstrap
+*/
+
+$accordion-button-color: $br-base-white;
+$accordion-button-bg: $br-purple-800;
+$accordion-button-active-color: $br-base-white;
+$accordion-button-active-bg: $br-purple-800;
+$accordion-border-color: $br-purple-800;
+
+.accordion-button {
+  cursor: pointer;
+  font-size: 14px !important;
+  background-color: $br-white-menu-inactive !important;
+  color: rgba(88, 89, 91, 1) !important;
+  border-bottom-color: $br-white-menu-inactive !important;
+  &.active {
+    background-color: $br-purple-menu-active !important;
+  }
+}
+
+.accordion {
+  .accordion-item {
+    background-color: $br-purple-menu-active;
+    border: 1px solid $br-purple-menu-active;
+  }
+
+  .accordion-button::after {
+    display: none;
+  }
+}
+
+.list-group-item {
+  border-radius: 0 !important;
+}
+
+.accordion-button {
+  background: $br-white-menu-inactive !important;
+  box-shadow: unset !important;
+}
+
+.accordion-button.collapsed {
+  background: $br-white-menu-inactive !important;
+  box-shadow: unset !important;
+}
+

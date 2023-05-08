@@ -1,0 +1,68 @@
+<div class="search">
+  <input type="text" (keyup)="applyFilter($event.target.value)" placeholder="Buscar..."
+         class="input-search i-search">
+</div>
+<div class="container-table">
+  <div style="display:flex">
+    <div [ngStyle]="withButtonDelete ? {width: '90%'} : {width: '100%'}">
+      <mat-paginator [length]="dataSource.data.length"
+                     [pageSizeOptions]="pageSizeOptions"
+                     (page)="changePage($event)"
+                     class="without-actions" aria-label="Select page"> </mat-paginator>
+    </div>
+    <div [ngClass]="withButtonDelete ? 'pagination-with-button' : 'hidden-element' ">
+      <button (click)="clickDelete()"  class="br-btn-solid">Borrar <div class="i-trash-alt"></div></button>
+    </div>
+  </div>
+  <table mat-table [dataSource]="dataSource">
+    <ng-container *ngFor="let column of definitionColumns" [matColumnDef]="column.columnDef">
+      <th mat-header-cell *matHeaderCellDef>
+        <ng-container *ngIf="column.header === 'selector'" >
+          <mat-checkbox (change)="selectAll()"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </ng-container>
+        <ng-container *ngIf="column.header !== 'selector'" >
+          {{column.header}}
+        </ng-container>
+
+      </th>
+      <td mat-cell *matCellDef="let row" [ngClass]="column.type === 'actions' ? 'col-actions' : ''">
+        <ng-container *ngIf="column.type === 'matCheckbox'">
+          <mat-checkbox (change)="sendNewValue($event, column.type, column, row)" [checked]="selection.isSelected(row)"></mat-checkbox>
+        </ng-container>
+        <ng-container *ngIf="column.type === 'matInput'">
+          <input matInput type="number" (change)="sendNewValue($event, column.type, column, row)" [style]="column.style" [value]="column.cell(row)">
+        </ng-container>
+        <ng-container *ngIf="column.type === 'mat-slide-toggle'">
+          <mat-slide-toggle class="slide-toggle-class" [checked]="column.cell(row)" (change)="sendNewValue($event, column.type, column, row)"></mat-slide-toggle>
+        </ng-container>
+        <ng-container *ngIf="!column.type">
+          {{column.cell(row)}}
+        </ng-container>
+        <ng-container *ngIf="column.type==='actions' && column.cell(row) !== 'undefined'">
+          <ng-container *ngFor="let action of column.cell(row)">
+              <ng-container *ngIf="action.nameButton!=='•••'; else contextButton;" >
+                <button class="br-btn-link" (click)="sendNewAction(action, row)">{{action.nameButton}}</button>
+              </ng-container>
+              <ng-template #contextButton>
+                <button class="br-btn-link" (click)="sendNewAction(action, row)"  [matMenuTriggerFor]="menu">{{action.nameButton}}</button>
+              </ng-template>
+              <mat-menu #menu="matMenu" yPosition="below">
+                <ng-container *ngFor="let more_action of action.actions">
+                  <button mat-menu-item (click)="sendNewAction(more_action, row)">
+                    <span>{{more_action.nameButton}}</span>
+                  </button>
+                </ng-container>
+              </mat-menu>
+          </ng-container>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <app-custom-paginator [totalPages]="totalPages" [pageSizeSelected]="pageSize" (page)="getPageActive($event)"></app-custom-paginator>
+</div>

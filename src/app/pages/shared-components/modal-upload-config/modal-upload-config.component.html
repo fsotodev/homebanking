@@ -1,0 +1,105 @@
+<form [formGroup]="form">
+  <p>
+    <mat-form-field appearance="fill">
+      <mat-label>ID colección:</mat-label>
+      <input matInput formControlName="idConfig"/>
+      <mat-error>Campo requerido</mat-error>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="fill" class="input-big-size">
+      <mat-label>Colección:</mat-label>
+      <input matInput formControlName="collection"/>
+      <mat-error>Campo requerido</mat-error>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-checkbox formControlName="automaticId" [(ngModel)]="autoID">ID Automático</mat-checkbox>
+  </p>
+  <p>
+    <mat-checkbox formControlName="overlaps">Sobrescribir datos en colección</mat-checkbox>
+  </p>
+  <p>
+    <mat-checkbox formControlName="convertType">Convertir Tipos de Datos</mat-checkbox>
+  </p>
+  <p>
+    <mat-accordion class="example-headers-align">
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+          <mat-panel-title>
+            Ayuda
+          </mat-panel-title>
+          <mat-panel-description>
+            Configuración de variables
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-selection-list>
+          Para los campos posteriores <br>
+          Puedes tener estas keywords (palabras reservadas): <br>
+          <mat-list-option *ngFor="let tip of tips" checkboxPosition="before" [disabled]="true"
+                           [selected]="true">{{tip}}</mat-list-option>
+        </mat-selection-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </p>
+  <p *ngIf="!autoID">
+    <mat-form-field appearance="fill" class="input-big-size">
+      <mat-label>DocumentId:</mat-label>
+      <input matInput formControlName="documentId"/>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="fill" class="input-big-size">
+      <mat-label>Objeto creado</mat-label>
+      <textarea matInput formControlName="objectCreated" matAutosizeMaxRows="10"
+                (change)="validateJson('objectCreated')"
+                mat-autosize></textarea>
+      <mat-error>Json no válido</mat-error>
+    </mat-form-field>
+
+  </p>
+
+  <p>
+    <mat-form-field appearance="fill" class="input-big-size">
+      <mat-label>Documento de destino</mat-label>
+      <input matInput formControlName="document" (change)="createOnLoaded()"/>
+      <mat-error>Campo requerido</mat-error>
+    </mat-form-field>
+
+  </p>
+
+  <p>
+    <mat-accordion class="example-headers-align">
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+          <mat-panel-title>
+            Ayuda
+          </mat-panel-title>
+          <mat-panel-description>
+            Configuración de push
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-selection-list>
+          Parámetros necesarios para las Notificaciones Push: <br>
+          <mat-list-option *ngFor="let tip of pushParamsTips" checkboxPosition="before" [disabled]="true"
+                           [selected]="true">{{tip}}</mat-list-option>
+        </mat-selection-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </p>
+  <p>
+    <mat-form-field appearance="fill" class="input-big-size">
+      <mat-label>Parámetros necesarios</mat-label>
+      <textarea matInput formControlName="parameters" matAutosizeMaxRows="10" (change)="validateJson('parameters')"
+                mat-autosize></textarea>
+      <mat-error>Json no válido</mat-error>
+    </mat-form-field>
+
+  </p>
+
+  <p>
+    <button mat-button (click)="saveChanges()">Aceptar</button>
+    <button mat-button (click)="closeDialog()">Cancelar</button>
+  </p>
+</form>

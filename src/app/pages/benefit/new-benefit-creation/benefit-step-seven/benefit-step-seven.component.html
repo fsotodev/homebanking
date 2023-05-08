@@ -1,0 +1,42 @@
+<div [formGroup]="sevenStepFormGroup" *ngIf="loadSegmentation">
+  <div *ngFor="let typeItem of segmentationTypes">
+    <div  *ngIf="typeItem.type === newBenefitService.selectedSegmentationType">
+      <div *ngFor="let segmentationType of typeItem.values">
+        <div class="full-width">
+          <p class="title-segmentation title-section title-image">{{segmentationType.text | titlecase}}</p>
+          <mat-slide-toggle (change)="addValidatorsToActiveDiscount($event, typeItem.type + segmentationType.id)" class="full-width" [formControlName]="typeItem.type+segmentationType.id+'Has'" 
+          [(ngModel)]='segmentationModel[typeItem.type + segmentationType.id].active'></mat-slide-toggle>
+          <div *ngIf="segmentationModel[typeItem.type + segmentationType.id].active">
+            <mat-form-field class="full-width error-wrapper">
+              <input matInput placeholder="Promocion adicional" [formControlName]="typeItem.type+segmentationType.id+'Discount'" 
+              [(ngModel)]="segmentationModel[typeItem.type + segmentationType.id].discount">
+              <mat-hint>Obligatorio. Max 40 caracteres</mat-hint>
+              <mat-error *ngIf="this.sevenStepFormGroup.controls[typeItem.type+segmentationType.id+'Discount'].errors?.maxlength">Max 40 caracteres</mat-error>
+              <mat-error *ngIf="this.sevenStepFormGroup.controls[typeItem.type+segmentationType.id+'Discount'].errors?.required">El descuento es obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Detalle descuento" [formControlName]="typeItem.type+segmentationType.id+'Detail'" 
+              [(ngModel)]="segmentationModel[typeItem.type + segmentationType.id].detail">
+              <mat-hint>Opcional.</mat-hint>
+            </mat-form-field>
+            <mat-form-field class="full-width" *ngIf="this.newBenefitService.selectedIsUniqueCode">
+              <input matInput placeholder="Código único" [formControlName]="typeItem.type+segmentationType.id+'Code'" 
+              [(ngModel)]="segmentationModel[typeItem.type + segmentationType.id].code">
+              <mat-hint>Obligatorio.</mat-hint>
+              <mat-error *ngIf="this.sevenStepFormGroup.controls[typeItem.type+segmentationType.id+'Code'].errors?.required">El codigo es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <mat-error *ngIf="sevenStepFormGroup.errors?.noDiscountSelected && sevenStepFormGroup?.dirty">Debe seleccionar al menos 1 descuento.</mat-error>
+  
+<div>
+  <button mat-button matStepperPrevious>Regresar</button>
+  <button mat-raised-button class="button-secundary mt-3" (click)="saveStepSeven()">Previsualizar</button>
+  <button mat-button class="button-secondary" (click)="checkFormAndSave()">Guardar</button>
+  <button mat-button class="button-primary" (click)="checkFormAndPublish()">Publicar</button>
+</div>

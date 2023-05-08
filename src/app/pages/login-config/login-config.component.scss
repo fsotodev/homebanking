@@ -1,0 +1,52 @@
+.platforms-info {
+  display: flex;
+  justify-content: center;
+}
+
+.container-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.container-info-form {
+  justify-content: center;
+
+  .container-form {
+    .user-location {
+      display: flex;
+      justify-content: center;
+      width: auto;
+
+      &.checkbox {
+        width: 380px;
+        justify-content: end;
+        margin-left: 140px;
+      }
+    }
+
+    .input-info {
+      width: auto;
+    }
+  }
+}
+
+.login-buttons {
+  display: flex;
+}
+
+.main-buttons {
+  margin-right: 10px;
+}
+
+.field-text {
+  display: flex;
+  justify-content: center;
+}
+
+span {
+  &.text-bold { font-family: "Montserrat Semibold"; }
+}
+
+.upload-button-quaternaty {
+  margin-left: 120px;
+}

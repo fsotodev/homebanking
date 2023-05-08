@@ -1,0 +1,20 @@
+@import '~sass/abstracts/variables';
+
+.paginator-custom {
+  margin-top: 20px;
+}
+
+.page-item {
+  color: $br-purple-800;
+}
+.page-link {
+  color: $br-purple-800;
+}
+.page-item.active .page-link {
+  background-color: $br-purple-800;
+  border-color: $br-purple-800;
+}
+
+a.page-link.button {
+  cursor:pointer;
+}

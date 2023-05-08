@@ -1,0 +1,39 @@
+<div class="main-container">
+    <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+    <ng-container *ngIf="!isLoading">
+        <mat-card class="container-info">
+            <div class="container-title">
+                <p class="title"> Encuestas NPS
+                    <span class="title-highlighted">Tiempo de Timeout por Flujo</span>
+                </p>
+            </div>
+            <mat-card class="main-table">
+                <div *ngIf="!isLoading" class="tab-content">
+                    <div class="dates-table">
+                        <mat-table [dataSource]="timeoutTime">
+                            <ng-container matColumnDef="flowName">
+                                <mat-header-cell *matHeaderCellDef> Nombre de Flujo </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.flowName}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="seconds">
+                                <mat-header-cell *matHeaderCellDef> Segundos </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <input matInput type="number" placeholder="seconds" [(ngModel)]="element.seconds"
+                    (change)="setSecondsOnSurvey(element)" class="input-survey">
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+                        </mat-table>
+                    </div>
+                </div>
+            </mat-card>
+        </mat-card>
+        <br>
+        <div class="main-buttons">
+            <button mat-raised-button (click)="saveChanges()" class="button-primary">Guardar</button>
+        </div>
+    </ng-container>
+</div>

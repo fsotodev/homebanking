@@ -1,0 +1,65 @@
+<div class="main-container">
+    <mat-card class="container-info">
+      <div class="container-title">
+        <p class="title"> Editar
+          <span class="title-highlighted">Banner Dashboard Ripley Puntos</span>
+        </p>
+      </div>
+    </mat-card>
+    <mat-card class="main-container-form">
+      <mat-card-content class="container-info-form">
+        <div class="container-form">
+          <div class="select-section">
+            <mat-label class="label-element">Categoría de cliente</mat-label>
+            <mat-select class="select-element" [(ngModel)]="segmentBannerSelected" (change)="uploadBannerData()">
+              <mat-option *ngFor="let banner of bannersList" value="{{banner.segment}}">{{banner.segment}}
+              </mat-option>
+            </mat-select>
+          </div>
+          <section class="date-box" *ngIf="selectedBanner">
+            <span class="title-section">Cargar imágen 880x440px</span>
+            <div class="special-info">
+              <div class="buttons-box">
+                <app-load-file-button [description]="description" [showUrl]="false" [text]="text" [extensions]="extensions" [isLoading]="isUploading" (file)="uploadMainImage($event)"></app-load-file-button>
+                <div class="preview" *ngIf="selectedBanner.imageUrl">
+                  <p class="title-section">Imágen</p>
+                  <img [src]="selectedBanner.imageUrl" alt="preview">
+                </div>
+              </div>
+            </div>
+          </section>
+  
+          <section class="dates-info" *ngIf="selectedBanner">
+            <div class="available-pages-section">
+              <p class="subtitle-section">Seleccionar Redirección:</p>
+              <mat-select class="select-element" [(ngModel)]="selectedBanner.redirectPath">
+                <mat-option value="clientBenefits">Beneficios</mat-option>
+                <mat-option value="redeem">Categorías de canje</mat-option>
+              </mat-select>
+              <p class="subtitle-section benefit-text" *ngIf="selectedBanner.redirectPath === 'clientBenefits'" >Id de beneficios</p>
+              <mat-form-field class="input-benefit" *ngIf="selectedBanner.redirectPath === 'clientBenefits'">
+                <input matInput type="text" placeholder="Id de beneficios"
+                  [(ngModel)]="selectedBanner.benefitId">
+              </mat-form-field>
+              <div *ngIf="selectedBanner.redirectPath === 'redeem'">
+                <p class="subtitle-section">Seleccionar Categoría:</p>
+                <mat-select class="select-element" [(ngModel)]="selectedBanner.categoryId">
+                  <mat-option *ngFor="let category of categories" value="{{category.categoryId}}">{{ category.name }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </section>
+        </div>
+      </mat-card-content>
+  
+      <div class="container-buttons">
+        <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">volver</button>
+        <div class="main-buttons">
+          <button mat-raised-button (click)="save()" class="button-primary"
+            [disabled]="!validBannerData || !segmentBannerSelected || saving ">Modificar</button>
+        </div>
+      </div>
+    </mat-card>
+  
+  </div>

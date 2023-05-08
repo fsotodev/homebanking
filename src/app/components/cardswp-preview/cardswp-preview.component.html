@@ -1,0 +1,98 @@
+<p>Pantalla preview </p>
+<div class="checkbox-container">
+  <mat-checkbox [(ngModel)]="product.forTR" (change)="checkEvent($event, 'tr')" [disabled]="trDisabled">
+    TR
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="product.forTRM" (change)="checkEvent($event, 'trm')" [disabled]="trmDisabled">
+    TRM
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="product.forSA" (change)="checkEvent($event, 'sa')" [disabled]="saDisabled">
+    SA
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="product.forSA_TR" (change)="checkEvent($event, 'trsa')" [disabled]="trsaDisabled">
+    TR_SA
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="product.forSA_TRM" (change)="checkEvent($event, 'trmsa')" [disabled]="trmsaDisabled">
+    TRM_SA
+  </mat-checkbox>
+</div>
+
+<div class="screen-container" [ngStyle]="{'background': screen ? screen.backgroundColor : 'white'}">
+
+  <div class="container-top"
+    [ngStyle]="{'background': wave?.show ? screen.backgroundColorTop : screen?.backgroundColor}">
+    <div class="wrapper-container">
+      <div *ngIf="screen?.exitButton?.show" class="exit-button-container"
+        [ngClass]="{'right': !!screen.exitButton.right}">
+        <p class="exit-button" [ngStyle]="{'color': screen?.exitButton.color}">
+          {{ utils.getHtmlContent(screen.exitButton.text) }}
+        </p>
+      </div>
+    </div>
+    <div class="screen-logo img-logo-negative"></div>
+    <div class="cards-container" [ngClass]="{ 'two-cards': product.forSA_TR || product.forSA_TRM }">
+
+      <div class="card fade-in" [ngClass]="getCardClass()">
+        <div class="card-logo img-logo-ripley-small"></div>
+        <div class="br-logo img-logo-negative"></div>
+        <div class="info">
+          <p class="pan">{{ getPan() }}</p>
+          <p class="name">Cuenta ABC</p>
+        </div>
+      </div>
+      <div *ngIf="product.forSA_TR || product.forSA_TRM" class="card over fade-in" [ngClass]="getCardClass(true)">
+        <div class="card-logo img-logo-ripley-small"></div>
+        <div class="br-logo img-logo-negative"></div>
+        <div class="info">
+          <p class="pan">{{ getPan() }}</p>
+          <p class="name">Cuenta ABC</p>
+        </div>
+      </div>
+
+    </div>
+    <p *ngIf="screen?.secondaryTitle?.show" class="secondary-title align-center"
+      [innerHTML]="utils.sanitizeHtml(getCardsMessage())" [ngStyle]="{'color': screen?.secondaryTitle?.color}"></p>
+  </div>
+  <app-wave *ngIf="wave?.show" [invert]="!!wave?.invert" [colorTop]="screen?.backgroundColorTop" [top]="false">
+  </app-wave>
+  <div class="container-bottom align-left" [ngClass]="{'with-footer': showFixedButton}">
+    <p *ngIf="screen?.subTitle?.show" class="sub-title" [innerHTML]="utils.sanitizeHtml(screen.subTitle.text)"
+      [ngStyle]="{'color': screen.subTitle?.color}"></p>
+
+    <div *ngIf="screen?.infoBox.show" class="info-box">
+      <img *ngIf="!!screen?.infoBox.iconURL" class="icon" [src]="screen?.infoBox.iconURL">
+      <p *ngIf="!!screen?.infoBox.text" class="text" [innerHTML]="utils.sanitizeHtml(screen.infoBox.text)"></p>
+    </div>
+    <ul class="item-list">
+      <ng-container *ngFor="let item of itemList">
+        <li *ngIf="canShowItem(item)" class="inner-item instruction-item">
+          <img *ngIf="!!item.iconURL" class="icon" [src]="item.iconURL">
+          <div class="text" [ngStyle]="{'color': item.color}">
+            <p *ngIf="!!item.title" class="title" [innerHTML]="utils.sanitizeHtml(item.title)"></p>
+            <p *ngIf="!!item.description" class="description" [innerHTML]="utils.sanitizeHtml(item.description)"></p>
+            <div *ngIf="!!item.showMiniCards" class="mini-cards-conainer">
+              <div *ngIf="item.forSA" class="mini-card i-mini-card-debit"></div>
+              <div *ngIf="item.forTR" class="mini-card i-mini-card-ripley"></div>
+              <div *ngIf="item.forTRM" class="mini-card i-mini-card-ripley-ms"></div>
+            </div>
+          </div>
+        </li>
+      </ng-container>
+    </ul>
+
+    <button *ngIf="screen?.button?.show && !screen?.button?.fixed" class="brand-button next button"
+      [ngClass]="screen?.button?.class"
+      [ngStyle]="{'background': screen?.button?.backgroundColor, 'color': screen?.button?.color}">
+      {{ utils.getHtmlContent(screen.button.text) }}
+    </button>
+  </div>
+
+  <div class="footer-container" *ngIf="showFixedButton" [ngStyle]="{'background': screen.backgroundColor}">
+    <button class="brand-button next button" [ngClass]="screen.button.class"
+      [ngStyle]="{'background': screen.button.backgroundColor, 'color': screen.button.color}"
+      [ngStyle]="{'background': screen.button.backgroundColor, 'color': screen.button.color}">
+      {{ utils.getHtmlContent(screen.button.text) }}
+    </button>
+  </div>
+
+</div>

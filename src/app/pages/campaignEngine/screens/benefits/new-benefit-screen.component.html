@@ -1,0 +1,242 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title">
+        {{ isEditing ? 'Actualizar' : 'Nueva'}}
+        <span class="title-highlighted">Pantalla de Beneficios</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form" style="display: flex; flex-direction: column;">
+    <mat-card-content class="container-info-form">
+      <div class="column">
+        <form class="container-form" [formGroup]="benefitsForm">
+          <section class="dates-info">
+            <mat-form-field class="input-info field-text">
+              <input matInput type="text" placeholder="Id" formControlName="id" required maxlength="2000">
+              <mat-hint>Ej: benefits-0225-SA</mat-hint>
+              <mat-hint class="input-length" align="end">{{ benefitsWP.id ? benefitsWP.id.length
+                : 0 }} / 2000</mat-hint>
+              <mat-error *ngIf="benefitsForm.get('id').hasError('screenExistance')">El id ya está en uso</mat-error>
+            </mat-form-field>
+            <mat-form-field class="input-info field-text" formGroupName="mainTitle">
+              <input matInput type="text" placeholder="Título principal" formControlName="text" required maxlength="2000">
+              <mat-hint>Ej: bienvenido al mundo de tu tarjeta</mat-hint>
+              <mat-hint class="input-length" align="end">{{ benefitsWP.mainTitle ? benefitsWP.mainTitle.text.length
+                : 0 }} / 2000</mat-hint>
+            </mat-form-field>
+            <mat-form-field class="input-info field-text" formGroupName="subTitle">
+              <input matInput type="text" placeholder="Sub-título" formControlName="text" required maxlength="2000">
+              <mat-hint>Ej: bienvenido al mundo de tu tarjeta</mat-hint>
+              <mat-hint class="input-length" align="end">{{ benefitsWP.subTitle ?
+                benefitsWP.subTitle.text.length : 0 }} / 2000</mat-hint>
+            </mat-form-field>
+            <div class="column products-container" formGroupName="productsForExclusiveBenefits">
+              <mat-label>Productos en donde mostrar Beneficios Exclusivos para ti (Seleccionables):</mat-label>
+              <mat-checkbox formControlName="TR">Tarjeta Ripley</mat-checkbox>
+              <mat-checkbox formControlName="TRM">Tarjeta Ripley Mastercard</mat-checkbox>
+              <mat-checkbox formControlName="SA">Cuenta vista</mat-checkbox>
+            </div>
+            <label id="benefit-type-radio-group">Seleccione el tipo de beneficios que desea ver en el Slider de la preview</label>
+            <br>
+            <mat-radio-group
+              aria-labelledby="benefit-type-radio-group"
+              class="benefits-radio-group"
+              [(ngModel)]="selectedBenefitType" [ngModelOptions]="{standalone: true}" >
+              <mat-radio-button class="benefits-radio-button" *ngFor="let benefitType of sliderBenefitTypes" [value]="benefitType">
+                {{benefitType}}
+              </mat-radio-button>
+            </mat-radio-group>
+            <!-- Normal Benefits Section -->
+            <div [hidden]="selectedBenefitType === 'Exclusivos para ti (Seleccionables)'">
+              <h4>Beneficios Destacados</h4>
+              <section formArrayName="normalBenefits" *ngFor="let benefit of normalBenefits.controls; let i=index">
+                <div  [formGroupName]="i">
+                  <mat-form-field appearance="fill" *ngIf="filteredOptionsNormalBenefits.length">
+                    <mat-label>Id</mat-label>
+                    <input type="text"
+                      placeholder="Selecciona un id"
+                      aria-label="Id"
+                      matInput
+                      formControlName="benefitId"
+                      [matAutocomplete]="auto">
+                      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="setCompanyImageUrlWelcome($event, normalBenefits, i)">
+                        <mat-option *ngFor="let benefit of filteredOptionsNormalBenefits[i] | async" [value]="benefit.id">
+                          {{benefit.id}}
+                        </mat-option>
+                      </mat-autocomplete>
+                  </mat-form-field>
+                  <!-- Imagen del beneficio slider -->
+                  <app-load-file-button [text]="'Cargar ícono del Beneficio'" [extensions]="extensions"
+                    [emitUrl]="true" [showUrl]="false" [folder]="uploadFolder" (url)="receiveUrl($event, benefit)"
+                    [isLoading]="isUploadingImage" [inputUrl]="benefit.get('companyImageUrlWelcome').value"
+                    [description]="'Dimensiones: 180 x 201 px'">
+                  </app-load-file-button>
+                  <mat-form-field class="input-info field-text">
+                    <input
+                      matInput
+                      type="number"
+                      placeholder="Orden del beneficio en el Slider"
+                      formControlName="priority"
+                      required
+                      maxlength="2000">
+                    <mat-hint>Ej: 1</mat-hint>
+                    <mat-hint class="input-length" align="end">{{ benefit.value ? benefit.value.priority.length : 0 }}</mat-hint>
+                  </mat-form-field>
+                  <button mat-icon-button type="button" (click)="removeNormalBenefit(i)" class="delete-btn">
+                    <mat-icon aria-label="Eliminar" class="i-trash-alt icon-small delete-icon"></mat-icon>
+                    Eliminar beneficio del Slider
+                  </button>
+                </div>
+              </section>
+              <br>
+              <button
+                class="button-quaternaty no-w mat-button padding-x-sm"
+                (click)="addNormalBenefit()"
+                type="button">
+                Agregar beneficio destacado
+              </button>
+            </div>
+            <div [hidden]="selectedBenefitType === 'Destacados'">
+              <!-- Exclusive Benefits Section -->
+              <h4>Beneficios Exclusivos para ti (Selecionables)</h4>
+              <section formArrayName="benefits" *ngFor="let benefit of exclusiveBenefits.controls; let i=index">
+                <div  [formGroupName]="i">
+                  <mat-form-field appearance="fill" *ngIf="filteredOptionsExclusiveBenefits.length">
+                    <mat-label>Id</mat-label>
+                    <input type="text"
+                      placeholder="Selecciona un id"
+                      aria-label="Id"
+                      matInput
+                      formControlName="benefitId"
+                      [matAutocomplete]="auto">
+                      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="setCompanyImageUrlWelcome($event, exclusiveBenefits, i)">
+                        <mat-option *ngFor="let benefit of filteredOptionsExclusiveBenefits[i] | async" [value]="benefit.id">
+                          {{benefit.id}}
+                        </mat-option>
+                      </mat-autocomplete>
+                  </mat-form-field>
+                  <!-- Imagen del beneficio slider -->
+                  <app-load-file-button [text]="'Cargar ícono del beneficio'" [extensions]="extensions"
+                    [emitUrl]="true" [keepChanging]="true" [showUrl]="false" [folder]="uploadFolder" (url)="receiveUrl($event, benefit)"
+                    [isLoading]="isUploadingImage" [inputUrl]="benefit.get('companyImageUrlWelcome').value"
+                    [description]="'Dimensiones: 180 x 201 px'">
+                  </app-load-file-button>
+                  <mat-form-field class="input-info field-text">
+                    <input
+                      matInput
+                      type="number"
+                      placeholder="Orden del Beneficio en el Slider"
+                      formControlName="priority"
+                      required
+                      maxlength="2000">
+                    <mat-hint>Ej: 1</mat-hint>
+                    <mat-hint class="input-length" align="end">{{ benefit.value ? benefit.value.priority.length : 0 }} / 2000</mat-hint>
+                  </mat-form-field>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    (click)="removeExclusiveBenefit(i)"
+                    class="delete-btn">
+                    <mat-icon aria-label="Eliminar" class="i-trash-alt icon-small delete-icon"></mat-icon>
+                    Eliminar Beneficio del Slider
+                  </button>
+                </div>
+              </section>
+              <br>
+              <button
+                class="button-quaternaty no-w mat-button padding-x-sm"
+                type="button"
+                (click)="addExclusiveBenefit()">
+                Agregar beneficio Exclusivo para ti (Seleccionable)
+              </button>
+            </div>
+            <!-- Default Benefits Section -->
+            <h4>Listado de Beneficios</h4>
+            <section formArrayName="defaultBenefits" *ngFor="let benefit of defaultBenefits.controls; let i=index">
+              <div  [formGroupName]="i">
+                <mat-form-field appearance="fill" *ngIf="filteredOptionsDefaultBenefits.length">
+                  <mat-label>Id</mat-label>
+                  <input type="text"
+                    placeholder="Selecciona un id"
+                    aria-label="Id"
+                    matInput
+                    formControlName="benefitId"
+                    [matAutocomplete]="auto">
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="setWeekdaysTag($event, defaultBenefits, i)">
+                      <mat-option *ngFor="let benefit of filteredOptionsDefaultBenefits[i] | async" [value]="benefit.id">
+                        {{benefit.id}}
+                      </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field class="input-info field-text">
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Tag del beneficio"
+                    formControlName="weekDaysTag">
+                  <mat-hint>Ej: Hasta el 23/03. Esto modificará el valor de `weekdays` del beneficio. Solo modifiquelo si está segura/o</mat-hint>
+                </mat-form-field>
+                <mat-form-field class="input-info field-text">
+                  <input
+                    matInput
+                    type="number"
+                    placeholder="Orden del beneficio en el listado"
+                    formControlName="priority"
+                    required
+                    maxlength="2000">
+                  <mat-hint>Ej: 1</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ benefit.value ? benefit.value.priority.length : 0 }} / 2000</mat-hint>
+                </mat-form-field>
+                <button
+                  mat-icon-button
+                  type="button"
+                  (click)="removeDefaultBenefit(i)"
+                  class="delete-btn">
+                  <mat-icon aria-label="Eliminar" class="i-trash-alt icon-small delete-icon">
+                  </mat-icon>
+                  Eliminar beneficio del listado
+                </button>
+              </div>
+            </section>
+            <br>
+            <button class="button-quaternaty no-w mat-button padding-x-sm" type="button" (click)="addDefaultBenefit()">
+              Agregar beneficio al listado
+            </button>
+          </section>
+        </form>
+      </div>
+      <div class="screen" id="sticky">
+        <button
+          mat-raised-button
+          type="button"
+          class="button-quaternaty no-w preview-btn mat-button padding-x-sm"
+          (click)="loadPreview()">
+          Recargar Preview con beneficios {{ sliderBenefitMessage }}
+        </button>
+        <app-benefits-preview
+          [wave]="benefitsWP.wave"
+          [containerTopBackgroundColor]="benefitsWP.backgroundColorTop"
+          [containerBackgroundColor]="benefitsWP.backgroundColor"
+          [useSlider]="true"
+          [mainTitle]="benefitsWP.mainTitle"
+          [subTitle]="benefitsWP.subTitle"
+          [exitButton]="benefitsWP.exitButton"
+          [sliderBenefits]="createdSliderBenefits"
+          [listBenefits]="createdDefaultBenefits">
+        </app-benefits-preview>
+      </div>
+    </mat-card-content>
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary back-btn">volver</button>
+      <button mat-raised-button
+        class="button-primary"
+        [disabled]="isLoading || benefitsForm.invalid || benefitsForm.pristine"
+        type="button"
+        (click)="saveScreen()"
+      >
+        {{isEditing ? 'Actualizar' : 'Crear'}}
+      </button>
+    </div>
+  </mat-card>
+</div>

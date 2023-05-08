@@ -1,0 +1,24 @@
+<div class="main-container">
+  <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+    <mat-card *ngIf="!isLoading" class="container-info">
+      <div class="container-title">
+        <p class="title">Consola <span class="title-highlighted">On/Off</span></p>
+      </div>
+    </mat-card>
+    <mat-card class="main-container-form" *ngIf="!isLoading">
+      <mat-card-content *ngFor="let type of categories" class="container-info-form">
+        <div class="container-form">
+          <section class="date-box">
+            <p class="title"><span class="title-highlighted">{{titles[type]}}</span></p>
+            <mat-slide-toggle *ngFor="let item of configData[type]; let i = index"
+              [checked]="item.status"
+              [disabled]="!isEnabled(item, type)"
+              labelPosition="before"
+              (change)="updateConfig($event, type, i)"
+              class="example-margin">{{item.name}}
+            </mat-slide-toggle>
+          </section>
+        </div>
+      </mat-card-content>
+    </mat-card>
+</div>

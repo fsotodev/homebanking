@@ -1,0 +1,234 @@
+<header class="main-header">
+  <div class="row m-3">
+    <div class="col">
+      <div class="logo" (click)="navigateTo('home')"></div>
+    </div>
+    <div class="col">
+      <div class="container-title">
+        <p class="main-title">Administrador de <span class="title-highlighted">{{ adminLabel() }}</span>
+        </p>
+        <p class="warning-text" *ngIf="isNotinProdButPointingProd()">¡Esto está apuntando a ambiente productivo!</p>
+      </div>
+    </div>
+    <div class="col">
+      <ng-container *ngIf="_auth.user | async as user">
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item disabled>Versión {{ version }}</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('benefits')"
+                  [matMenuTriggerFor]="beneficios">Beneficios</button>
+          <button mat-menu-item
+                  *ngIf="user.type === 'admin' || user.access.includes('load-file') || user.access.includes('load-product') || user.access.includes('load-product-codes')"
+                  [matMenuTriggerFor]="upload">Cargar</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('nps')"
+                  [matMenuTriggerFor]="campaigns">Campañas</button>
+          <button mat-menu-item
+                  *ngIf="user.type === 'admin' || user.access.includes('new-category') || user.access.includes('load-product') || user.access.includes('new-product')"
+                  [matMenuTriggerFor]="exchanges">Canjes</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('pay')"
+                  [matMenuTriggerFor]="pagar">Pagar</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('promotions') || user.access.includes('promotion-banner')"
+                  [matMenuTriggerFor]="promotions">Promociones</button>
+          <button mat-menu-item
+                  *ngIf="user.type === 'admin' || user.access.includes('push-campaigns') || user.access.includes('push-on-off')
+      || user.access.includes('epu-push') || user.access.includes('push-stats') || user.access.includes('upload-config')"
+                  [matMenuTriggerFor]="notifications">Notificaciones</button>
+          <button mat-menu-item *ngIf="false" (click)="navigateTo('users-config')">Usuarios</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('nps')"
+                  [matMenuTriggerFor]="npsSurvey">Encuestas NPS</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('export') || user.access.includes('download-logs')"
+                  [matMenuTriggerFor]="export">Exportar</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('customer-service')"
+                  [matMenuTriggerFor]="customerServiceDV">Servicio al Cliente</button>
+
+          <!-- Change privilige access -->
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('list-campaigns')"
+                  [matMenuTriggerFor]="campaignsEngine">Motor de campañas</button>
+
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('data-cards')"
+                  [matMenuTriggerFor]="dataCards">Datos de Tarjeta</button>
+
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('on-off')"
+                  [matMenuTriggerFor]="config">Config PWA</button>
+
+          <button mat-menu-item (click)="logout()">Salir<mat-icon class="i-close-sesion"></mat-icon></button>
+        </mat-menu>
+
+        <mat-menu #productos="matMenu">
+          <button *ngIf="user.type === 'admin' || user.access.includes('list-product')" mat-menu-item
+                  (click)="navigateTo('list-product')">Ver Productos</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-product')" mat-menu-item
+                  (click)="navigateTo('new-product')">Crear
+            Producto</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('load-product')" mat-menu-item
+                  (click)="navigateTo('load-product')" mat-menu-item (click)="navigateTo('load-product-manually')">Crear
+            Canje</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('load-product-codes')" mat-menu-item
+                  (click)="navigateTo('load-product-codes')">Cargar Códigos</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('download-product-codes')" mat-menu-item
+                  (click)="navigateTo('download-product-codes')">Descargar Códigos Validos</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('download-invalid-product-codes')" mat-menu-item
+                  (click)="navigateTo('download-invalid-product-codes')">Descargar Códigos Vencidos</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('download-product-transactions')" mat-menu-item
+                  (click)="navigateTo('download-product-transactions')">Descarga de Canjes</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('delete-product-transactions')" mat-menu-item
+                  (click)="navigateTo('delete-product-transactions')">Eliminar Canjes</button>
+        </mat-menu>
+
+        <mat-menu #campaigns="matMenu">
+          <button mat-menu-item (click)="navigateTo('new-campaign')">Crear Campaña</button>
+        </mat-menu>
+
+        <mat-menu #upload="matMenu">
+          <button mat-menu-item (click)="navigateTo('load-file')">Imagen</button>
+        </mat-menu>
+
+        <mat-menu #category="matMenu">
+          <button *ngIf="user.type === 'admin' || user.access.includes('list-category')" mat-menu-item
+                  (click)="navigateTo('list-category')">Ver Categorías</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-category')" mat-menu-item
+                  (click)="navigateTo('new-category')">Crear Categoría</button>
+          <button mat-menu-item (click)="navigateTo('list-group')">Ver Grupos</button>
+          <button mat-menu-item (click)="navigateTo('featured-redeem')">Canjes Destacados</button>
+        </mat-menu>
+
+        <mat-menu #exchanges="matMenu">
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('new-category')"
+                  [matMenuTriggerFor]="category">Categoría</button>
+          <button mat-menu-item
+                  *ngIf="user.type === 'admin' || user.access.includes('load-product') || user.access.includes('new-product')"
+                  [matMenuTriggerFor]="productos">Productos</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('dashboard-banner')"
+                  (click)="navigateTo('dashboard-banner')">Banners</button>
+        </mat-menu>
+
+        <mat-menu #beneficios="matMenu">
+          <button mat-menu-item (click)="navigateTo('home')">Admin. Beneficios</button>
+          <button mat-menu-item (click)="navigateTo('benefit-titles')">Tipos de Beneficios</button>
+          <button mat-menu-item (click)="navigateTo('download-benefit-subscriptions')">Data de Subscripción</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('download-benefit-codes')" mat-menu-item
+                  (click)="navigateTo('download-benefit-codes')">Data de Códigos</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('download-benefit-transactions')" mat-menu-item
+                  (click)="navigateTo('download-benefit-transactions')">Data de Transacciones</button>
+          <button mat-menu-item (click)="navigateTo('benefit-tag')">Tags</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('uploads-benefit-files')" mat-menu-item
+                  (click)="navigateTo('uploads-benefit-files')">Cargar códigos y ruts</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('benefit-segments')" mat-menu-item
+                  (click)="navigateTo('benefit-segments')">Segmentos</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('benefit-banners')" mat-menu-item
+                  (click)="navigateTo('benefit-banners')">Banners</button>        
+        </mat-menu>
+
+        <mat-menu #pagar="matMenu">
+          <button mat-menu-item (click)="navigateTo('pay-banner')">Editar Banner</button>
+        </mat-menu>
+
+        <mat-menu #promotions="matMenu">
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('promotions')"
+                  (click)="navigateTo('advance-promo', 'av')">Avance</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('promotions')"
+                  (click)="navigateTo('advance-promo', 'sav')">Super Avance</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('promotion-banner')"
+                  (click)="navigateTo('promotion-banner')">Banner</button>
+        </mat-menu>
+
+        <mat-menu #notifications="matMenu">
+          <button *ngIf="user.type === 'admin' || user.access.includes('push-campaigns')" mat-menu-item
+                  (click)="navigateTo('campaigns')">Campañas</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('push-on-off')" mat-menu-item
+                  (click)="navigateTo('push-on-off')">On/Off</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('epu-push')" mat-menu-item
+                  (click)="navigateTo('epu-push')">EPU Push</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('push-stats')" mat-menu-item
+                  (click)="navigateTo('push-stats')">Estadísticas</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('upload-config')" mat-menu-item
+                  (click)="navigateTo('upload-config')">Upload Config</button>
+        </mat-menu>
+
+        <mat-menu #npsSurvey="matMenu">
+          <button mat-menu-item (click)="navigateTo('inhibition-time')">Tiempo de Inhibición</button>
+          <button mat-menu-item (click)="navigateTo('timeout-time')">Tiempo de Espera</button>
+        </mat-menu>
+
+        <mat-menu #export="matMenu">
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('export')"
+                  (click)="navigateTo('unemployment-insurance')">Seguro de cesantia</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('download-logs')"
+                  (click)="navigateTo('download-logs')">Logs</button>
+        </mat-menu>
+
+        <mat-menu #customerServiceDV="matMenu">
+          <button mat-menu-item (click)="navigateTo('customer-service')">Reclamo por DV</button>
+        </mat-menu>
+
+        <!-- Campaigns -->
+        <mat-menu #campaignsEngine="matMenu">
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('list-campaigns')"
+                  [matMenuTriggerFor]="createCampaign">Crear</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('list-campaigns')"
+                  [matMenuTriggerFor]="createScreen">Crear Pantalla</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('list-campaigns')" mat-menu-item
+                  (click)="navigateTo('list-campaigns')">Ver Campañas</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('list-campaigns')" mat-menu-item
+                  (click)="navigateTo('list-welcomepack-campaigns')">Ver Welcomepacks</button>
+
+        </mat-menu>
+        <mat-menu #createScreen="matMenu">
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-welcome-campaign')" mat-menu-item
+                  (click)="navigateTo('new-cards-screen')">Crear P. productos</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-welcome-campaign')" mat-menu-item
+                  (click)="navigateTo('new-benefit-screen')">Crear P. beneficios</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-welcome-campaign')" mat-menu-item
+                  (click)="navigateTo('new-ripley-points-screen')">Crear P. Ripley puntos</button>
+        </mat-menu>
+        <mat-menu #createCampaign="matMenu">
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-slider-campaign')" mat-menu-item
+                  (click)="navigateTo('new-slider-campaign')">Slider (Banner inteligente)</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-avsav-campaign')" mat-menu-item
+                  (click)="navigateTo('new-avsav-campaign')">Avsav (3ª caja)</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-credit-sim-campaign')" mat-menu-item
+                  (click)="navigateTo('new-credit-sim-campaign', '?type=avsavSimulation')">Avsav Simulacion</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-credit-sim-campaign')" mat-menu-item
+                  (click)="navigateTo('new-credit-sim-campaign', '?type=ccSimulation')">Consumo Simulacion</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-welcome-campaign')" mat-menu-item
+                  (click)="navigateTo('new-welcome-campaign')">Minime/Popup</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-welcome-campaign')" mat-menu-item
+                  (click)="navigateTo('new-welcomepack-campaign')">Welcomepack</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('new-dashboard-campaign')" mat-menu-item
+                  (click)="navigateTo('new-dashboard-campaign')">Dashboard (RipleyPuntos Go)</button>
+        </mat-menu>
+        <!-- /Campaigns -->
+
+        <!-- Data cards -->
+        <mat-menu #dataCards="matMenu">
+          <button *ngIf="user.type === 'admin' || user.access.includes('load-datacards-users')" mat-menu-item
+                  (click)="navigateTo('load-datacards-users')">Cargar</button>
+          <button *ngIf="user.type === 'admin' || user.access.includes('list-datacards-users')" mat-menu-item
+                  (click)="navigateTo('list-datacards-users')">Usuarios</button>
+        </mat-menu>
+        <!-- /Data cards -->
+
+        <!-- Config -->
+        <mat-menu #config="matMenu">
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('on-off')"
+                  (click)="navigateTo('on-off')">On/Off</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('on-off')"
+                  (click)="navigateTo('login-config')">Login</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('embedded-login-config')"
+                  (click)="navigateTo('embedded-login-config')">Login Embebido</button>
+          <button mat-menu-item *ngIf="user.type === 'admin' || user.access.includes('card-reissue-config')"
+                  (click)="navigateTo('card-reissue-config')">Carga de RUT</button>
+
+        </mat-menu>
+        <!-- /Config -->
+
+        <div class="menu-user">
+          <h6 class="gretting-user">¡Hola, {{ user.displayName }}!</h6>
+          <button mat-button [matMenuTriggerFor]="menu">
+            <mat-icon class="i-caret-down-square"></mat-icon>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+</header>

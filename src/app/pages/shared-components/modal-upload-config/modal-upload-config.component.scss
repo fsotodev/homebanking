@@ -1,0 +1,54 @@
+@import '../../../../global.scss';
+
+.input-big-size {
+  width: 100%;
+}
+
+::ng-deep .tooltip-modal {
+  white-space: pre-line !important;
+  color: black !important;
+  background-color: white;
+  border: 1px solid black !important;
+  border-color: black !important;
+  font-size: small;
+}
+
+::ng-deep .mat-list-option {
+  font-size: 10px !important;
+  background-color: white;
+  height: 25px !important;
+
+}
+
+::ng-deep .mat-list-option.mat-list-item-focus,
+.mat-list-option:hover,
+.mat-nav-list
+.mat-list-item.mat-list-item-focus,
+.mat-nav-list .mat-list-item:hover {
+  background: white;
+}
+
+::ng-deep .mat-list-item-content {
+  padding: 0 !important;
+  align-items: center;
+}
+
+.mat-selection-list {
+  padding: 0;
+}
+
+::ng-deep .mat-expansion-panel-content {
+  font-size: 12px;
+}
+
+::ng-deep .mat-pseudo-checkbox {
+  height: 10px !important;
+  width: 10px !important;
+  background: $purple !important;
+  color: white;
+}
+
+form {
+  height: 80vh;
+  overflow-y: auto;
+}

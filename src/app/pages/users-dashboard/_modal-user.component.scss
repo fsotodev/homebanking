@@ -1,0 +1,55 @@
+@import '../../../global.scss';
+
+.modal-container {
+  width: 384px;
+  height: 93px;
+
+  .box-info-modal {
+    height: 51px;
+
+    .title-modal {
+      color: $red;
+      font-size: 16px;
+      text-align: left;
+      margin-bottom: 6px;
+      line-height: inherit;
+
+      .text-highlight {
+        font-family: $font-semibold;
+      }
+    }
+
+    .title-modal-warning {
+      color: $red;
+    }
+
+    .title-modal-normal {
+      color: $purple;
+    }
+  }
+
+  .box-button-modal {
+    float: right;
+
+    .button-tertiary {
+      margin-right: 46px;
+      min-width: 160px;
+    }
+
+    .button-primary {
+      text-transform: lowercase;
+      margin-left: 0;
+      width: auto;
+      min-width: 160px;
+    }
+  }
+
+  .user-form {
+    padding: 0 20px;
+
+    .mat-input-container {
+      margin: 10px 0;
+      width: 100%;
+    }
+  }
+}

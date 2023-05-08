@@ -1,0 +1,65 @@
+@import '../../../global.scss';
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.results-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+
+  .container-new-user {
+    display: flex;
+
+    .button-new-user {
+      background-color: $purple;
+      margin-left: 16px;
+      width: 50px;
+      height: 50px;
+
+      ::ng-deep {
+        .mat-button-wrapper {
+          font-size: 30px;
+          padding: 13px 0;
+          font-family: $font-light;
+        }
+      }
+    }
+  }
+
+}
+
+.search-container {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+.i-edit,
+.i-delete {
+  width: 22px;
+  height: 22px;
+  margin-right: 16px;
+  border: 0;
+  opacity: 0.8;
+  background-color: transparent;
+
+  &:hover {
+    cursor: pointer;
+    color: $purple;
+    outline-color: $white;
+    opacity: 1;
+  }
+
+  &:focus {
+    outline-color: $white;
+  }
+}

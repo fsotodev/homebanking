@@ -1,0 +1,21 @@
+<div [ngClass]="{'invert': invert, 'top': top}">
+  <div *ngIf="image" class="container-wave i-welcomepack-wave"></div>
+  <div *ngIf="!image" class="container-wave">
+    <svg viewBox="0 0 500 130" preserveAspectRatio="xMinYMin meet" class="up">
+      <path d="M0,100 C150,180 350,-10 500,100 L500,00 L0,0 Z" style="stroke: none;" [ngStyle]="{'fill': path}">
+      </path>
+      <defs>
+        <linearGradient id="MyGradient">
+          <stop offset="0%" stop-color="#4F2D7F" />
+          <stop offset="48%" stop-color="#F2A54A" />
+          <stop offset="100%" stop-color="#E03748" />
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <svg viewBox="0 0 500 130" preserveAspectRatio="xMinYMin meet" class="down">
+      <path d="M0,110 C150,220 360,0 500,80 L500,00 L0,0 Z" style="stroke: none;" [ngStyle]="{'fill': colorTop}">
+      </path>
+    </svg>
+  </div>
+</div>

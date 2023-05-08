@@ -1,0 +1,43 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> Cambio de
+        <span class="title-highlighted">Periodos</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <mat-progress-spinner *ngIf="loading" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+      <div *ngIf="!loading" class="main-benefits-container" [formGroup]="benefitPeriodsForm">
+
+        <span class="title-section benefit-name">
+          <strong>{{benefit.newBenefit?.benefitDiscount}} - {{benefit.newBenefit?.title}}</strong>
+          <br>
+          Total de códigos: {{ benefitCodes.length }}
+        </span>
+
+        <section *ngIf="benefitCodes.length > 0" class="period-list">
+          <div *ngFor="let period of periods" class="period-list-item">
+            <p class="period-label">Periodo: </p>
+            <mat-form-field class="input-info period-input">
+              <input matInput type="month" [formControlName]="period" [value]="this.toMonthString(period)">
+            </mat-form-field>
+            <p class="period-label">{{ countCodesOfPeriod(period) }} Códigos</p>
+            <button mat-raised-button (click)="updateCodes(period)" class="button-primary period-button"
+              [disabled]="!benefitPeriodsForm.controls[period].valid || savingCodes">
+              Guardar
+            </button>
+            <div *ngIf="savingCodes === period" class="spinner-button">
+                <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </mat-card-content>
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">volver</button>
+    </div>
+  </mat-card>
+</div>

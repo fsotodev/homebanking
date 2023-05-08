@@ -1,0 +1,50 @@
+<div class="main-container mat-elevation-z8">
+  <div class="search-container">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar...">
+    </mat-form-field>
+  </div>
+  <mat-table #table [dataSource]="dataSource" matSort>
+    <!-- Display Name Column -->
+    <ng-container matColumnDef="displayName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.displayName}} </mat-cell>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Correo </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.email}} </mat-cell>
+    </ng-container>
+
+    <!-- Type Column -->
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.type}} </mat-cell>
+    </ng-container>
+
+    <!-- Modify or Delete Column -->
+    <ng-container matColumnDef="modifyOrDelete">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Opciones
+      </mat-header-cell>
+      <mat-cell *matCellDef="let user" class="actions-table">
+        <button class="i-edit" (click)="openModal(user, 'editUser')"></button>
+        <button class="i-delete" (click)="openDeleteModal(user)"></button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+  <div class="results-container">
+    <div>
+      <p>Total usuarios: {{ totalUsers() }}</p>
+    </div>
+    <div class="container-new-user">
+      <p class="title-button">Nuevo Usuario</p>
+      <button (click)="openModal(false, 'createUser')" mat-fab class="button-new-user">+</button>
+    </div>
+  </div>
+
+</div>

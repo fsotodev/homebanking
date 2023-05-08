@@ -1,0 +1,75 @@
+@import '~sass/abstracts/variables';
+
+.no-padding {
+  padding: 0;
+}
+
+.header-menu {
+  display: flex;
+  flex-direction: column;
+  color: $br-gray-700;
+}
+
+.title-header {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.5px;
+}
+
+.version-class {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: 0.15px;
+}
+
+.container-menu {
+  margin-top: 70px;
+  width: 260px;
+}
+
+.sub-icon {
+  width: 17px;
+  height: 17px;
+}
+
+.button-menu {
+  width: 180px;
+}
+
+.list-group-item {
+  background-color: $br-gray-sub-menu-active;
+  color: $br-gray-sub-menu-letter;
+  font-size: 14px;
+  letter-spacing: 0.15px;
+  font-weight: 400;
+}
+
+.list-group-item.active {
+  background-color: $br-purple-menu-active!important;
+  border-color: $br-gray-sub-menu-border;
+}
+
+.container-button {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.icon-arrow {
+  width: 7px;
+}
+
+.accordion-header {
+  background-color: $br-gray-sub-menu-active;
+}
+
+.accordion-body {
+  padding: 0;
+  cursor: pointer;
+  background-color: $br-gray-500;
+}
+
+

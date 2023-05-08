@@ -1,0 +1,71 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> Tags </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+
+    <mat-card-content class="container-info-form">
+      <pre *ngIf="currentId">
+        Editando
+        Nombre: {{ tagInEdition.tagName }}
+        Orden: {{ tagInEdition.order }}
+        Habilitado {{ tagInEdition.tagName ? 'si' : 'no' }}
+      </pre>
+
+      <form class="example-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="tag"
+            [(ngModel)]="tagName"
+            name="input-tag-name">
+
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Orden</mat-label>
+          <input [(ngModel)]="order" name="input-order" matInput type="number" placeholder="0">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Habilitado</mat-label>
+          <mat-select [(ngModel)]="enable" name="select-enable">
+            <mat-option [value]="true">Si</mat-option>
+            <mat-option [value]="false">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-raised-button color="primary" [disabled]="disableSaveButton()" (click)="saveTag()">Guardar</button>
+        <button mat-raised-button (click)="clearForm()">Cancelar</button>
+      </form>
+      <div class="error" *ngIf="verifyDuplicateTag(tagName)">Error: tag duplicado</div>
+
+    </mat-card-content>
+
+    <mat-card-content *ngIf="loadlist || savingTag">
+      <mat-progress-spinner mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+    </mat-card-content>
+
+    <mat-card-content class="container-info-form">
+      <div id="tag-list" class="tag-list">
+        <mat-chip-list>
+          <mat-chip
+            *ngFor="let tag of tagList"
+            [color]="evaluateColor(tag.enable)"
+            selected [ngClass]="{'none-event': tag.id === currentId}">
+            <span class="order-span">{{ tag.order }}</span>
+            <label class="tag-name"> {{ tag.tagName }}</label>
+            <mat-slide-toggle class="example-margin"
+              [disabled]="modifiyingTag === tag.id"
+              [checked]="tag.enable" (click)="toggleChange(tag)">
+            </mat-slide-toggle>
+            <button class="icon-action i-edit" (click)="editTag(tag)"></button>
+            <button class="icon-action i-delete" (click)="removeTag(tag)"></button>
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,64 @@
+@import '../../../../../global.scss';
+
+.full-width {
+  min-width: 150px;
+  max-width: 500px;
+  width: 80%;
+}
+
+.example-h2 {
+  margin: 10px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.example-margin {
+  margin: 0 10px;
+}
+
+.btn-delete-list {
+  float: right;
+}
+
+li {
+  height: 42px;
+  border-bottom: grey;
+  border-bottom-style: dotted;
+}
+
+.product-options{
+  display: flex;
+  height: 60px;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-content: flex-start;
+}
+
+.i-close {
+  background-position: center;
+  background-size: auto 50%;
+}
+
+
+.i-eye-gray {
+  background-position: center;
+  background-size: auto 75%;
+}
+
+.error-wrapper {
+  margin-bottom: 12px;
+}
+
+.step-title {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.subtitle-wrapper {
+  margin-top: 12px;
+}

@@ -1,0 +1,40 @@
+<div style="width: 900px">
+  <div class="p-2 card">
+    <div class="card-header titleCard">Gestión de campos colapsables. </div>
+      <table mat-table [dataSource]="dataSourceCollapsible" class="mat-elevation-z5">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let collapse"> {{collapse.id}} </td>
+        </ng-container>
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Título</th>
+          <td mat-cell *matCellDef="let collapse"> {{collapse.title}} </td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Descripción</th>
+          <td mat-cell *matCellDef="let collapse"> {{collapse.description}} </td>
+        </ng-container>
+        <ng-container matColumnDef="priority">
+          <th mat-header-cell *matHeaderCellDef>Prioridad</th>
+          <td mat-cell *matCellDef="let collapse"> {{collapse.priority}} </td>
+        </ng-container>
+        <ng-container matColumnDef="icon">
+          <th mat-header-cell *matHeaderCellDef>Ícono</th>
+          <td mat-cell *matCellDef="let collapse"> <img style="height: 30px; width:30px" [src]="collapse.icon" /> </td>
+        </ng-container>
+        <ng-container matColumnDef="options">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell style="width: 180px;" *matCellDef="let collapse">
+            <button mat-button matTooltip="Editar registro" class="i-edit" (click)="addEditCollapsible(collapse)"></button>
+            <button mat-button matTooltip="Eliminar registro" class=" i-delete" (click)="removeCollapsible(collapse)"></button>          
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <p class="p-3" *ngIf="collapsibles.length === 0">No hay registros colapsables para este beneficio.</p>
+    <div style="display: flex; justify-content: end; margin-top: 5px;">
+      <button mat-mini-fab color="primary" disabled (click)="addEditCollapsible()" >+</button>
+    </div>
+  </div>
+</div>

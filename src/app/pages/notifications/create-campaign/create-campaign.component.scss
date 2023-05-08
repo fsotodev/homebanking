@@ -1,0 +1,26 @@
+.mat-chip:not(.mat-basic-chip)+.mat-chip:not(.mat-basic-chip) {
+  margin: 0 0 8px 8px;
+}
+
+.input-info{
+  &.field-text{
+    &.mat-input-container{
+      &.mat-form-field {
+        width: 190%;
+      }
+    }
+  }
+}
+
+.date-box {
+  display: block;
+  margin: 0px 0px 10px 0px !important;
+}
+
+.send-method-box{
+  padding-bottom: 15px;
+}
+
+.upload-button-quaternaty span{
+  color: gray;
+}

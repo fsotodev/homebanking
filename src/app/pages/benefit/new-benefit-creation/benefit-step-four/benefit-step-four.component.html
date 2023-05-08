@@ -1,0 +1,60 @@
+<div class="step-title">Vigencias y Códigos</div>
+
+<div [formGroup]="fourthStepForm">
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Sitio web" formControlName="siteUrl" [(ngModel)]="siteUrl">
+  </mat-form-field>
+
+  <div class="full-width">
+    <p class="title-section title-image">Vigencia del beneficio</p>
+    <mat-form-field class="wt-5 mr-2">
+      <input matInput [matDatepicker]="pickerFrom" placeholder="Desde" formControlName="startDate"
+        [(ngModel)]="startDate">
+      <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFrom></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="wt-5">
+      <input matInput [matDatepicker]="pickerTo" placeholder="Hasta" formControlName="endDate" [(ngModel)]="endDate"
+        (dateChange)="transformDate(endDate)">
+      <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+      <mat-datepicker #pickerTo></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Vigencia" formControlName="durationText" [(ngModel)]="durationText">
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Orden de prioridad" value="" type="number" formControlName="orderPriority"
+      [(ngModel)]="orderPriority">
+  </mat-form-field>
+  <div *ngIf="newBenefitService.modelBenefitOld.newBenefit.type !== 'restofan'">
+    <div class="full-width">
+      <p class="title-section title-image">Códigos del beneficio</p>
+      <mat-radio-group formControlName="codeType" [(ngModel)]="optType" (change)="fireUniqueCodeValue()">
+        <mat-radio-button class="mr-2" value="normal" >Normal</mat-radio-button>
+        <mat-radio-button class="mr-2" value="barcode" >Barra</mat-radio-button>
+        <mat-radio-button class="mr-2" value="withoutCodeOpt">Sin codigo</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div class="full-width" *ngIf="optType !== 'withoutCodeOpt'">
+      <mat-radio-group class="full-width" formControlName="optCode" [(ngModel)]="optCode" (change)="fireUniqueCodeValue()">
+        <mat-radio-button class="mr-2" value="variable" *ngIf="newBenefitService.selectedSegmentationType !== 'plan'
+         && newBenefitService.selectedSegmentationType !== 'productos'">Variable</mat-radio-button>
+        <mat-radio-button class="mr-2" value="unique">Unico</mat-radio-button>
+      </mat-radio-group>
+      <div>
+        <mat-form-field class="full-width mt-2" *ngIf="optCode === 'unique'">
+          <input matInput [placeholder]="this.newBenefitService.selectedSegmentationType === 'sinsegmentacion' ?
+          this.placeHolderUniqueCodeDefault : 'Texto APP no actualizada'" formControlName="uniqueCode" [(ngModel)]="uniqueCode">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="mt-2">
+    <button mat-button matStepperPrevious>Regresar</button>
+    <button mat-raised-button class="button-primary text-white mt-3" matStepperNext [disabled]="!fourthStepForm.valid"
+      (click)="saveStepFour()">Siguiente</button>
+    <button mat-raised-button class="button-secundary mt-3" [disabled]="!fourthStepForm.valid"
+      (click)="saveStepFour()">Previsualizar</button>
+  </div>
+</div>

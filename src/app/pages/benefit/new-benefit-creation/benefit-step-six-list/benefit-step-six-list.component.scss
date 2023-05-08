@@ -1,0 +1,59 @@
+@import '../../../../../global.scss';
+
+.full-width {
+    min-width: 150px;
+    max-width: 500px;
+    width: 80%;
+}
+
+.titleCard{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.mt-3 {
+    margin-top: 30px;
+}
+
+.togle-style {
+    font-weight: bold;
+    flex-wrap: wrap;
+    box-shadow: none;
+}
+
+mat-button-toggle {
+    border: 1px solid grey;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.i-edit {
+    background-size: 18px auto;
+  }
+
+.i-delete {
+    background-size: 15px auto;
+}
+
+.i-edit,
+.i-delete{
+  width: 22px;
+  height: 22px;
+  margin-right: 4px;
+  border: 0;
+  opacity: 0.8;
+  background-color: transparent;
+
+  &:hover {
+    cursor: pointer;
+    color: $purple;
+    outline-color: $white;
+    opacity: 1;
+  }
+
+  &:focus {
+    outline-color: $white;
+  }
+}

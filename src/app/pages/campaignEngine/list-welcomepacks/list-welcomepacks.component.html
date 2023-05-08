@@ -1,0 +1,151 @@
+<div class="main-container">
+  <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+    <mat-card *ngIf="!isLoading" class="container-info">
+      <div class="container-title">
+        <p class="title"> Administrador de
+          <span class="title-highlighted">Welcomepacks</span>
+        </p>
+      </div>
+    </mat-card>
+    <mat-card class="main-table" *ngIf="!isLoading">
+      <div class="search">
+        <input type="text" (keyup)="applyFilter($event.target.value)" placeholder="Buscar..."
+          class="input-search i-search">
+      </div>
+      <mat-tab-group class="tab-content"  [selectedIndex]="tabSelected" (selectedTabChange)="tabChanged($event)">
+        <mat-tab *ngFor="let type of tabsIterator" [label]="type" class="title-tab">
+          <div class="dates-table">
+            <!-- <div class="empty-message">Aún no hay beneficios creados.</div>  -->
+            <mat-table #table [dataSource]="dataSources[type]">
+
+              <!-- Priority-->
+              <ng-container matColumnDef="priority">
+                <mat-header-cell *matHeaderCellDef> Prioridad </mat-header-cell>
+                <mat-cell *matCellDef="let campaign">
+                  <input matInput type="number"
+                    [(ngModel)]="campaign.priority"
+                    (change)="setPriorityOnWelcomepack(campaign)"
+                    class="input-order">
+                </mat-cell>
+              </ng-container>
+
+              <!-- Id-->
+              <ng-container matColumnDef="id">
+                <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                <mat-cell *matCellDef="let campaign"> {{campaign.id}} </mat-cell>
+              </ng-container>
+
+              <!-- totalUsers Column -->
+              <ng-container matColumnDef="totalUsers">
+                <mat-header-cell *matHeaderCellDef> Usuarios </mat-header-cell>
+                <mat-cell *matCellDef="let campaign" matTooltip=""> {{campaign.stats.total_users}} </mat-cell>
+              </ng-container>
+
+              <!-- views Column -->
+              <ng-container matColumnDef="views">
+                <mat-header-cell *matHeaderCellDef> views </mat-header-cell>
+                <mat-cell *matCellDef="let campaign" matTooltip=""> {{campaign.stats.count_users_with_views}} </mat-cell>
+              </ng-container>
+
+              <!-- goals Column -->
+              <ng-container matColumnDef="goals">
+                <mat-header-cell *matHeaderCellDef> Goals </mat-header-cell>
+                <mat-cell *matCellDef="let campaign" matTooltip=""> {{campaign.stats.count_users_with_goals}} </mat-cell>
+              </ng-container>
+
+              <!--  % Goals Column -->
+              <ng-container matColumnDef="percentageGoals">
+                <mat-header-cell *matHeaderCellDef> % Goals </mat-header-cell>
+                <mat-cell *matCellDef="let campaign" matTooltip=""> {{campaign.stats.percentage_goals}} </mat-cell>
+              </ng-container>
+
+              <!--  % Views Column -->
+              <ng-container matColumnDef="percentageViews">
+                <mat-header-cell *matHeaderCellDef> % views </mat-header-cell>
+                <mat-cell *matCellDef="let campaign" matTooltip=""> {{campaign.stats.percentage_views}} </mat-cell>
+              </ng-container>
+
+              <!--  Minime Column -->
+              <ng-container matColumnDef="minime">
+                <mat-header-cell *matHeaderCellDef> Minime </mat-header-cell>
+                <mat-cell *matCellDef="let campaign">
+                  <mat-checkbox class="example-margin"
+                                      [checked]="campaign.minime"
+                                      [disabled]="true">
+                  </mat-checkbox>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Card Screen: backgroundColor -->
+              <ng-container matColumnDef="mainTitle">
+                <mat-header-cell *matHeaderCellDef>Titulo</mat-header-cell>
+                <mat-cell *matCellDef="let screen">
+                  {{ screen.mainTitle.text }}
+                </mat-cell>
+              </ng-container>
+
+              <!-- Card Screen: Subtitle -->
+              <ng-container matColumnDef="subTitle">
+                <mat-header-cell *matHeaderCellDef>Sub-titulo</mat-header-cell>
+                <mat-cell *matCellDef="let screen">
+                  {{ screen.subTitle.text }}
+                </mat-cell>
+              </ng-container>
+
+              <!-- Card Screen: backgroundColor -->
+              <ng-container matColumnDef="backgroundColor">
+                <mat-header-cell *matHeaderCellDef>Background Color</mat-header-cell>
+                <mat-cell *matCellDef="let screen">
+                  {{ screen.backgroundColor }}
+                </mat-cell>
+              </ng-container>
+
+              <!-- Card Screen: backgroundColorTop -->
+              <ng-container matColumnDef="backgroundColorTop">
+                <mat-header-cell *matHeaderCellDef>Titulo</mat-header-cell>
+                <mat-cell *matCellDef="let screen">
+                  {{ screen.backgroundColorTop }}
+                </mat-cell>
+              </ng-container>
+
+              <!-- Status -->
+              <ng-container matColumnDef="statusTogglePWA">
+                <mat-header-cell *matHeaderCellDef>Activo en PWA</mat-header-cell>
+                <mat-cell *matCellDef="let campaign">
+                  <mat-slide-toggle class="example-margin"
+                                    [checked]="campaign.activePWA" (change)="toggleChange(campaign, 'activePWA')"
+                                    [disabled]="modifyingCampaign || campaign.priority === null">
+                  </mat-slide-toggle>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Actions (modify / delete / download data) -->
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let campaign" class="actions-table">
+                  <button (click)="editWelcomepack(campaign)" class="i-edit" [disabled]="modifyingCampaign"></button>
+                  <button class="i-copy" (click)="copyWelcomepack(campaign)" [disabled]="modifyingCampaign"></button>
+                  <div *ngIf="downloading" class="spinner-button">
+                    <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                  </div>
+                  <a *ngIf="!downloading" class="text-button" (click)="downloadCounters(campaign, 'views')">Views</a>
+                  <a *ngIf="!downloading" class="text-button" (click)="downloadCounters(campaign, 'goals')">Goals</a>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Screen Actions (modify) -->
+              <ng-container matColumnDef="screenActions">
+                  <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                  <mat-cell *matCellDef="let screen" class="actions-table">
+                    <button *ngIf="true" class="i-edit" (click)="editScreen(screen)"></button>
+                    <button *ngIf="true" class="i-copy" (click)="copyScreen(screen, true)"></button>
+                  </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns[type]"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns[type];"></mat-row>
+            </mat-table>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+</div>

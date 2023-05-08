@@ -1,0 +1,257 @@
+<div class="main-container">
+    <mat-card class="container-info">
+        <div class="container-title">
+            <p class="title"> Canjes
+                <span class="title-highlighted">Destacados</span>
+            </p>
+        </div>
+    </mat-card>
+    <mat-card class="main-table">
+        <div class="tab-content">
+            <mat-accordion class="example-headers-align">
+                <mat-expansion-panel *ngFor="let redeem of featuredRedeemsList; index as i;" [expanded]="step === i"
+                    (opened)="setStep(i)" (closed)="closeStep(i)" hideToggle>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <button *ngIf="editedRedeem !== i" class="i-caret-down-square"></button>
+                            <button *ngIf="editedRedeem === i" class="i-arrow "></button>
+                            Canjes destacados {{i+1}}
+                        </mat-panel-title>
+
+                        <mat-panel-description>
+                            <div class="redeemTitle">
+                                {{redeem.title}}
+                            </div>
+                            <div class="redeemStatus">
+                                {{redeem.isActive | statusPipe}}
+                            </div>
+                            <div class="statusToggle">
+                                <mat-slide-toggle [color]="color" *ngIf="redeem.products.length > 0"
+                                    [checked]="redeem.isActive" (change)="toggleStatus(redeem,i)"
+                                    class="statusButton">
+                                </mat-slide-toggle>
+                                <div *ngIf="redeem.products.length === 0">
+                                    Sin productos
+                                </div>
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <mat-divider></mat-divider>
+
+                    <div class="editForm formPadding">
+                        <div class="titleField">
+                            <div *ngIf="!editingTitle">
+                                <div class="formFieldTitle">Título Canje Destacado {{i+1}}</div>
+                                <div class="formField">{{redeem.title}}
+                                    <button class="i-edit icon-style" (click)="activeEditTitle(i, true)"> </button>
+                                </div>
+                            </div>
+                            <div [formGroup]="form" *ngIf="editingTitle && editedRedeem === i" class="example-form">
+                                <mat-form-field class="example-full-width" appearance="standard">
+                                    <mat-label>Título Canje Destacado {{i+1}}</mat-label>
+                                    <input type="text" [attr.disabled]="isLoading" formControlName="title" matInput>
+                                    <br />
+                                    <mat-hint>{{ titleMaxLength }}</mat-hint>
+                                    <mat-error *ngIf="form.controls.title.invalid">
+                                        {{getErrorMessage(form.controls.title)}}</mat-error>
+                                </mat-form-field>
+                                <button class="i-done icon-style" (click)="save(i,form.controls.title)"> </button>
+                                <button class="i-close icon-style" (click)="activeEditTitle(i, false)"> </button>
+                            </div>
+                        </div>
+
+                        <div class="titleField">
+                            <div *ngIf="!editingSubtitle">
+                                <div class="formFieldTitle">Subtítulo Canje Destacado {{i+1}}</div>
+                                <div class="formField">{{redeem.subtitle}}
+                                    <button class="i-edit icon-style" (click)="activeEditSubtitle(i, true)"> </button>
+                                </div>
+                            </div>
+                            <div [formGroup]="form" *ngIf="editingSubtitle && editedRedeem === i" class="example-form">
+                                <mat-form-field class="example-full-width" appearance="standard">
+                                    <mat-label>Subtítulo Canje Destacado</mat-label>
+                                    <input type="text" [attr.disabled]="isLoading" formControlName="subtitle" matInput>
+                                    <mat-hint>{{ subtitleMaxLength }}</mat-hint>
+                                    <mat-error *ngIf="form.controls.subtitle.invalid">
+                                        {{getErrorMessage(form.controls.subtitle)}}</mat-error>
+                                </mat-form-field>
+                                <button class="i-done icon-style" (click)="save(i, form.controls.subtitle)"> </button>
+                                <button class="i-close icon-style" (click)="activeEditSubtitle(i, false)"> </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <mat-divider></mat-divider>
+
+                    <div class="uploadImagesSegment formPadding">
+                        <div class="imagesList">
+                            <table class="imgTable">
+                                <tr>
+                                    <th class="font">Imagen </th>
+                                    <th class="font">Formato</th>
+                                    <th class="font">Nueva Imagen</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a class="font clicable"   matTooltip="Ver imagen" (click)="openDialog(redeem.imgXS)" >Móvil</a>
+                                    </td>
+                                    <td>
+                                        <div class="img-info font">
+                                            <a target="_blank" [href]="config.mobileHandbook">
+                                                <button class="i-eye-gray icon-style" matTooltip="Ver manual del formato"></button>
+                                            </a>
+                                            {{config.mobileResolution}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input class="custom-file-input font" type="file"
+                                            matTooltip="Nueva imagen formato Móviles" 
+                                            (change)="uploadImage($event.target.files, i,'imgXS')"
+                                            accept=".png,.jpg,.svg">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a class="font clicable"   matTooltip="Ver imagen"  (click)="openDialog(redeem.imgLG)">Desktop</a>
+                                        
+                                    </td>
+                                    <td>
+                                        <div class="img-info font">
+                                            <a target="_blank" [href]="config.desktopHandbook">
+                                                <button class="i-eye-gray icon-style"  matTooltip="Ver manual del formato"></button>
+                                            </a>
+                                            {{config.desktopResolution}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input class="custom-file-input font" type="file"
+                                            matTooltip="Nueva imagen formato Desktop" 
+                                            (change)="uploadImage($event.target.files, i,'imgLG')"
+                                            accept=".png,.jpg,.svg">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a class="font clicable"   matTooltip="Ver imagen"  (click)="openDialog(redeem.logo)">Logo</a>
+                                        
+                                    </td>
+                                    <td>
+                                        <div class="img-info font">
+                                            <a target="_blank" [href]="config.handbook">
+                                                <button class="i-eye-gray icon-style"  matTooltip="Ver manual del formato"></button>
+                                            </a>
+                                            {{config.logoResolution}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input class="custom-file-input font" type="file"
+                                            matTooltip="Nueva imagen formato Logo" 
+                                            (change)="uploadImage($event.target.files, i,'logo')"
+                                            accept=".png,.jpg,.svg">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="previewSegment">
+                            <div class="box-tablet">
+                                <div class="slide-img-desktop"
+                                    [ngStyle]="{'background-image': 'url(' + redeem.imgXS + ')'}">
+                                    <div _ngcontent-esh-c21="" class="box-color-desktop"></div>
+                                    <div _ngcontent-esh-c21="" class="box-elem-desktop">
+                                        <div _ngcontent-esh-c21="" class="box-logo">
+                                            <div _ngcontent-esh-c21="" class="box-img"
+                                            [ngStyle]="{'background-image': 'url(' + redeem.logo + ')'}"></div>
+                                        </div>
+                                        <div _ngcontent-esh-c21="" class="box-text">
+                                            <div _ngcontent-esh-c21="" class="box-text-title"> {{ redeem.title }}
+                                            </div>
+                                            <div _ngcontent-esh-c21="" class="box-text-subtitle"> {{ redeem.subtitle }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div class="productsListSegment formPadding">
+                        <div class="productsTitle font">Productos Asociados ({{redeem.title}})</div>
+                        <div class="info-warning" *ngIf="redeem.productsList.length === 0">Aun no se han asociado
+                            productos al canje destacado {{i+1}}!!!</div>
+                        <table *ngIf="redeem.productsList.length > 0" class="custom-products-table">
+                            <thead>
+                                <tr>
+                                    <th class="product-id">ID Producto</th>
+                                    <th class="product-name">Nombre Producto</th>
+                                    <th class="product-category">Categoría</th>
+                                    <th class="product-points">Puntos</th>
+                                    <th class="product-status">Status</th>
+                                    <th class="product-delete"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let product of redeem.productsList">
+                                    <td>{{product.id}}</td>
+                                    <td>{{product.fullName}}</td>
+                                    <td>{{product.category}}
+                                         <div class="info-warning-small" 
+                                         *ngIf="!product.publishedCategory">
+                                         {{product.publishedCategory | statusPipe: 'Publicado':'No publicado!!!'}}
+                                        </div> 
+                                    </td>
+                                    <td>{{product.points}} pts</td>
+                                    <td>{{product.active | statusPipe }}</td>
+                                    <td><button class="i-delete" (click)="deleteProduct(i, product.id)"></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <mat-action-row>
+                        <table class="custom-products-table">
+                            <tr class="product-input-row">
+                                <td class="product-id">
+                                    <input class="input-search i-search" type="text" [(ngModel)]="searchId"
+                                        placeholder="Buscar producto" (keydown.enter)="searchProduct(i)">
+                                </td>
+                                <td *ngIf="newProduct && editedRedeem === i" class="product-name">
+                                    {{newProduct.fullName}}
+
+                                </td>
+                                <td *ngIf="newProduct && editedRedeem === i" class="product-category">
+                                    {{newProduct.category}}                                         
+                                    <div class="info-warning-small" 
+                                    *ngIf="!newProduct.publishedCategory">
+                                    {{newProduct.publishedCategory | statusPipe: 'Publicado':'No publicado!!!'}}
+                                   </div> 
+                                </td>
+                                <td *ngIf="newProduct && editedRedeem === i" class="product-points">
+                                    {{newProduct.points}} pts</td>
+                                <td *ngIf="newProduct && editedRedeem === i" class="product-status"><span
+                                        [class.warning-font]="!newProduct.active">{{newProduct.active |
+                                        statusPipe}}</span></td>
+                                <td *ngIf="newProduct && editedRedeem === i" class="product-delete"></td>
+                            </tr>
+                            <tr class="product-buttons-row" *ngIf="newProduct && editedRedeem === i">
+                                <td colspan="6">
+                                    <div class="products-buttons" *ngIf="newProduct && editedRedeem === i">
+                                        <button mat-button color="primary" class="font"
+                                            (click)="cleanAddProduct()">Cancelar</button>
+                                        <button mat-flat-button color="primary" class="accept-button"
+                                            (click)="addProduct()">
+                                            <span class="font">Asociar Producto</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </mat-action-row>
+                </mat-expansion-panel>
+
+            </mat-accordion>
+
+        </div>
+    </mat-card>
+</div>

@@ -1,0 +1,65 @@
+<div class="main-container">
+    <mat-card class="container-info">
+      <div class="container-title">
+        <p class="title"> Descargar
+          <span class="title-highlighted">Códigos Válidos de Productos</span>
+        </p>
+      </div>
+    </mat-card>
+    <mat-card class="main-container-form">
+      <mat-progress-bar mode="query"  *ngIf="initLoading"></mat-progress-bar>
+      <mat-card-content class="container-info-form"  *ngIf="!initLoading">
+        <div class="container-form" [formGroup]="formGroup">
+          <section class="dates-info">
+            <mat-form-field>
+              <mat-label>Categoría</mat-label>
+              <mat-select formControlName="category" (selectionChange)="changeSelectCategory()">
+                <mat-option *ngFor="let c of categories" value="{{c.categoryId}}">{{ c.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Producto</mat-label>
+              <mat-select formControlName="product">
+                <mat-option *ngFor="let product of selectedProducts" value="{{product.sku}}" [disabled]="product.stock === 0">
+                  {{product.fullName}} - Stock: {{product.stock}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <p class="sku" > SKU: {{ formGroup.get('product')?.value }} </p>
+          </section>
+        </div>
+        <div class="upload-button-quaternaty">
+          <button mat-raised-button class="button-quaternaty" [disabled]="loading || formGroup.invalid" (click)="downloadFile()">Códigos disponibles</button>
+          <div class="info-section">
+            <div class="tip-image">Los códigos descargados corresponden a aquellos que aún pueden ser canjeados</div>
+          </div>
+        </div>
+
+        <div class="upload-button-quaternaty all-codes-button">
+          <button mat-raised-button class="button-quaternaty" 
+          [disabled]="loading || codeRequested" 
+          (click)="requestCodeReport()">Solicitar todos los Códigos</button>
+          <div class="info-section">
+            <div class="tip-image">
+              Al hacer click en el botón, se generará la solicitud del archivo al sistema, el cual recibirá por correo electrónico en un plazo máximo de {{ WAITING_TIME }} minutos. <br/>
+              Si no recibe el correo en el plazo estipulado, favor comunicarse con el área de fidelización y clientes. <br/>
+             </div>
+             <div class="msg-requested" *ngIf="codeRequested">
+              Solo se puede hacer una solicitud de todos los códigos cada 10 minutos.
+             </div>
+          </div>
+          <div class="upload-info-section" *ngIf="loading">
+            <span class="title-section">Descargando códigos: {{ percCommited }}%</span>
+            <section class="progress-bar-section">
+              <mat-progress-bar color="primary" mode="determinate" [value]="percCommited">
+              </mat-progress-bar>
+            </section>
+            <mat-progress-spinner mode="indeterminate" *ngIf="loadingData" class="spinner home-spinner"></mat-progress-spinner>
+          </div>   
+        </div>
+      </mat-card-content>
+      <div class="container-buttons">
+        <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">Volver</button>
+      </div>
+    </mat-card>
+  </div>

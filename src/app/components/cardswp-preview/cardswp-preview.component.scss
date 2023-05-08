@@ -1,0 +1,290 @@
+@import '../../../global.scss';
+$card-space-between: 12px;
+$x-small-device-h: 580px;
+
+$iphone-5-width: 320px; // iPhone 5/SE
+$screen-small-width: calc(#{$iphone-5-width} + 20px);
+
+
+
+$white-soft-opacity: rgba(255, 255, 255, 0.3);
+
+$font-medium: "Montserrat Medium";
+
+.background-purple {
+  background-color: $purple;
+}
+
+.cards-container {
+  text-align: center;
+  margin: 24px 0 30px 0;
+  padding: 0;
+  @media (min-width: $screen-small-width) { padding: 0 5% 0 5%; }
+  @media (min-width: 400px) { padding: 0 8% 0 8%; }
+
+  &.two-cards {
+    margin: 10% 0 14% 0;
+    .debit, .credit, .credit-ms { padding: 0 0 0 5px !important; }
+    @media (min-width: $screen-small-width) { margin: 15% 0 15% 0; }
+    @media (min-width: 450px) { margin: 20% 0 20% 0; }
+  }
+}
+
+.screen-logo {
+  height: 50px;
+  width: 50%;
+  margin-left: 25%;
+  background-size: contain;
+  margin-bottom: 5px;
+  background-position: center;
+}
+
+.card {
+  width: calc(100% - 40px);
+  height: 160px;
+  max-height: 200px;
+  border-radius: 10px;
+  box-shadow: 0 0 25px 10px rgba(255, 255, 255, 0.2);
+  position: relative;
+  text-align: left;
+  overflow: hidden;
+  transform: scale(0.9);
+  border-color: $yellow;
+  border-style: solid;
+  border-width: 2px;
+
+  height: 130px;
+  margin: 20px 0 20px 0;
+  @media (min-width: $screen-small-width) {
+    height: 154px;
+  }
+  @media (min-width: 450px) {
+    height: 190px;
+  }
+  z-index: 1;
+  &.over {
+    z-index: 5;
+
+    margin-top: calc(-50% - 42px);
+    margin-left: 40px;
+    @media (min-width: $screen-small-width) {
+      margin-top: calc(-50% - 62px);
+    }
+    @media (min-width: 450px) {
+      margin-top: calc(-56% - 82px);
+    }
+  }
+
+  .inner-border {
+    width: calc(100% - #{$card-space-between});
+    height: calc(100% - #{$card-space-between});
+    border-radius: 8px;
+    background-color: transparent;
+    border: solid 2px $white-soft-opacity;
+    position: relative;
+    padding: $card-space-between;
+  }
+
+  .br-logo {
+    width: 100px;
+    height: 40px;
+    position: absolute;
+    background-size: contain;
+    background-position: center;
+    right: 24px;
+  }
+
+  &.debit,
+  &.credit,
+  &.credit-ms {
+    padding: 12px 20px;
+    color: $white;
+
+    .card-logo {
+      position: absolute;
+      top: 9%;
+      left: 5%;
+      width: 50%;
+      height: 85%;
+
+      background-size: auto 100%;
+      opacity: 0.05;
+    }
+    .card-title {
+      position: absolute;
+      top: 15%;
+      right: 12%;
+      font: 0.93em $font-semibold;
+      text-align: right;
+      width: 80%;
+      @media (max-height: $x-small-device-h) {
+        font-size: 0.79em;
+      }
+    }
+    .info {
+      position: absolute;
+      bottom: 10%;
+      p {
+        font-size: 0.62em;
+        font-family: $font-regular;
+        opacity: 0.7;
+        @media (max-height: $x-small-device-h) {
+          font-size: 0.6em;
+        }
+        &.pan {
+          font-family: $font-bold;
+          opacity: 1;
+          letter-spacing: 1px;
+          word-spacing: 6px;
+        }
+        &.name {
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  &.credit,
+  &.credit-ms,
+  &.debit {
+    background-position-x: right;
+    background-position-y: center;
+    background-size: contain;
+    background-color: $grey-darkest;
+  }
+
+  &.debit {
+    background-color: $purple;
+  }
+}
+
+.checkbox-container mat-checkbox {
+  margin-left: 8px;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.item-list .inner-item .icon {
+  max-width: 25px;
+}
+
+
+.container-bottom {
+  padding: 0 32px 12px 32px;
+}
+
+.exit-button-container {
+  display: flex;
+
+  .exit-button {
+    margin-bottom: 0;
+    margin-top: 0;
+    font: 15px $font-medium;
+  }
+
+  &.right {
+    flex-direction: row-reverse;
+    .exit-button {
+      padding-right: 12px;
+    }
+  }
+}
+
+.align-center {
+  text-align: center;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.img-card-mc-band {
+  @extend .i-no-repeat;
+  background-image: url("~assets/icon/card-credit-mc-band.svg");
+}
+
+.img-card-band {
+  @extend .i-no-repeat;
+  background-image: url("~assets/icon/card-debit-band.svg");
+}
+
+
+.img-logo-negative {
+  @extend .i-no-repeat;
+  background-image: url("~assets/icon/logo-bancoripley-negative.svg");
+}
+
+.img-logo-ripley-small {
+  @extend .i-no-repeat;
+  background-image: url("~assets/icon/card_logo-light.svg");
+}
+
+.container-top {
+  width: 100%;
+  padding: 12px 0 8px 0;
+
+  &.no-padding {
+    padding-bottom: 0;
+  }
+}
+
+
+
+
+.item-list {
+  padding: 0;
+  .inner-item {
+    width: 100%;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    .icon {
+      min-width: 20px;
+      height: auto;
+      margin-right: 16px;
+    }
+    .text {
+      .title {
+        width: 100%;
+        font: 13px $font-semibold;
+        margin-bottom: 6px;
+      }
+      .description {
+        width: 100%;
+        font: 13px $font-regular;
+      }
+      .mini-cards-conainer {
+        display: flex;
+        margin-top: 4px;
+
+        .mini-card {
+          width: 24px;
+          height: 16px;
+          margin: auto 2px;
+        }
+      }
+    }
+  }
+}
+
+.info-box {
+  background: rgba(137, 69, 144, 0.05);
+  display: flex;
+  padding: 10px 8px;
+  margin-top: 18px;
+
+  .icon {
+    padding: 0 14px 0 6px;
+  }
+
+  .text {
+    margin-top: 0;
+    margin-bottom: 0;
+    font: 11px $font-regular;
+    color: $purple-light;
+    b {
+      font: 11px $font-bold;
+      color: $purple-light;
+    }
+  }
+}

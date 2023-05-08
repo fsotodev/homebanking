@@ -1,0 +1,25 @@
+@import '../../../../global.scss';
+
+.input-survey {
+  border: 0;
+  border-bottom: 1px solid $purple;
+  width: 30px;
+  font-size: 12.5px;
+  font-family: $font-semibold;
+  color: $purple;
+  text-align: center;
+
+  &:hover {
+    cursor: auto;
+  }
+
+  &:focus {
+    outline-color: $white;
+  }
+}
+
+.main-buttons {
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+}

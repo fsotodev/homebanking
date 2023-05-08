@@ -1,0 +1,244 @@
+@import '../../../../global.scss';
+
+.main-table {
+  width: 1130px;
+  background-color: $white;
+  padding: 0;
+  margin: 0px auto;
+  font-family: $font-bold;
+
+  .spinner {
+    margin: 0 auto;
+  }
+
+  ::ng-deep {
+
+    .mat-progress-spinner circle,
+    .mat-spinner circle {
+      stroke: $purple;
+    }
+
+  }
+
+  .tab-content {
+    ::ng-deep {
+      .mat-tab-list {
+        background-color: $grey-softer;
+      }
+
+      .mat-tab-label-content {
+        color: $purple;
+        text-transform: uppercase;
+        font-size: 10px;
+        font-family: $font-bold;
+        letter-spacing: 0.5px;
+      }
+
+      .mat-ink-bar {
+        background-color: $purple !important;
+      }
+
+      .mat-tab-label {
+        background-color: $white;
+        min-width: 90px;
+      }
+
+      .mat-tab-disabled {
+        background-color: $grey-soft !important;
+      }
+    }
+
+    .dates-table {
+      .empty-message {
+        color: $grey;
+        font-size: 12.5px;
+        text-align: center;
+        margin-top: 40px;
+      }
+
+      .mat-header-row {
+        padding: 0 24px;
+      }
+
+      .mat-header-cell {
+        color: $purple;
+        text-transform: uppercase;
+        font-family: $font-semibold;
+      }
+
+      .mat-cell {
+        color: $grey-ms;
+        font-size: 12.5px;
+        letter-spacing: 0.2px;
+      }
+
+      %standard-column {
+        min-width: 120px;
+        padding-right: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        cursor: default;
+      }
+
+      .mat-column-createdAt {
+        min-width: 82px;
+        padding-right: 16px;
+        @extend %standard-column;
+      }
+
+      .mat-column-id {
+        min-width: 60px;
+        @extend %standard-column;
+      }
+
+      .mat-column-name {
+        min-width: 70px;
+        @extend %standard-column;
+      }
+
+      .mat-column-title {
+        min-width: 85px;
+        @extend %standard-column;
+      }
+
+      .mat-column-description {
+        min-width: 270px;
+        @extend %standard-column;
+      }
+
+      .mat-column-performAt {
+        min-width: 120px;
+        padding-right: 16px;
+        @extend %standard-column;
+      }
+
+      .mat-column-status {
+        min-width: 92px;
+        cursor: default;
+        text-align: left;
+        margin-right: 6px;
+        text-transform: uppercase;
+      }
+
+      .mat-column-successCount {
+        min-width: 50px;
+        @extend %standard-column;
+      }
+
+      .mat-column-failureCount {
+        min-width: 50px;
+        @extend %standard-column;
+      }
+
+      .mat-column-uploadedRuts {
+        min-width: 30px;
+        @extend %standard-column;
+      }
+
+      .mat-column-modifyOrDelete {
+        min-width: 100px;
+
+        &:focus {
+          outline-color: $white;
+        }
+      }
+
+      .actions-table {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+.container-new-campaign {
+  width: 210px;
+  padding: 24px 0;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  bottom: 0;
+  z-index: 1;
+  float: right;
+  display: block;
+  margin-top: 2%;
+
+  .title-button {
+    color: $grey-darker;
+    font-size: 14px;
+    font-family: $font-semibold;
+    -ms-flex-item-align: center;
+    align-self: center;
+    display: contents;
+  }
+
+  .button-new-benefit {
+    background-color: $purple !important;
+    margin-left: 16px;
+
+    ::ng-deep {
+      .mat-button-wrapper {
+        font-size: 40px;
+        font-family: $font-light;
+      }
+    }
+  }
+}
+
+.main-container-form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* ICONS */
+.i-edit {
+  background-size: 18px auto;
+}
+
+.i-more {
+  background-size: 18px auto;
+}
+
+.i-calendar-edit {
+  background-size: 18px auto;
+}
+
+.i-close-grey {
+  background-size: 18px auto;
+}
+
+.i-delete {
+  background-size: 15px auto;
+}
+
+.i-edit,
+.i-more,
+.i-delete,
+.i-copy,
+.i-close-grey,
+.i-calendar-edit {
+  width: 22px;
+  height: 22px;
+  margin-right: 4px;
+  border: 0;
+  opacity: 0.8;
+  background-color: transparent;
+  vertical-align: middle !important;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.i-copy {
+  background-size: 20px auto;
+  margin-right: 0px;
+}

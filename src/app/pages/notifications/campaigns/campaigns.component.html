@@ -1,0 +1,120 @@
+<div class="main-container">
+  <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+  <mat-card *ngIf="!isLoading" class="container-info">
+    <div class="container-title">
+      <p class="title"> Notificaciones Push
+        <span class="title-highlighted">Campañas</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <div class="container-form" [formGroup]="clicksCampaignForm">
+        <section class="dates-info">
+          <p class="title"> Descargar data de clicks por campaña</p>
+          <mat-form-field>
+            <mat-label>Selecciona la campaña</mat-label>
+              <mat-select formControlName="campaignMap" [(ngModel)]="campaignName">
+                <mat-option *ngFor="let campaign of campaignsList" value="{{campaign.name}}">{{campaign.name}}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+        </section>
+      </div>
+    </mat-card-content>
+    <div class="container-buttons">
+        <button mat-raised-button (click)="downloadClicksCampaigns()" class="button-primary"
+          [disabled]="!clicksCampaignForm.valid || !loading">Descargar</button>
+        <p *ngIf="!loading">Descargando...</p>
+    </div>
+  </mat-card>
+  <mat-card class="main-table">
+    <div *ngIf="!isLoading" class="tab-content">
+      <div class="dates-table">
+        <mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="createdAt">
+            <mat-header-cell *matHeaderCellDef> Fecha de creación </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.createdAt | date:'dd/MM/yyyy'}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="title">
+            <mat-header-cell *matHeaderCellDef> Título </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.options.pushTitle}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.options.pushDescription}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="performAt">
+            <mat-header-cell *matHeaderCellDef> Fecha Programada </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.performAt | date:'dd/MM/yyyy HH:mm'}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="successCount">
+            <mat-header-cell *matHeaderCellDef> Correctos </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.successCount}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="failureCount">
+            <mat-header-cell *matHeaderCellDef> Fallados </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.failureCount}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="uploadedRuts">
+            <mat-header-cell *matHeaderCellDef> Ruts </mat-header-cell>
+            <mat-cell *matCellDef="let element" >
+              <p *ngIf="element.uploadedRuts"> {{element.rutsUploaded}} </p>
+              <p *ngIf="!element.uploadedRuts"> No</p>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="modifyOrDelete">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element" class="actions-table">
+              <button mat-icon-button [matMenuTriggerFor]="menu" class="i-more">
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="editCampaign(element)" *ngIf="canEdit(element)">
+                  <button class="i-edit"></button>
+                  <span>Editar</span>
+                </button>
+                <button mat-menu-item (click)="cancelSend(element)" *ngIf="canCancel(element)">
+                  <button class="i-close-grey"></button>
+                  <span>Cancelar</span>
+                </button>
+                <button mat-menu-item (click)="deleteCampaign(element)" *ngIf="canDelete(element)">
+                  <button class="i-delete"></button>
+                  <span>Eliminar</span>
+                </button>
+              </mat-menu>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+    <mat-paginator [pageSizeOptions]="[15, 30, 60, 100]"></mat-paginator>
+  </mat-card>
+
+  <div *ngIf="!isLoading" class="container-new-campaign">
+    <span class="title-button">Nueva Campaña</span>
+    <button mat-fab class="button-new-benefit" (click)="addNewCampaign()">+</button>
+  </div>
+</div>

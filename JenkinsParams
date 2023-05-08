@@ -1,0 +1,9 @@
+SLACK_CHANNEL=ci-cd-homebanking-pwa
+PROJECT_NAME=homebanking-pwa-admin
+PROJECT_KEY=HBPWA
+SCAN_SOURCE=src
+SCAN_EXCLUDE_FILES=node_modules/,assets/,public/
+SCAN_COVERAGE_REPORT=coverage/lcov.info
+
+continueGcloud=y
+buildEnv=dev

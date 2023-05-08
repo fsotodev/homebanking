@@ -1,0 +1,147 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> Nueva
+        <span class="title-highlighted">Campaña</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card *ngIf="isLoaded" class="main-container-form">
+    <mat-card-content class="container-info-form">
+
+
+
+      <div class="container-form">
+        <mat-form-field class="input-info field-text" [formGroup]="campaignIdForm">
+          <input matInput type="text" placeholder="ID de campaña" formControlName="id">
+          <mat-hint>Ej: CABIFYENERO.</mat-hint>
+        </mat-form-field>
+
+        <div class="main-buttons">
+          <button mat-raised-button (click)="saveCampaignId()" class="button-primary"
+            [disabled]="!campaignIdForm.valid || !isIdValid() || confirmedId">Continuar</button>
+        </div>
+
+        <p *ngIf="!isIdValid()">Ya existe una campana con el ID "{{id}}"</p>
+
+        <section *ngIf="confirmedId" class="date-box benefit-header-box" [formGroup]="campaignForm">
+          <section class="dates-info">
+
+            <mat-form-field class="input-info field-text">
+              <input matInput type="text" placeholder="Código único" formControlName="uniqueCode">
+              <mat-hint>Ej: hola.</mat-hint>
+            </mat-form-field>
+
+            <section>
+              <div class="user-location">
+                <mat-checkbox formControlName="hasCode">Tiene código
+                </mat-checkbox>
+              </div>
+              <div class="user-location">
+                <mat-checkbox formControlName="active">Activa
+                </mat-checkbox>
+              </div>
+            </section>
+
+            <section>
+              <mat-form-field>
+                <input matInput [matDatepicker]="pickerStart" placeholder="Fecha de inicio" formControlName="startDate">
+                <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                <mat-datepicker #pickerStart></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput [matDatepicker]="pickerEnd" placeholder="Fecha de término" formControlName="endDate">
+                <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                <mat-datepicker #pickerEnd></mat-datepicker>
+              </mat-form-field>
+            </section>
+
+            <section>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Título de campaña" formControlName="campaignTitle" required>
+                <mat-hint>Ej: 30% dcto en Cabify todos los miércoles de febrero 2019!.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Subtítulo de campaña" formControlName="campaignSubTitle"
+                  required>
+                <mat-hint>Ej: Tope de descuento por viaje $2.000, Máximo 8 viajes en el mes por persona. Ingresa tu
+                  código en PROMOCIONES de la app de Cabify.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Titulo del header" formControlName="headerTitle" required>
+                <mat-hint>Ej: 30% descuento Cabify!.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Texto del home" formControlName="homeText" required>
+                <mat-hint>Ej: 30% dcto!.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Texto de duración de la campaña"
+                  formControlName="campaignDurationText" required>
+                <mat-hint>Ej: Todos los miércoles de febrero.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Descripción del código" formControlName="codeDescription"
+                  required>
+                <mat-hint>Ej: Tu código es:.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="number" placeholder="Prioridad" formControlName="priority" required>
+                <mat-hint>Ej: 2.</mat-hint>
+              </mat-form-field>
+            </section>
+
+            <section>
+              <span class="title-section">Tipo de código</span>
+              <div class="special-info">
+                <div class="user-location">
+                  <mat-checkbox formControlName="copyPaste">Copy Paste
+                  </mat-checkbox>
+                </div>
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text" placeholder="openApp" formControlName="openApp">
+                  <mat-hint>Ej: advance.</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text" placeholder="openUrl" formControlName="openUrl">
+                  <mat-hint>Ej: https://www.bancoripley.cl/tarjeta-ripley-week-arauco.</mat-hint>
+                </mat-form-field>
+              </div>
+            </section>
+
+            <section>
+              <span class="title-section">Archivos</span>
+              <mat-card-content>
+                <app-load-file-button [text]="'campaignConditionsPdfUrl'" [extensions]="['pdf']"
+                  [isLoading]="isUploadingPdf" [showUrl]="false" [emitUrl]="true" [folder]="folder + id"
+                  (url)="uploadToForm($event, 'campaignConditionsPdfUrl')"></app-load-file-button>
+                <app-load-file-button [text]="'campaignLogoUrl'" [description]="'Dimensión: 100 x 50 px (máximo)'"
+                  [extensions]="['jpg', 'png']" [isLoading]="isUploadingPdf" [showUrl]="false" [emitUrl]="true"
+                  [showImage]="true" [folder]="folder + id" (url)="uploadToForm($event, 'campaignLogoUrl')">
+                </app-load-file-button>
+                <app-load-file-button [text]="'campaignMainImage'" [description]="'Dimensión: 414 x 235 px'"
+                  [extensions]="['jpg', 'png']" [isLoading]="isUploadingPdf" [showUrl]="false" [emitUrl]="true"
+                  [showImage]="true" [folder]="folder + id" (url)="uploadToForm($event, 'campaignMainImage')">
+                </app-load-file-button>
+                <app-load-file-button [text]="'homeLogoUrl'" [description]="'Dimensión: 50 x 50 px'"
+                  [extensions]="['jpg', 'png']" [isLoading]="isUploadingPdf" [showUrl]="false" [emitUrl]="true"
+                  [showImage]="true" [folder]="folder + id" (url)="uploadToForm($event, 'homeLogoUrl')">
+                </app-load-file-button>
+              </mat-card-content>
+            </section>
+
+          </section>
+        </section>
+      </div>
+
+    </mat-card-content>
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">volver</button>
+      <div class="main-buttons">
+        <button mat-raised-button (click)="saveCampaign()" class="button-primary"
+          [disabled]="!campaignForm.valid">Crear</button>
+      </div>
+    </div>
+  </mat-card>
+</div>

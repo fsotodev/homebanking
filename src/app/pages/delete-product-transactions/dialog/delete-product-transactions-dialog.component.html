@@ -1,0 +1,22 @@
+
+<h1 mat-dialog-title>¿Confirma la eliminación del siguiente canje?</h1>
+<div mat-dialog-content>
+  Eliminarás esta transacción del cliente {{data.userId}}, con esta acción desaparecerá el canje de sus canjes realizados.
+  <div class="highlightText">
+    <h3>ACCIÓN NO REVERSIBLE</h3>
+  </div>
+  <ul>
+    <li><h3>{{data.productTransaction.fullName}}</h3></li>
+    <li><strong>Categoría</strong>: {{data.productTransaction.category}}</li>
+    <li *ngIf="data.productTransaction.createdAt"><strong>Fecha:</strong> {{getParsedDate(data.productTransaction.createdAt)}}</li>
+    <li *ngIf="data.productTransaction.status"><strong>Estado:</strong> {{data.productTransaction.status}}</li>
+    <li><strong>Usuario</strong>: {{data.userId}}</li>
+
+  </ul>
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+  {{result}}
+</div>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>No</button>
+  <button mat-button [disabled]="loading" cdkFocusInitial (click)="confirmDeleteProductTransactions()">Eliminar</button>
+</mat-dialog-actions>

@@ -1,0 +1,171 @@
+<div class="main-container">
+    <mat-card class="container-info group-flex">
+        <div class="container-title">
+            <p class="title"> Beneficios de 
+                <span class="title-highlighted">Segmentos de Clientes</span>
+            </p>
+        </div>
+        <div class="container-actions">
+            <button *ngIf="!isEditing" (click)="toggleEditing()" mat-raised-button  color="primary">Editar</button>
+            <button *ngIf="isEditing" mat-raised-button (click)="saveChanges()"  color="primary">Guardar</button>
+            <button *ngIf="isEditing" (click)="cancelEditing()" mat-raised-button  color="primary">Cancelar</button>
+
+        </div>
+    </mat-card>
+    <mat-card class="main-table">
+        <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+        <!-- <div class="search">
+            <input type="text" (keyup)="applyFilter($event.target.value)" placeholder="Buscar..."
+                class="input-search i-search">
+        </div> -->
+        <div class="tab-content">
+            <mat-tab-group class="tab-content" [selectedIndex]="tabSelected" (selectedTabChange)="tabChanged($event)">
+                <mat-tab *ngFor="let tab of tabs" [label]="tab.title" class="title-tab">
+                    <mat-tab-group *ngIf="tab.id === 'gold-silver'" class="tab-content" [selectedIndex]="tabUncategorizedSelected" (selectedTabChange)="tabUncategorizedChanged($event)">
+                        <mat-tab *ngFor="let t of uncategorizedTabs" [label]="t.title" class="title-tab">
+                            <mat-table *ngIf="!loading"
+                                #tableun
+                                [dataSource]="segments[segmentSelected][t.id]"
+                                cdkDropList
+                                [cdkDropListData]="isEditing ? groupsDataSource : []"
+                                (cdkDropListDropped)="dropUncategorizedTable($event, t.id)"
+                            >
+            
+                                <ng-container matColumnDef="order">
+                                    <mat-header-cell *matHeaderCellDef> Orden </mat-header-cell>
+                                    <mat-cell *matCellDef="let element; let i = index;">
+                                        <div *ngIf="!isEditing">{{i + 1}}</div>
+                                        <mat-icon 
+                                            class="i-menu"
+                                            *ngIf="isEditing" 
+                                            (mouseenter)="dragEnabled = true"
+                                            (mouseleave)="dragEnabled = false"
+                                        ></mat-icon>
+                                    </mat-cell>
+                                </ng-container>
+            
+                                <ng-container matColumnDef="title">
+                                    <mat-header-cell *matHeaderCellDef> Título </mat-header-cell>
+                                    <mat-cell *matCellDef="let element; let i = index;"> 
+                                        <div *ngIf="!isEditing">{{element.title}}</div>
+                                        <input *ngIf="isEditing" matInput type="string" placeholder="Nombre" [(ngModel)]="segments[segmentSelected][t.id][i].title"
+                                        class="input-name">
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="icon">
+                                    <mat-header-cell *matHeaderCellDef> Ícono </mat-header-cell>
+                                    <mat-cell class="text-ellipsis" *matCellDef="let element; let i = index;"> 
+                                        <div *ngIf="!isEditing">{{element.icon }}</div>
+                                        <!-- <input *ngIf="isEditing" matInput type="string" placeholder="Ícono" [(ngModel)]="segments[segmentSelected].benefits[i].icon"
+                                        class="input-name"> -->
+                                        <div class="upload-image">
+                                            <input class="custom-file-input" type="file" (change)="uploadUncategorizedSegmentImage($event.target.files, i, t.id )"
+                                            accept=".png,.jpg,.svg" [disabled]="isUploadingCatalog">
+                                            <div class="name-archive" *ngIf="!isUploadingCatalog">
+                                            {{ element.icon}}</div>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="delete">
+                                    <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
+                                    <mat-cell *matCellDef="let element; let i = index;"> 
+                                        <button
+                                            *ngIf="isEditing"
+                                            mat-icon-button
+                                            type="button"
+                                            (click)="deleteUncategorizedSegment(i, t.id)"
+                                            class="delete-btn">
+                                            <mat-icon aria-label="Eliminar" class="i-trash-alt icon-small delete-icon"></mat-icon>
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+            
+                                <mat-header-row *matHeaderRowDef="displayedUncategorizedColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedUncategorizedColumns;" cdkDrag [cdkDragData]="row" [cdkDragDisabled]="!dragEnabled"></mat-row>
+                            </mat-table>
+                            <div class="add-row">
+                                <div *ngIf="isEditing" (click)="addUncategorizedRow(t.id)" class="row-btn">+ Añadir fila</div>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                    <div *ngIf="tab.id !== 'gold-silver'" class="dates-table">
+                        <mat-table 
+                             *ngIf="!loading"
+                            #table
+                            [dataSource]="segments[segmentSelected].benefits"
+                            cdkDropList
+                            [cdkDropListData]="isEditing ? groupsDataSource : []"
+                            (cdkDropListDropped)="dropTable($event, tab.id)"
+                        >
+        
+                            <ng-container matColumnDef="order">
+                                <mat-header-cell *matHeaderCellDef> Orden </mat-header-cell>
+                                <mat-cell *matCellDef="let element; let i = index;">
+                                    <div *ngIf="!isEditing">{{i + 1}}</div>
+                                    <mat-icon 
+                                        class="i-menu"
+                                        *ngIf="isEditing" 
+                                        (mouseenter)="dragEnabled = true"
+                                        (mouseleave)="dragEnabled = false"
+                                    ></mat-icon>
+                                </mat-cell>
+                            </ng-container>
+        
+                            <ng-container matColumnDef="title">
+                                <mat-header-cell *matHeaderCellDef> Título </mat-header-cell>
+                                <mat-cell *matCellDef="let element; let i = index;"> 
+                                    <div *ngIf="!isEditing">{{element.title}}</div>
+                                    <input *ngIf="isEditing" matInput type="string" placeholder="Nombre" [(ngModel)]="segments[segmentSelected].benefits[i].title"
+                                     class="input-name">
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="description">
+                                <mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
+                                <mat-cell *matCellDef="let element; let i = index;"> 
+                                    <div *ngIf="!isEditing">{{element.description}}</div>
+                                    <input *ngIf="isEditing" matInput type="string" placeholder="Descripción" [(ngModel)]="segments[segmentSelected].benefits[i].description"
+                                     class="input-name">
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="icon">
+                                <mat-header-cell *matHeaderCellDef> Ícono </mat-header-cell>
+                                <mat-cell class="text-ellipsis" *matCellDef="let element; let i = index;"> 
+                                    <div *ngIf="!isEditing">{{element.icon }}</div>
+                                    <!-- <input *ngIf="isEditing" matInput type="string" placeholder="Ícono" [(ngModel)]="segments[segmentSelected].benefits[i].icon"
+                                     class="input-name"> -->
+                                     <div class="upload-image">
+                                        <input class="custom-file-input" type="file" (change)="uploadSegmentImage($event.target.files, i)"
+                                          accept=".png,.jpg,.svg" [disabled]="isUploadingCatalog">
+                                        <div class="name-archive" *ngIf="!isUploadingCatalog">
+                                          {{ element.icon}}</div>
+                                      </div>
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="delete">
+                                <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
+                                <mat-cell *matCellDef="let element; let i = index;"> 
+                                    <button
+                                        *ngIf="isEditing"
+                                        mat-icon-button
+                                        type="button"
+                                        (click)="deleteSegment(i)"
+                                        class="delete-btn">
+                                        <mat-icon aria-label="Eliminar" class="i-trash-alt icon-small delete-icon"></mat-icon>
+                                    </button>
+                                </mat-cell>
+                            </ng-container>
+        
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row" [cdkDragDisabled]="!dragEnabled"></mat-row>
+                        </mat-table>
+                        <div class="add-row">
+                            <div *ngIf="isEditing" (click)="addRow()" class="row-btn">+ Añadir fila</div>
+                        </div>
+                    </div>
+                </mat-tab>
+
+            </mat-tab-group>
+        </div>
+    </mat-card>
+</div>

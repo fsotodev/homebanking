@@ -1,0 +1,88 @@
+/*
+Botones en base a sistema de diseño BR
+https://www.figma.com/file/r8R44aG3KloEAMzigSYndx/121---Button-%E2%9C%85-(0.0.1)?node-id=619%3A4437
+*/
+
+.br-btn-solid {
+  height: 40px;
+  min-width: 90px;
+  padding: inherit;
+  font-size: 14px;
+  border-radius: 4px;
+  font-weight: 600;
+  color: $br-base-white;
+  background-color: $br-purple-800;
+  border: 0;
+
+
+  &:hover,
+  &:active,
+  &:focus {
+      // Agregar styles en base figma
+  }
+
+  &[disabled],
+  &[disabled]:hover {
+    // Agregar styles en base figma
+  }
+
+}
+
+.br-btn-link {
+  height: 40px;
+  min-width: 90px;
+  padding: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: $br-purple-600;
+  background-color: transparent;
+  border: 0;
+  text-decoration: underline;
+
+
+  &:hover,
+  &:active,
+  &:focus {
+    // Agregar styles en base figma
+  }
+
+  &[disabled],
+  &[disabled]:hover {
+    // Agregar styles en base figma
+  }
+
+}
+
+.br-btn-circle {
+  border-radius: 32px;
+}
+
+.br-btn-outline {
+  // Agregar styles en base figma
+
+  &:hover,
+  &:active,
+  &:focus {
+    // Agregar styles en base figma
+  }
+
+  &[disabled],
+  &[disabled]:hover {
+    // Agregar styles en base figma
+  }
+}
+
+.br-btn-outline {
+  // Agregar styles en base figma
+
+  &:hover,
+  &:active,
+  &:focus {
+    // Agregar styles en base figma
+  }
+
+  &[disabled],
+  &[disabled]:hover {
+    // Agregar styles en base figma
+  }
+}

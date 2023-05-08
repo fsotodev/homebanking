@@ -1,0 +1,45 @@
+.mat-form-field { margin-right: 8px; }
+
+.mat-chip.mat-chip-selected.mat-primary {
+  background-color: #a0f1a0;
+  color: #000;
+}
+.tag-name {
+  margin-right: 18px;
+  margin-left: 9px;
+}
+
+.mat-chip, .mat-chip:not(.mat-basic-chip)+.mat-chip:not(.mat-basic-chip) {
+  margin: 0 8px 8px 0px;
+}
+
+.main-container .main-container-form .container-info-form { display: block; }
+
+.error { color: red; }
+
+.icon-action {
+  width: 22px;
+  height: 22px;
+  background-color: transparent;
+  border: 0 none;
+  background-position: center center;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+button { margin-right: 8px; }
+
+.order-span {
+  background-color: whitesmoke;
+  padding: 0 8px;
+  border-radius: 10px;
+}
+
+.none-event {
+  pointer-events: none;
+  opacity: 0.5;
+  background: white;
+  box-shadow: 0px -1px 15px 2px rgba(0,0,0,0.43);
+  -webkit-box-shadow: 0px -1px 15px 2px rgba(0,0,0,0.43);
+  -moz-box-shadow: 0px -1px 15px 2px rgba(0,0,0,0.43);
+}

@@ -1,0 +1,72 @@
+@import '../../../../../global.scss';
+
+.login-container {
+  width: 360px;
+  height: 400px;
+  margin: 176px auto 0;
+  padding: 0;
+  overflow: hidden;
+
+  .info-login {
+    width: 286px;
+    margin: 63px auto 0;
+
+    .title {
+      font-size: 20.5px;
+      font-family: $font-light;
+      line-height: 10.5px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .title-highlighter {
+      font-size: 20.5px;
+      font-family: $font-semibold;
+      line-height: 0;
+      margin-bottom: 46px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .input-login {
+      width: 100%;
+      font-size: 14px;
+      margin-bottom: 9px;
+    }
+
+    .container-error {
+      height: 16px;
+      width: 100%;
+
+      .error-message {
+        font-size: 13px;
+        text-align: center;
+      }
+    }
+
+    .input-password {
+      margin-bottom: 5px;
+    }
+
+    .container-button {
+      text-align: center;
+      margin-top: 18px;
+
+      .button-login {
+        text-transform: none;
+        letter-spacing: 1px;
+      }
+    }
+  }
+
+  .i-color-band {
+    height: 8px;
+    margin-top: 55px;
+  }
+}
+
+.footer {
+  height: 25px;
+  background-color: $grey-light;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}

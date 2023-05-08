@@ -1,0 +1,50 @@
+<div class="main-container">
+    <mat-card class="container-info">
+      <div class="container-title">
+        <p class="title"> Descargar
+          <span class="title-highlighted">Códigos de Beneficios</span>
+        </p>
+      </div>
+    </mat-card>
+    <mat-card class="main-container-form">
+      <mat-card-content class="container-info-form">
+        <div class="container-form" [formGroup]="formGroup">
+          <section class="dates-info">
+            <mat-form-field class="input-info field-text">
+              <input matInput type="text" placeholder="ID de Beneficio"
+                (input)="onSearchChange()" formControlName="benefit" required>
+              <mat-hint>Ej: QIMHT899xdLKmlFXnXp7</mat-hint>
+            </mat-form-field>
+          </section>
+        </div>
+        <span class="strong" *ngIf="benefitExist">Beneficio de: "{{benefitCompany()}}"</span>
+        <span class="warning" *ngIf="showWarn">No se encontró beneficio con ID: "{{formGroup.get('benefit')?.value}}"</span>
+        <br>
+
+        <div class="upload-button-quaternaty">
+          <button mat-raised-button class="button-quaternaty" [disabled]="loading || formGroup.invalid"
+            (click)="changeBenefit()">Buscar beneficio</button>
+          <button mat-raised-button class="button-quaternaty" [disabled]="loading || !benefitExist"
+            (click)="downloadFile()">Descargar códigos</button>
+          <div class="info-section">
+            <div>Se descargarán los <span class="strong">códigos disponibles</span> para el beneficio especificado</div>
+          </div>
+        </div>
+
+        <div class="upload-button-quaternaty all-codes-button">
+          <div class="upload-info-section">
+            <span class="title-section">Descargando Códigos: {{ percCodesCommited }}%</span>
+            <section class="progress-bar-section">
+              <mat-progress-bar color="primary" mode="determinate" [value]="percCodesCommited">
+              </mat-progress-bar>
+            </section>
+          </div>
+        </div>
+      </mat-card-content>
+
+
+      <div class="container-buttons">
+        <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">Volver</button>
+      </div>
+    </mat-card>
+  </div>

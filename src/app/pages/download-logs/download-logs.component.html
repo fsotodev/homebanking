@@ -1,0 +1,64 @@
+<div class="main-container">
+    <mat-card class="container-info">
+      <div class="container-title">
+        <p class="title"> Descargar
+          <span class="title-highlighted">Logs</span>
+        </p>
+      </div>
+    </mat-card>
+    <mat-card class="main-container-form">
+      <mat-card-content class="container-info-form">
+        <div class="container-form" [formGroup]="formGroup">
+          <section class="dates-info">
+            <mat-form-field>
+              <mat-label>Tipo</mat-label>
+              <mat-select formControlName="log" (change)="changeSelectAction()">
+                <mat-option *ngFor="let action of ACTION_LOGS" value="{{action.id}}">
+                  {{ action.tittle }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Usuario</mat-label>
+              <mat-select formControlName="email" (change)="getFilteredData()">
+                <mat-option *ngFor="let email of this.emails" value="{{email}}">
+                  {{email}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <p class="sku" > Cantidad de Logs: {{ this.logsLen }} </p>
+          </section>
+        </div>
+        <span class="warning" *ngIf="showWarn">No hay resultados para la acción de: "{{formGroup.get('log')?.value}}"</span>
+        <br>
+
+        <div class="upload-button-quaternaty">
+          <button mat-raised-button class="button-quaternaty" [disabled]="!logsLen || formGroup.invalid || loading"
+            (click)="downloadFile()">Logs por acción</button>
+          <div class="info-section">
+            <div class="tip-image">Los Logs descargados corresponden a aquellos que corresponda con el tipo de acción filtrada.</div>
+          </div>
+        </div>
+
+        <div class="upload-button-quaternaty all-codes-button">
+          <button mat-raised-button class="button-quaternaty" [disabled]="loading"
+            (click)="downloadFile(true)">Todos los Logs</button>
+          <div class="info-section">
+            <div class="tip-image">Los Logs descargados corresponden a todos los registros sin ningún tipo de filtro.</div>
+          </div>
+          <div class="upload-info-section">
+            <span class="title-section">Descargando códigos: {{ percCommited }}%</span>
+            <section class="progress-bar-section">
+              <mat-progress-bar color="primary" mode="determinate" [value]="percCommited">
+              </mat-progress-bar>
+            </section>
+          </div>
+        </div>
+
+      </mat-card-content>
+
+      <div class="container-buttons">
+        <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">Volver</button>
+      </div>
+    </mat-card>
+  </div>

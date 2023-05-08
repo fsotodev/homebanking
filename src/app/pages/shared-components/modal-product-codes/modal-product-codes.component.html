@@ -1,0 +1,68 @@
+<div class="modal-container">
+    <div class="box-info-modal">
+      <h2 class="title-modal title-modal-{{modalData?.titleColor}}" mat-dialog-title [innerHTML]="modalData?.title"></h2>
+      <p class="message-modal">Códigos de productos subidos a la base de datos. A continuación se muestran los 10 más recientemente agregados.</p>
+      <div class="table-header" *ngIf="!!dataSource && !loading">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro">
+        </mat-form-field>
+      </div>
+      <div *ngIf="!dataSource && !loading">
+        <p>Sin resultados.</p>
+      </div>
+      <div *ngIf="loading" class="loading-bar">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+    </div>
+
+    <mat-dialog-content class="dialog-content">
+      <div class="table-container mat-elevation-z8">
+        <mat-table #table [dataSource]="dataSource" matSort>
+
+        <!-- productUploadedAt Column -->
+          <ng-container matColumnDef="productUploadedAt">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de carga </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.productUploadedAt.toDate() | date:'dd/MM/yyyy'}}</mat-cell>
+          </ng-container>
+
+          <!-- code Column -->
+          <ng-container matColumnDef="code">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.code}} </mat-cell>
+          </ng-container>
+
+          <!-- password Column -->
+          <ng-container matColumnDef="password">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Password </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.password}} </mat-cell>
+          </ng-container>
+
+          <!-- productFolio Column -->
+          <ng-container matColumnDef="productFolio">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Folio </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.productFolio}} </mat-cell>
+          </ng-container>
+
+          <!-- sku Column -->
+          <ng-container matColumnDef="sku">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Sku </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.sku}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;">
+          </mat-row>
+        </mat-table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      </div>
+
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="box-button-modal">
+      <button class="mat-raised-button button-tertiary" *ngIf="!!modalData?.leftButton" (click)="closeModal('left')">
+        {{ modalData?.leftButton }}</button>
+      <button class="mat-raised-button button-primary" (click)="closeModal('right')">{{ modalData?.rightButton }}</button>
+    </mat-dialog-actions>
+  </div>

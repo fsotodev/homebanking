@@ -1,0 +1,40 @@
+@import '../../../global.scss';
+
+.main-container .main-container-form .container-info-form {
+  flex-direction: column;
+
+  .container-form {
+    width: 650px;
+
+    .sku {
+      display: inline;
+      margin-left: 8px;
+    }
+  }
+}
+
+.progress-bar-section {
+  width: 25%;
+}
+
+.title-section {
+  font-size: 16px;
+  font-family: $font-regular;
+  color: $purple;
+}
+
+.info-section {
+  margin: 10px 0;
+}
+
+.upload-info-section {
+  margin: 40px 0 0;
+}
+
+.all-codes-button {
+  margin-top: 60px;
+}
+
+.msg-requested {
+  color: red;
+}

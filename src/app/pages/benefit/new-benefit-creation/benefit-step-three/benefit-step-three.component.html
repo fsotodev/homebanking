@@ -1,0 +1,49 @@
+<div class="step-title">Información adicional</div>
+<div>
+  <mat-form-field  class="full-width mt-3" >
+    <input matInput placeholder="Dirección" value="" [(ngModel)]="address" autocomplete="off" >
+  </mat-form-field>
+  <button mat-mini-fab color="primary" (click)="addAddress()" >+</button>
+  <ul>
+    <li class="full-width" *ngFor="let addressItem of addressList; let i = index">
+      <button class="btn-delete-list" mat-mini-fab color="warn" (click)="deleteAddress(i)">-</button>
+      <p>{{addressItem}}</p>
+    </li>
+  </ul>
+
+  <mat-form-field class="full-width mt-3">
+    <input matInput placeholder="Teléfono" value="" [(ngModel)]="phone" autocomplete="off" >
+  </mat-form-field>
+  <button mat-mini-fab color="primary" (click)="addPhone()" >+</button>
+  <span class="example-text">Ejem: Local Providencia: +56-984736213</span>
+  <ul>
+    <li class="full-width" *ngFor="let phoneItem of phoneList; let i = index">
+      <button class="btn-delete-list" mat-mini-fab color="warn" (click)="deletePhone(i)">-</button>
+      <p>{{phoneItem}}</p>
+    </li>
+  </ul>
+
+  <div *ngIf="selectedTemplate !== 'opex'">
+    <mat-form-field class="full-width mt-3">
+      <input matInput placeholder="Horario" value="" [(ngModel)]="schedule" autocomplete="off" >
+    </mat-form-field>
+    <button mat-mini-fab color="primary" (click)="addSchedule()" >+</button>
+    <ul>
+      <li class="full-width" *ngFor="let scheduleItem of scheduleList; let i = index">
+        <button class="btn-delete-list" mat-mini-fab color="warn" (click)="deleteSchedule(i)">-</button>
+        <p>{{scheduleItem}}</p>
+      </li>
+    </ul>
+  </div>
+
+  <mat-form-field class="full-width mt-3">
+    <textarea matInput placeholder="Terminos y condiciones"
+      [(ngModel)]="termsAndConditions"></textarea>
+  </mat-form-field>
+
+</div>
+<div>
+  <button mat-button matStepperPrevious>Regresar</button>
+  <button mat-raised-button class="button-primary text-white mt-3" matStepperNext (click)="saveStepThree()">Siguiente</button>
+  <button mat-raised-button class="button-secundary mt-3" (click)="saveStepThree()">Previsualizar</button>
+</div>

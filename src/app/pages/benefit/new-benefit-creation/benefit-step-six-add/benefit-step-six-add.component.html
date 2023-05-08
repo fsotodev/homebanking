@@ -1,0 +1,58 @@
+<div class="p-2 card">
+  <div class="card-header mb-2 titleCard">{{operation}} beneficio colapsable </div>
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="addEditCollapsible()">
+      <div [hidden]="true" class="form-group mb-3">
+        <label for="id">ID</label>
+        <input type="text" class="form-control" id="title" placeholder="Ingrese título"
+        formControlName="id" [(ngModel)]="addCollapsibleRequest.id" autocomplete="off">
+      </div>
+      <div class="form-group mb-3">
+        <label for="title">Título</label>
+        <input type="text" class="form-control" id="title" placeholder="Ingrese título"
+        formControlName="title" [(ngModel)]="addCollapsibleRequest.title" autocomplete="off">
+        <div class="error p-1">
+          <span *ngIf="form.get('title')?.hasError('required') && form.get('title')?.touched"><strong>El título es requerido!</strong></span>
+        </div>
+      </div>
+      <div class="form-group mb-3">
+        <label for="description">Descripción</label>
+        <textarea class="form-control rounded-0" id="description" style="resize: none" rows="5"
+        formControlName="description" [(ngModel)]="addCollapsibleRequest.description"></textarea>
+        <div class="error p-1">
+          <span *ngIf="form.get('description')?.hasError('required') && form.get('description')?.touched"><strong>La descripción es requerida!</strong></span>
+        </div>
+      </div>
+      <div class="form-group mb-3">
+        <label for="priority">Prioridad</label>
+        <div class="counter">
+          <span class="minus" (click)="minus()">-</span>
+          <input type="number" disabled class="form-control inputPriority" id="priority" pattern="[0-9.]+"
+          formControlName="priority" [(ngModel)]="addCollapsibleRequest.priority" autocomplete="off">
+          <span class="plus" (click)="plus()">+</span>  
+        </div>
+        <div class="form-helper" style="font-size: 12px;">* Orden: 0 máxima prioridad.</div>
+        <div class="error p-1">
+          <span *ngIf="form.get('priority')?.hasError('required') && form.get('priority')?.touched"><strong>La prioridad es requerida!</strong></span>
+        </div>
+      </div>
+      <div class="form-group mb-3">
+        <label for="icon">Ícono</label>
+          <div style="display:flex; flex-direction: column;">            
+            <input type="file" class="form-control" id="icon" (change)="uploadBenefitImage($event.target.files)"
+            formControlName="icon" accept=".png,.jpg,.svg">   
+            <div class="form-helper" style="font-size: 12px;">* Máximo 24x24px. Formato .png .jpg .svg</div>         
+            <div class="error p-1">
+              <span *ngIf="form.get('icon')?.hasError('required') && form.get('icon')?.touched"><strong>El ícono es requerido!</strong></span>
+            </div>
+            <div style="display:flex; justify-content: center; margin-top: 10px;">
+              <img style="height: 100px" [src]="addCollapsibleRequest.icon" />
+            </div>
+          </div>
+      </div>
+      <button type="button" (click)="cancel()" mat-button > Cerrar </button>
+      <button [disabled]="form.invalid" type="submit" [hidden]="!showCreate" class="btn btn-primary">Crear</button>
+      <button type="button" (click)="updateCollapsible(addCollapsibleRequest.id, addCollapsibleRequest.icon)" [hidden]="!showUpdate" class="btn btn-primary">Guardar</button>
+    </form>
+  </div>
+</div>

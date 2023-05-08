@@ -1,0 +1,24 @@
+<mat-card *ngIf="!loggedIn" class="login-container">
+  <div class="info-login">
+    <p class="title">Beneficios</p>
+    <p class="title-highlighter">Banco Ripley</p>
+    <form [formGroup]="loginForm">
+      <mat-form-field class="input-login">
+        <input matInput placeholder="Usuario" formControlName="email" required>
+        <mat-error *ngIf="formControls.email.status === 'INVALID' && formControls.email.touched">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="input-login input-password">
+        <input matInput type="password" placeholder="Contraseña" formControlName="pwd"  required>
+      </mat-form-field>
+      <div class="container-error">
+        <mat-error class="error-message" *ngIf="errorMessage !== ''">{{ errorMessage }}</mat-error>
+      </div>
+      <div class="container-button">
+        <button mat-raised-button color="warn" (click)="login()" class="button-login button-primary">acceder</button>
+      </div>
+    </form>
+  </div>
+  <div class="i-color-band"></div>
+</mat-card>
+<div class="footer"></div>
+

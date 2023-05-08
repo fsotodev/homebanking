@@ -1,0 +1,120 @@
+<div class="container-preview full-width">
+
+  <div class="container-benefit-list">
+    <div class="benefit-image-list">
+      <div>
+        <div class="period">{{newBenefitService.modelBenefitOld.newBenefit?.listHeaderText}}</div>
+      </div>
+      <div class="logo-benefit">
+        <img class="img-logo" src="{{newBenefitService.modelBenefitOld.newBenefit?.logoImageUrl}}" alt="">
+      </div>
+      <img class="img-responsive" src="{{newBenefitService.modelBenefitOld.newBenefit?.cardImageUrl}}" alt="">
+    </div>
+    <div class="advice-user">
+      <div
+        *ngIf="newBenefitService.modelBenefitOld.newBenefit?.isLocallyConsume || newBenefitService.modelBenefitOld.newBenefit?.isDelivery"
+        class="restofans-icon">
+        <div
+          [ngClass]="newBenefitService.modelBenefitOld.newBenefit?.isLocallyConsume ? 'category-button-icon' : 'category-button-icon-opacity'"
+          class="i-category-restofan category-button-icon"></div>
+
+        <div
+          [ngClass]="newBenefitService.modelBenefitOld.newBenefit?.isDelivery ? 'category-button-icon' : 'category-button-icon-opacity'"
+          class="i-category-delivery category-button-icon"></div>
+      </div>
+      <div *ngIf="newBenefitService.modelBenefitOld.newBenefit?.templateType !== 'restofans'" class="cards-icon">
+        <div *ngIf="showCreditCard()"
+          class="i-category-master category-button-icon-card-detail"></div>
+        <div *ngIf="debitCard() !== ''"
+          [ngClass]="debitCard() + ' category-button-icon-card-detail'"></div>
+      </div>
+    </div>
+    <div class="body-card-list">
+      <p class="title-benefit-list">{{newBenefitService.modelBenefitOld.newBenefit?.title}}</p>
+      <p class="subtitle-benefit-list">{{newBenefitService.modelBenefitOld.newBenefit?.subtitle}}
+        <span *ngIf="newBenefitService.modelBenefitOld.newBenefit?.hasAdditionalGoldBenefit" class="gold-benefit">/GOLD</span>
+        <span *ngIf="newBenefitService.modelBenefitOld.newBenefit?.hasAdditionalSilverBenefit" class="silver-benefit">/SILVER</span></p>
+      <p class="discount-benefit-list">{{newBenefitService.modelBenefitOld.newBenefit?.benefitDiscount}}</p>
+      <p class="coverage-benefit-list">{{newBenefitService.modelBenefitOld.newBenefit?.coverage}}</p>
+      <p class="short-desc-benefit-list">{{newBenefitService.modelBenefitOld.newBenefit?.benefitShortDescrption}}</p>
+      <p class="more-info">MAS INFORMACION</p>
+    </div>
+
+  </div>
+  <div class="container-benefit-detail">
+    <div class="benefit-image-detail">
+      <div>
+        <div class="period-detail">{{newBenefitService.modelBenefitOld.newBenefit?.durationText}}</div>
+      </div>
+      <div class="logo-benefit-detail">
+        <img class="logo-benefit-detail-img" src="{{newBenefitService.modelBenefitOld.newBenefit?.logoImageUrl}}" alt="">
+      </div>
+      <img class="main-image" src="{{newBenefitService.modelBenefitOld.newBenefit?.mainImageUrl}}" alt="">
+
+    </div>
+    <div class="body-card-list">
+      <p class="title-benefit-list">{{newBenefitService.modelBenefitOld.newBenefit?.title}}</p>
+      <p class="subtitle-benefit-list">{{newBenefitService.modelBenefitOld.newBenefit?.subtitle}}</p>
+      <div><p>
+        <span *ngIf="newBenefitService.modelBenefitOld.newBenefit?.hasAdditionalGoldBenefit" class="gold-benefit">GOLD</span>
+        <span *ngIf="newBenefitService.modelBenefitOld.newBenefit?.hasAdditionalSilverBenefit" class="silver-benefit">SILVER</span>
+      </p>
+        
+      
+      </div>
+      <div class="discount-benefit-list">{{newBenefitService.modelBenefitOld.newBenefit?.benefitDiscount}}</div>
+      <div class="advice-user">
+        <div
+          *ngIf="newBenefitService.modelBenefitOld.newBenefit?.isLocallyConsume || newBenefitService.modelBenefitOld.newBenefit?.isDelivery"
+          class="restofans-icon-detail">
+          <div
+            [ngClass]="newBenefitService.modelBenefitOld.newBenefit?.isLocallyConsume ? 'category-button-icon' : 'category-button-icon-opacity'"
+            class="i-category-restofan category-button-icon"></div>
+
+          <div
+            [ngClass]="newBenefitService.modelBenefitOld.newBenefit?.isDelivery ? 'category-button-icon' : 'category-button-icon-opacity'"
+            class="i-category-delivery category-button-icon"></div>
+        </div>
+      </div>
+
+      <div class="cards-icon-detail">
+        <div *ngIf="showCreditCard()"
+          class="i-category-master category-button-icon-card-detail"></div>
+        <div *ngIf="debitCard() !== ''"
+          [ngClass]="debitCard() + ' category-button-icon-card-detail'"></div>
+        <p class="card-text">{{newBenefitService.modelBenefitOld.newBenefit?.cardText}}</p>
+      </div>
+      <div class="cards-icon-detail">
+        <div class="i-calendar category-button-icon-card-detail"></div>
+        <p class="card-text">Vigencia {{newBenefitService.modelBenefitOld.newBenefit?.durationText}}</p>
+      </div>
+      <div>
+        <p class="section-info">{{newBenefitService.modelBenefitOld.newBenefit?.benefitDescription}}</p>
+      </div>
+      <div>
+        <div *ngIf="newBenefitService.modelBenefitOld.newBenefit?.addressList.length > 0" class="i-maps"><p class="text-info">Dirección:</p></div>
+        <div class="section-info">
+          <p *ngFor="let address of newBenefitService.modelBenefitOld.newBenefit?.addressList">{{address}}</p>
+        </div>
+        <div *ngIf="newBenefitService.modelBenefitOld.newBenefit?.bussinessHourList.length > 0" class="i-timer"><p class="text-info">Horarios:</p></div>
+        <div class="section-info">
+          <p *ngFor="let hour of newBenefitService.modelBenefitOld.newBenefit?.bussinessHourList">{{hour}}</p>
+        </div>
+        <div *ngIf="newBenefitService.modelBenefitOld.newBenefit?.phoneList.length > 0" class="i-phone"><p class="text-info">Teléfono del local:</p></div>
+        <div class="section-info">
+          <p *ngFor="let phone of newBenefitService.modelBenefitOld.newBenefit?.phoneList">{{phone}}</p>
+        </div>
+        <div *ngIf="newBenefitService.modelBenefitOld.newBenefit?.coverage" class="i-map-selection"><p class="text-info">Cobertura reparto:</p></div>
+        <div class="section-info">
+          <p>{{newBenefitService.modelBenefitOld.newBenefit?.coverage}}</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="terms">Ver terminos y condiciones</p>
+    </div>
+    <div *ngIf="newBenefitService.modelBenefitOld.newBenefit?.siteUrl" class="cont-web">
+      <input class="btn-web" type="button" value="Ir a sitio web">
+    </div>
+  </div>
+</div>

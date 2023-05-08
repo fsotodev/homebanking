@@ -1,0 +1,72 @@
+<div class="main-container">
+
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title">
+        <span class="title-highlighted">Beneficio</span>
+      </p>
+    </div>
+  </mat-card>
+
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <mat-horizontal-stepper #stepper="matHorizontalStepper">
+        <div>
+          <mat-step [stepControl]="firstFormGroup">
+            <form [formGroup]="firstFormGroup">
+              <ng-template matStepLabel>Primer paso</ng-template>
+              <app-benefit-step-one class="step-box" (msgTemplateType)="templateSelected($event)" (segmentationChange)="setSegmentationTypeChange=$event">
+              </app-benefit-step-one>
+            </form>
+            <!-- <app-new-benefit-preview class="benefit-preview" [newBenefitToCreate]="newBenefitToCreate"></app-new-benefit-preview> -->
+          </mat-step>
+          <mat-step [stepControl]="secondFormGroup">
+            <form [formGroup]="secondFormGroup">
+              <ng-template matStepLabel>Segundo paso</ng-template>
+              <app-benefit-step-two [selectedTemplate]="templateType"></app-benefit-step-two>
+            </form>
+            <!-- <app-new-benefit-preview class="benefit-preview" [newBenefitToCreate]="newBenefitToCreate"></app-new-benefit-preview> -->
+          </mat-step>
+          <mat-step [stepControl]="thirdFormGroup">
+            <form [formGroup]="thirdFormGroup">
+              <ng-template matStepLabel>Tercer paso</ng-template>
+              <app-benefit-step-three [selectedTemplate]="templateType"></app-benefit-step-three>
+            </form>
+            <!-- <app-new-benefit-preview class="benefit-preview" [newBenefitToCreate]="newBenefitToCreate"></app-new-benefit-preview> -->
+          </mat-step>
+          <mat-step [stepControl]="fourthFormGroup">
+            <form [formGroup]="fourthFormGroup">
+              <ng-template matStepLabel>Cuarto paso</ng-template>
+              <app-benefit-step-four (uniqueCodeValue)="setUniqueCodeBenefit = $event"></app-benefit-step-four>
+            </form>
+            <!-- <app-new-benefit-preview class="benefit-preview" [newBenefitToCreate]="newBenefitToCreate"></app-new-benefit-preview> -->
+          </mat-step>
+          <mat-step [stepControl]="fifthFormGroup">
+            <form [formGroup]="fifthFormGroup">
+              <ng-template matStepLabel>Quinto paso</ng-template>
+              <app-benefit-step-five></app-benefit-step-five>
+            </form>
+            <!-- <app-new-benefit-preview class="benefit-preview" [newBenefitToCreate]="newBenefitToCreate"></app-new-benefit-preview> -->
+          </mat-step>
+          <mat-step [stepControl]="sixthFormGroup">
+            <form [formGroup]="sixthFormGroup">
+              <ng-template matStepLabel>Sexto paso</ng-template>
+              <app-benefit-step-six></app-benefit-step-six>
+            </form>
+            <!-- <app-new-benefit-preview class="benefit-preview" [newBenefitToCreate]="newBenefitToCreate"></app-new-benefit-preview> -->
+          </mat-step>          
+          <mat-step [stepControl]="sevenFormGroup" *ngIf="newBenefitService.selectedSegmentationType !== 'sinsegmentacion'">
+            <form [formGroup]="sevenFormGroup">
+              <ng-template matStepLabel>Séptimo paso</ng-template>
+              <app-benefit-step-seven [uniqueCodeObservable]="getUniqueCodeBenefit" [segmentationTypeObservable]="getSegmentationTypeChange"></app-benefit-step-seven>
+            </form>
+            <!-- <app-new-benefit-preview class="benefit-preview" [newBenefitToCreate]="newBenefitToCreate"></app-new-benefit-preview> -->
+          </mat-step>
+        </div>
+
+      </mat-horizontal-stepper>
+
+    </mat-card-content>
+  </mat-card>
+
+</div>

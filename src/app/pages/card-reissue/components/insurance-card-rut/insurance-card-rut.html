@@ -1,0 +1,78 @@
+<mat-progress-spinner *ngIf="loading" mode="indeterminate" class="mt-3 home-spinner"></mat-progress-spinner>
+<app-notification *ngIf="isUploaded" [message]="message"></app-notification>
+<mat-card-content class="container-upload-rut">
+    <div class="container-form-upload-rut">
+        <p class="title-content">Subir documento colección</p>
+        <p class="subtitle-content">El documento debe tener formato .csv</p>
+        <ng-container class="container-btn-add-var" *ngFor="let info of myFilesInfo">
+            <button class="btn-rut-secure" (click)="resetInputFile()">
+                <span class="btn-rut-secure-title">
+                    {{ info.name | slice:0:50 }}
+                </span>
+                <span class="i-delete-outline"></span>
+            </button>
+            <span class="i-delete-outline.svg"></span>
+        </ng-container>
+        <label [ngClass]="{ 'disabled': uploadDisabled }" class="btn-upload" for="file-input">
+            <span class="i-conbined-shape"></span>
+            <span class="btn-title">
+                Buscar en mis archivos
+            </span>
+        </label>
+        <input #fileInput [disabled]="uploadDisabled" (change)="getFileDetails($event)" type="file" id="file-input"
+            style="display: none;" />
+    </div>
+</mat-card-content>
+<div class="form-container mb-5">
+    <form autocomplete="off" [formGroup]="form" class="w-100">
+        <div class="input-group">
+            <label for="name">Nombre de colección</label>
+            <div [ngClass]="{ 'has-error': form.get('collection').invalid && form.get('collection').touched }"
+                class="input">
+                <input formControlName="collection" type="text" id="name" placeholder="Ingresa un nombre">
+            </div>
+            <small *ngIf="form.get('collection').invalid && form.get('collection').touched" class="text-danger">
+                Ingresa un nombre válido
+            </small>
+        </div>
+        <ng-container formArrayName="fields">
+            <div class="form-row" *ngFor="let fields of fields.controls; let i = index">
+                <ng-container [formGroup]="fields">
+                    <div class="input-group">
+                        <label for="field">Ingresa un campo</label>
+                        <div [ngClass]="{ 'has-error': hasError(i, 'field') }" class="input">
+                            <input formControlName="field" type="text" id="field" placeholder="Ingresa un campo">
+                        </div>
+                        <small *ngIf="hasError(i, 'field')" class="text-danger">
+                            Ingrese un campo válido
+                        </small>
+                    </div>
+                    <div class="input-group">
+                        <label for="value">Ingresa un valor</label>
+                        <div [ngClass]="{ 'has-error': hasError(i, 'value') }" class="input">
+                            <input formControlName="value" type="text" id="value" placeholder="Ingresa un valor">
+                        </div>
+                        <small *ngIf="hasError(i, 'value')" class="text-danger">
+                            Ingrese un valor
+                        </small>
+                    </div>
+                </ng-container>
+                <button mat-button class="btn-delete button-tertiary" (click)="deleteFields(i)">Eliminar</button>
+            </div>
+        </ng-container>
+    </form>
+    <button class="btn-chip" (click)="addField()">
+        <span class="i-add-rut"></span>
+        <span class="btn-var-title">
+            Agregar variable
+        </span>
+    </button>
+</div>
+<hr>
+<div class="container-buttons separators">
+    <button mat-button (click)="goHome()" class="i-left-arrow button-tertiary mt-4">Volver</button>
+    <button [disabled]="!form.valid" class="btn-chip mt-4" (click)="uploadRuts()">
+        <span class="i-cloud-upload"></span>
+        Cargar información
+    </button>
+</div>

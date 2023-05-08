@@ -1,0 +1,101 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> Eliminar
+        <span class="title-highlighted">Canjes</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <div class="container-form" [formGroup]="transactionSearchForm">
+        <section>
+          <mat-form-field class="input-info field-text">
+            <input matInput maxlength="20" placeholder="User Id (RUT)" formControlName="userId" required>
+            <mat-hint>Ej: 12343454k (Sin puntos ni guiones).</mat-hint>
+          </mat-form-field>
+          <div class="input-info field-text">
+            <button mat-raised-button (click)="getUserTransactions()" color="primary"
+              [disabled]="!transactionSearchForm.valid">Consultar canjes</button>
+          </div>
+        </section>
+      </div>
+
+      <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+      <mat-card *ngIf="showUserTransactions">
+        <mat-card-title>Canjes usuario {{ userId }}</mat-card-title>
+        <div class="table-header" *ngIf="!!dataSource">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro">
+          </mat-form-field>
+        </div>
+        <mat-card-content>
+          <table mat-table [dataSource]="dataSource" style="width: 100%">
+
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef> Creación </th>
+              <td mat-cell *matCellDef="let element"> {{ element.created }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fullName">
+              <th mat-header-cell *matHeaderCellDef> Nombre </th>
+              <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef> Categoría </th>
+              <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef> Estado </th>
+              <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="points">
+              <th mat-header-cell *matHeaderCellDef> Puntos </th>
+              <td mat-cell *matCellDef="let element"> {{element.points}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="origin">
+              <th mat-header-cell *matHeaderCellDef> Canal </th>
+              <td mat-cell *matCellDef="let element"> {{element.origin}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="code">
+              <th mat-header-cell *matHeaderCellDef> Código </th>
+              <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="productFolio">
+              <th mat-header-cell *matHeaderCellDef> Producto Folio </th>
+              <td mat-cell *matCellDef="let element"> {{element.productFolio}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="modifyOrDelete">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element"> <button *ngIf="element.createdAt || element.id" class="i-delete" (click)="selectRow(element)"></button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No se encontraron transacciones asociadas al cliente {{userId}}</td>
+            </tr>
+          </table>
+
+        </mat-card-content>
+      </mat-card>
+      <mat-paginator  [hidden]="!showUserTransactions" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+
+
+    </mat-card-content>
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">Volver</button>
+    </div>
+  </mat-card>
+</div>

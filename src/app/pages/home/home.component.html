@@ -1,0 +1,150 @@
+<div class="main-container">
+  <mat-progress-spinner *ngIf="loadingData" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+  
+  <div class="drawer-container">
+    <div class="drawer-side" mode="side" opened>
+      <button mat-raised-button *ngFor="let group of benefitCategories; let i = index" 
+      class="type-button" [color]=" i===selectedTypeIndex ? 'primary' : null" (click)="selectType(i, true)" >
+        <span class="md-chip" [class.total]="i<2">
+          {{ group.publishedBenefit.length }}  
+          <span class="i-eye-gray i-eye-inline"></span>
+        </span> 
+         <span class="type-button-text">{{group.type.sectionTitle}} </span>
+         <span class="type-button-text-inactive" *ngIf="!group.type.active">(Inactivo)</span>
+      </button>
+    </div>
+    <div class="drawer-content" >
+
+      <ng-container *ngIf="!loadingData && hasAccess">
+        <mat-card class="main-table" *ngIf="!loadingData">
+          <div class="search">
+
+            <span class="form-field-container">
+              <mat-form-field appearance="fill" class="form-field-select" *ngIf="![1,2].includes(selectedTypeIndex)">
+                <mat-label>Plan</mat-label>
+                <mat-select (selectionChange)="applyFilterSelect($event, 'plan')"[(ngModel)]="matSelectPlan">
+                  <mat-option>Ninguno</mat-option>
+                  <ng-container *ngFor="let item of segmentationList">
+                    <mat-option *ngIf="item.id === 'plan'" [value]="item">{{item.text | titlecase}}</mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="form-field-select" *ngIf="![0,2].includes(selectedTypeIndex)">
+                <mat-label>Producto</mat-label>
+                <mat-select (selectionChange)="applyFilterSelect($event, 'producto')" [(ngModel)]="matSelectProduct">
+                  <mat-option>Ninguno</mat-option>
+                  <ng-container *ngFor="let item of segmentationList">
+                    <mat-option *ngIf="item.id === 'productos'" [value]="item">{{item.text | titlecase}}</mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="form-field-select" *ngIf="![0,1,2].includes(selectedTypeIndex)">
+                <mat-label>Categoria</mat-label>
+                <mat-select (selectionChange)="applyFilterSelect($event, 'categoria')" [(ngModel)]="matSelectCategory">
+                  <mat-option>Ninguno</mat-option>
+                  <ng-container *ngFor="let item of segmentationList">
+                    <mat-option *ngIf="item.id === 'segmentacion' && item.text !=='ripley_baja'" [value]="item">{{item.text | titlecase}}</mat-option>
+                    <mat-option *ngIf="item.text === 'ripley_baja'" [value]="item">Gama Baja</mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+            </span>
+
+
+            <mat-checkbox *ngIf="![0,1,2].includes(selectedTypeIndex)" class="published-check"
+              [(ngModel)]="withoutSegmentation" (change)="this.onlyWithoutSegmentation($event)">Sin segmentación</mat-checkbox>
+              
+            <mat-checkbox class="published-check" [(ngModel)]="onlyPublished" (change)="this.onlyPublishedAndVigent($event)">Públicos y vigentes</mat-checkbox>
+            <input type="text" (keyup)="applyFilter($event.target.value)" placeholder="Buscar..."
+              class="input-search i-search">
+          </div>
+          <mat-tab-group class="tab-content">
+            <mat-tab [label]="reduceStringLength(benefitCategories[selectedTypeIndex].type.type + ' - ' + benefitCategories[selectedTypeIndex].type.sectionTitle)" class="title-tab">
+              <div class="dates-table">
+                <div *ngIf="benefitsList.length === 0" class="empty-message">Aún no hay beneficios creados.</div>
+                <mat-table *ngIf="benefitsList.length > 0" #benefitTable [dataSource]="benefitsDataSource">
+
+                  <!-- Order Column -->
+                  <ng-container matColumnDef="order">
+                    <mat-header-cell *matHeaderCellDef> orden </mat-header-cell>
+                    <mat-cell *matCellDef="let benefit">
+                      <input matInput type="number" placeholder="Orden" [(ngModel)]="benefit.newBenefit.orderPriority"
+                        (change)="setOrderOnBenefit(benefit)" class="input-order">
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Periodicity Column -->
+                  <ng-container matColumnDef="periodicity">
+                    <mat-header-cell *matHeaderCellDef> periodicidad </mat-header-cell>
+                    <mat-cell *matCellDef="let benefit" matTooltip=""> 
+                      <span class="periodicity-text">{{benefit.newBenefit?.listHeaderText}}</span>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Title Column -->
+                  <ng-container matColumnDef="title">
+                    <mat-header-cell *matHeaderCellDef> título del beneficio </mat-header-cell>
+                    <mat-cell *matCellDef="let benefit" matTooltip="">
+                      <span class="title-text">{{benefit.newBenefit?.benefitDiscount}} - {{benefit.newBenefit?.title}}</span>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Start Date Column -->
+                  <ng-container matColumnDef="startDate">
+                    <mat-header-cell *matHeaderCellDef> Vigencia </mat-header-cell>
+                    <mat-cell *matCellDef="let benefit" >
+                      <span [class.active]="this.validities[benefit.id]" *ngIf="benefit.newBenefit.startDate">
+                       {{benefit.newBenefit?.startDate | date:'dd/MM/yyyy'}} a {{benefit.newBenefit?.endDate | date:'dd/MM/yyyy'}} 
+                      </span>
+                      <div class="i-eye-gray" *ngIf="this.validities[benefit.id] && isPublished(benefit)"></div>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Status toogle Column -->
+                  <ng-container matColumnDef="statusToogle">
+                    <mat-header-cell *matHeaderCellDef>Publicación</mat-header-cell>
+                    <mat-cell *matCellDef="let benefit">
+                      <mat-slide-toggle class="example-margin" *ngIf="benefit.newBenefit?.type ==='personal'"
+                      [color]="color"
+                        [checked]="benefit.newBenefit?.statusPersonalBenefit === 'Publicado'" (change)="toggleChange(benefit)"
+                        [disabled]="modifiyingBenefit || benefit.newBenefit?.orderPriority === null ">
+                      </mat-slide-toggle>
+                      <mat-slide-toggle class="example-margin" *ngIf="benefit.newBenefit?.type !=='personal'"
+                      [color]="color"
+                        [checked]="benefit.newBenefit?.status === 'Publicado'" (change)="toggleChange(benefit)"
+                        [disabled]="modifiyingBenefit || benefit.newBenefit?.orderPriority === null">
+                      </mat-slide-toggle>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Modify or Delete Column -->
+                  <ng-container matColumnDef="modifyOrDelete">
+                    <mat-header-cell *matHeaderCellDef>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let benefit" class="actions-table">
+                      <button class="i-tag" (click)="showTagBenefitModal(benefit.id)" [disabled]="modifiyingBenefit">@</button>
+                      <button class="i-edit" (click)="modifyBenefit(benefit)" [disabled]="modifiyingBenefit"></button>
+                      <button class="i-calendar-edit" (click)="modifyBenefitCodesPeriod(benefit)"
+                        [disabled]="modifiyingBenefit"></button>
+                      <button class="i-delete" (click)="deleteBenefit(benefit)" [disabled]="modifiyingBenefit"></button>
+                      <button class="i-copy" (click)="copyBenefitConfirm(benefit)" [disabled]="modifiyingBenefit"></button>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></mat-row>
+                </mat-table>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleccionar página"></mat-paginator>
+          <div class="container-new-benefit">
+            <button mat-fab class="button-new-benefit" (click)="addNewBenefit()">+</button>
+          </div>
+        </mat-card>
+      </ng-container>
+
+    </div>
+  </div>
+  
+</div>

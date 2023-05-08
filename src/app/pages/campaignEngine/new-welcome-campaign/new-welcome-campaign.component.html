@@ -1,0 +1,752 @@
+<div class="main-container">
+    <mat-card class="container-info">
+      <div class="container-title">
+        <p class="title"> {{ id ? 'Actualizar' : 'Nueva' }}
+          <span class="title-highlighted">Campaña: Welcome (minime)</span>
+        </p>
+      </div>
+    </mat-card>
+    <mat-card class="main-container-form">
+      <mat-card-content class="container-info-form">
+
+        <!-- Campaign Form -->
+        <div class="container-form" [formGroup]="campaignForm">
+          <section class="date-box benefit-header-box">
+            <section class="dates-info">
+
+              <!-- Core -->
+              <div class="user-location">
+                <mat-slide-toggle [checked]="campaign.isCustom" (change)="toggleCustomMinimeChange($event)" [(ngModel)]="campaign.isCustom"
+                  [disabled]="id" [ngModelOptions]="{ standalone: true }">¿Es Custom?
+                </mat-slide-toggle>
+              </div>
+
+              <section>
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.activePWA" [ngModelOptions]="{ standalone: true }">Activo en PWA
+                  </mat-checkbox>
+                </div>
+
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.totem" [ngModelOptions]="{ standalone: true }">Mostrar en Totem
+                  </mat-checkbox>
+                </div>
+
+                <div class="user-location">
+                  <mat-checkbox
+                    [(ngModel)]="campaign.minime"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="true">Mini campaña (minime)
+                  </mat-checkbox>
+                </div>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text" [readonly]="id"
+                    (keydown)="utilsService.onKeyPress($event)"
+                    (blur)="initializeCampaignById()"
+                    placeholder="Id de campaña"
+                    formControlName="id"
+                    [(ngModel)]="campaign.id"
+                    required
+                    maxlength="35">
+                  <mat-hint>Sin espacios, Ej: banner-AvSav-2.5mm</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.id ? campaign.id.length : 0 }} / 35</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Prioridad"
+                    formControlName="priority"
+                    [(ngModel)]="campaign.priority"
+                    onkeydown="return event.keyCode !== 69" required>
+                  <mat-hint>Ej: 2</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Máximo de visualizaciones"
+                    formControlName="maxViews"
+                    [(ngModel)]="campaign.maxViews"
+                    onkeydown="return event.keyCode !== 69">
+                  <mat-hint>Ej: 3</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Máximo de goals (clicks en caso de minime)"
+                    formControlName="maxGoals"
+                    [(ngModel)]="campaign.maxGoals"
+                    onkeydown="return event.keyCode !== 69" required>
+                  <mat-hint>Ej: 1</mat-hint>
+                </mat-form-field>
+
+                <div class="special-info" *ngIf="!campaign.isCustom">
+                  <div class="buttons-box">
+                    <div class="upload-button-quaternaty">
+                      <button mat-raised-button class="button-quaternaty">Subir ruts</button>
+                      <input id="uploadInputCampaignRut" class="file-input" type="file"
+                        (change)="showModalConfirmation($event.target.files, true)" accept=".csv"
+                        [disabled]="uploadingRuts">
+                      <div *ngIf="uploadingRuts" class="spinner-button">
+                        <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                      </div><br><br>
+                      <mat-progress-bar color="primary" mode="determinate" [value]="rutUploadingProgress">
+                      </mat-progress-bar>
+                      <span class="tip-image">Seleccionar un archivo CSV con el nombre de la campaña</span><br />
+                      <span class="tip-image">Ejemplo CSV: Rut</span><br />
+                      <span class="tip-image">Sin títulos en la primera fila del CSV, solo datos </span><br />
+                      <div *ngIf="!!uploadingRuts" class="upload-info-section">
+                        <span class="title-section">Subiendo Ruts a la campaña, esto puede tardar varios minutos</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="rutsFilePath && rutsFilePath.length > 0" class="title-section">
+                    <mat-label>Historial de Ruts</mat-label>
+                    <ul class="table table-bordered table-condensed table-striped">
+                      <div *ngIf="noToggle">
+                        <li *ngFor="let rut of rutsFilePath">
+                        {{rut}}
+                        </li>
+                      </div>
+                      <div *ngIf="toggleRutListShort && !noToggle">
+                        <li *ngFor="let rut of rutsArrayShort">
+                        {{rut}}
+                        </li>
+                        <li>... <a href="#" (click)="toggleRutListMethod()">[ver mas]</a></li>
+                      </div>
+                      <div *ngIf="!toggleRutListShort && !noToggle">
+                        <li *ngFor="let rut of rutsFilePath">
+                        {{rut}}
+                        </li>
+                        <a href="#" (click)="toggleRutListMethod()">[ver menos]</a>
+                      </div>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="special-info" *ngIf="campaign.isCustom">
+                  <div class="buttons-box">
+                    <div class="upload-button-quaternaty">
+                      <button mat-raised-button class="button-quaternaty"
+                      [class.disabled]="!campaign.id">Subir ruts</button>
+                      <input id="uploadInputCustomCampaign" class="file-input" type="file"
+                        (change)="showModalConfirmation($event.target.files, true)" accept=".csv"
+                        [disabled]="uploadingCustomCampaigns || !campaign.id">
+                      <div *ngIf="uploadingCustomCampaigns" class="spinner-button">
+                        <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                      </div>
+                      <br>
+                      <mat-hint class="error-msg" *ngIf="!campaign.id">Ingresa un id de campaña antes del archivo</mat-hint>
+                      <br>
+                      <mat-progress-bar color="primary" mode="determinate" [value]="customCampaignsUploadingProgress">
+                      </mat-progress-bar>
+                      <span class="tip-image">Seleccionar un archivo CSV con el nombre de la campaña</span><br />
+                      <span class="tip-image">Ejemplo CSV: Rut</span><br />
+                      <span class="tip-image">Sin títulos en la primera fila del CSV, solo datos </span><br />
+                      <div *ngIf="!!uploadingCustomCampaigns" class="upload-info-section">
+                        <span class="title-section">Subiendo Ruts a la campaña, esto puede tardar varios minutos</span>
+                      </div>
+                    </div>
+                  </div>
+                  <span *ngIf="rutsFilePath && rutsFilePath.length > 0" class="title-section">Historial de Ruts
+                    <ul class="table table-bordered table-condensed table-striped" fixed-header>
+                      <div *ngIf="noToggle">
+                        <li *ngFor="let rut of rutsFilePath">
+                        {{rut}}
+                        </li>
+                      </div>
+                      <div *ngIf="toggleRutListShort && !noToggle">
+                        <li *ngFor="let rut of rutsArrayShort">
+                        {{rut}}
+                        </li>
+                        <a href="#" (click)="toggleRutListMethod()">[ver mas]</a>
+                      </div>
+                      <div *ngIf="!toggleRutListShort && !noToggle">
+                        <li *ngFor="let rut of rutsFilePath">
+                        {{rut}}
+                        </li>
+                        <a href="#" (click)="toggleRutListMethod()">[ver menos]</a>
+                      </div>
+                    </ul>
+                  </span>
+                </div>
+              </section>
+
+              <!-- Filters -->
+              <section>
+<!--                Se elimina ya que el crear campaña para todos los ruts ha dado problemas-->
+<!--                <div *ngIf="!campaign.isCustom">-->
+<!--                  <br>-->
+<!--                  <div class="user-location">-->
+<!--                    <mat-checkbox [(ngModel)]="campaign.filters.allUsers" [ngModelOptions]="{ standalone: true }">Filtros aplican para todos los usuarios (sin rutero)-->
+<!--                    </mat-checkbox>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+                <!-- Devices -->
+                <div *ngIf="!campaign.isCustom">
+                  <mat-label>Dispositivos</mat-label> <br><br>
+                  <div class="user-location">
+                    <mat-checkbox [(ngModel)]="campaign.filters.devices.mobile"
+                      [ngModelOptions]="{ standalone: true }">
+                      Mobile
+                    </mat-checkbox>
+                    <br>
+                    <mat-checkbox [(ngModel)]="campaign.filters.devices.desktop"
+                      [ngModelOptions]="{ standalone: true }">
+                      Desktop
+                    </mat-checkbox>
+                  </div>
+                </div>
+
+                <!-- Platform and NFC -->
+                <div class="platform-filter" *ngIf="!campaign.isCustom">
+                  <mat-label>Plataformas</mat-label> <br><br>
+                  <div>
+                    <mat-checkbox [(ngModel)]="campaign.filters.platform.on"
+                      (change)="platformFilterChange($event)"
+                      [ngModelOptions]="{ standalone: true }">
+                      Filtro por plataforma activo
+                    </mat-checkbox>
+                  </div>
+                  <div>
+                    <mat-checkbox [(ngModel)]="campaign.filters.platform.nfc"
+                      [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!campaign.filters.platform.on">
+                      Filtro por NFC activo
+                    </mat-checkbox>
+                  </div>
+                  <mat-form-field class="input-info field-text">
+                    <mat-label>Selección de Plataformas</mat-label>
+                    <mat-select multiple [(ngModel)]="campaign.filters.platform.allowedPlatforms" [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!campaign.filters.platform.on">
+                      <mat-option *ngFor="let platform of platformsList" [value]="platform">{{ platform }}</mat-option>
+                    </mat-select>
+                    <mat-hint>Puedes seleccionar más de una</mat-hint>
+                  </mat-form-field>
+                </div>
+
+                <!-- Segment -->
+                <div *ngIf="!campaign.isCustom">
+                  <div class="user-location">
+                    <mat-checkbox [(ngModel)]="campaign.filters.segment" [ngModelOptions]="{ standalone: true }">Filtro por categoría activo
+                    </mat-checkbox>
+                  </div>
+                  <div class="user-location">
+                    <mat-checkbox [(ngModel)]="campaign.filters.segmentRipley"
+                      [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!campaign.filters.segment">
+                      Categoría Ripley
+                    </mat-checkbox>
+                    <br>
+                    <mat-checkbox [(ngModel)]="campaign.filters.segmentOne"
+                      [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!campaign.filters.segment">
+                      Categoría One
+                    </mat-checkbox>
+                    <br>
+                    <mat-checkbox [(ngModel)]="campaign.filters.segmentBronze"
+                      [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!campaign.filters.segment">
+                      Categoría Plus
+                    </mat-checkbox>
+                    <br>
+                    <mat-checkbox [(ngModel)]="campaign.filters.segmentSilver"
+                      [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!campaign.filters.segment">
+                      Categoría Silver
+                    </mat-checkbox>
+                    <br>
+                    <mat-checkbox [(ngModel)]="campaign.filters.segmentGold"
+                      [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!campaign.filters.segment">
+                      Categoría Gold
+                    </mat-checkbox>
+                  </div>
+                </div>
+
+                <!-- Product -->
+                <div *ngIf="!campaign.isCustom">
+                  <mat-label>Tipo de productos*</mat-label>
+                  <br>
+                  <mat-hint class="text-size-hint">Debe seleccionar al menos un producto</mat-hint> <br><br>
+                  <div class="user-location">
+                    <mat-checkbox [(ngModel)]="campaign.filters.hasCA" [ngModelOptions]="{ standalone: true }" (ngModelChange)="atLeastOneProduct()">Cuenta Corriente
+                    </mat-checkbox>
+                    <br>
+                    <mat-checkbox [(ngModel)]="campaign.filters.hasSA" [ngModelOptions]="{ standalone: true }" (ngModelChange)="atLeastOneProduct()">Cuenta Vista
+                    </mat-checkbox>
+                    <br>
+                    <mat-checkbox [(ngModel)]="campaign.filters.hasTR" [ngModelOptions]="{ standalone: true }" (ngModelChange)="atLeastOneProduct()">Tarjeta Ripley
+                    </mat-checkbox>
+                    <br>
+                    <mat-checkbox [(ngModel)]="campaign.filters.hasTRM" [ngModelOptions]="{ standalone: true }" (ngModelChange)="atLeastOneProduct()">Tarjeta Ripley Mastercard
+                    </mat-checkbox>
+                    <input type="hidden" formControlName="productType">
+                  </div>
+
+                  <mat-form-field class="input-info field-text">
+                    <mat-label>Condicion de filtro de productos</mat-label>
+                    <mat-select formControlName="haveProductCondition" [(ngModel)]="campaign.filters.haveProductCondition" required>
+                      <mat-option value="or">ó / or / ||</mat-option>
+                      <mat-option value="and">y / and / &&</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <!-- Dates -->
+                <mat-label>Rango de fechas de la campaña</mat-label> <br><br>
+                <mat-form-field class="date">
+                  <input matInput
+                    [matDatepicker]="startDate"
+                    placeholder="Fecha de inicio"
+                    [(ngModel)]="campaign.filters.startDate"
+                    formControlName="startDate"
+                    required>
+                  <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                  <mat-datepicker #startDate disabled="false"></mat-datepicker>
+                </mat-form-field>
+                <br>
+                <mat-form-field class="date">
+                  <input matInput
+                    [matDatepicker]="endDate"
+                    placeholder="Fecha de término"
+                    [(ngModel)]="campaign.filters.endDate"
+                    formControlName="endDate"
+                    required>
+                  <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                  <mat-datepicker #endDate disabled="false"></mat-datepicker>
+                </mat-form-field>
+
+                <!-- Product dates -->
+                <div *ngIf="!campaign.isCustom">
+                <br><br><br>
+                  <!-- SA -->
+                  <div class="user-location">
+                    <mat-checkbox [(ngModel)]="campaign.filters.productDateSA" [ngModelOptions]="{ standalone: true }">Fecha de Cuenta Vista
+                    </mat-checkbox>
+                  </div>
+                  <div class="date-range" *ngIf="campaign.filters.productDateSA">
+                    <mat-form-field class="date">
+                      <input matInput
+                        [matDatepicker]="productDateStartSA"
+                        placeholder="Fecha de inicio"
+                        [(ngModel)]="campaign.filters.productDateStartSA"
+                        [ngModelOptions]="{ standalone: true }">
+                      <mat-datepicker-toggle matSuffix [for]="productDateStartSA"></mat-datepicker-toggle>
+                      <mat-datepicker #productDateStartSA disabled="false"></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field class="date">
+                      <input matInput
+                        [matDatepicker]="productDateEndSA"
+                        placeholder="Fecha de término"
+                        [(ngModel)]="campaign.filters.productDateEndSA"
+                        [ngModelOptions]="{ standalone: true }">
+                      <mat-datepicker-toggle matSuffix [for]="productDateEndSA"></mat-datepicker-toggle>
+                      <mat-datepicker #productDateEndSA disabled="false"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- TR -->
+                  <div class="user-location">
+                    <mat-checkbox [(ngModel)]="campaign.filters.productDateTR" [ngModelOptions]="{ standalone: true }">Fecha de Tarjeta Ripley
+                    </mat-checkbox>
+                  </div>
+                  <div class="date-range" *ngIf="campaign.filters.productDateTR">
+                    <mat-form-field class="date" >
+                      <input matInput
+                        [matDatepicker]="productDateStartTR"
+                        placeholder="Fecha de inicio"
+                        [(ngModel)]="campaign.filters.productDateStartTR"
+                        [ngModelOptions]="{ standalone: true }">
+                      <mat-datepicker-toggle matSuffix [for]="productDateStartTR"></mat-datepicker-toggle>
+                      <mat-datepicker #productDateStartTR disabled="false"></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field class="date">
+                      <input matInput
+                        [matDatepicker]="productDateEndTR"
+                        placeholder="Fecha de término"
+                        [(ngModel)]="campaign.filters.productDateEndTR"
+                        [ngModelOptions]="{ standalone: true }">
+                      <mat-datepicker-toggle matSuffix [for]="productDateEndTR"></mat-datepicker-toggle>
+                      <mat-datepicker #productDateEndTR disabled="false"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- TRM -->
+                  <div class="user-location">
+                    <mat-checkbox [(ngModel)]="campaign.filters.productDateTRM" [ngModelOptions]="{ standalone: true }">Fecha de Tarjeta Ripley Mastercard
+                    </mat-checkbox>
+                  </div>
+                  <div class="date-range" *ngIf="campaign.filters.productDateTRM">
+                    <mat-form-field class="date">
+                      <input matInput
+                        [matDatepicker]="productDateStartTRM"
+                        placeholder="Fecha de inicio"
+                        [(ngModel)]="campaign.filters.productDateStartTRM"
+                        [ngModelOptions]="{ standalone: true }">
+                      <mat-datepicker-toggle matSuffix [for]="productDateStartTRM"></mat-datepicker-toggle>
+                      <mat-datepicker #productDateStartTRM disabled="false"></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field class="date">
+                      <input matInput
+                        [matDatepicker]="productDateEndTRM"
+                        placeholder="Fecha de término"
+                        [(ngModel)]="campaign.filters.productDateEndTRM"
+                        [ngModelOptions]="{ standalone: true }">
+                      <mat-datepicker-toggle matSuffix [for]="productDateEndTRM"></mat-datepicker-toggle>
+                      <mat-datepicker #productDateEndTRM disabled="false"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <!-- Screen(s) -->
+                <section>
+                  <mat-form-field class="input-info field-text">
+                    <input matInput type="text"
+                      placeholder="Id de nueva pantalla"
+                      [(ngModel)]="screenId"
+                      [ngModelOptions]="{standalone: true}"
+                      required
+                      maxlength="35">
+                    <mat-hint>Sin espacios, Ej: welcomepack-benefits</mat-hint>
+                    <mat-hint class="input-length" align="end">{{ screenId ? screenId.length : 0 }} / 35</mat-hint>
+                  </mat-form-field>
+                  <button mat-button
+                    (click)="addScreen(screenId)"
+                    class="button-quaternaty"
+                    [disabled]="screenIdValidator(screenId) || screens.length >= 1">
+                    Agregar
+                  </button>
+
+                  <br><br>
+                  <mat-label>Pantallas</mat-label> <br><br>
+                  <mat-accordion  *ngIf="campaign.screens && campaign.screens.length > 0 ">
+                    <mat-expansion-panel hideToggle *ngFor="let screen of screens">
+                      <mat-expansion-panel-header (click)="setPreview(screen)">
+                        <mat-panel-title>
+                          {{ screen.id }}
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <div class="container-form">
+
+                        <section class="date-box benefit-header-box">
+                          <section class="dates-info">
+
+                            <!-- Images -->
+                            <app-load-file-button *ngIf="screen && !campaign.isCustom"
+                              [text]=imageFile.mobile.text
+                              [extensions]=imageFile.extensions
+                              [emitUrl]="true"
+                              [showUrl]="false"
+                              [folder]="uploadFolder"
+                              (url)="receiveUrl($event, 'mobileUrl', screen)"
+                              [isLoading]="isUploadingImage"
+                              [inputUrl]="screen.mobileUrl"
+                              [description]=imageFile.mobile.description>
+                            </app-load-file-button>
+
+                            <app-load-file-button *ngIf="screen"
+                              [text]=imageFile.desktop.text
+                              [extensions]=imageFile.extensions
+                              [emitUrl]="true"
+                              [showUrl]="false"
+                              [folder]="uploadFolder"
+                              (url)="receiveUrl($event, 'desktopUrl', screen)"
+                              [isLoading]="isUploadingImage"
+                              [inputUrl]="screen.desktopUrl"
+                              [description]=imageFile.desktop.description>
+                            </app-load-file-button>
+
+                            <!-- Button -->
+                            <div class="user-location" *ngIf="!campaign.isCustom">
+                              <mat-checkbox [(ngModel)]="screen.button.show" [ngModelOptions]="{ standalone: true }" (ngModelChange)="clearConfirmationBtn()">Con botón
+                              </mat-checkbox>
+                            </div>
+
+                            <ng-container *ngIf="screen.button.show || campaign.isCustom">
+                              <mat-form-field class="input-info field-text">
+                                <input matInput type="text"
+                                  placeholder="Texto del botón"
+                                  formControlName="buttonText"
+                                  [(ngModel)]="screen.button.text"
+                                  maxlength="40">
+                                <mat-hint>Ej: Subscribirse</mat-hint>
+                                <mat-hint class="input-length" align="end">{{ screen.button.text ? screen.button.text.length : 0 }} / 40</mat-hint>
+                              </mat-form-field>
+
+                              <mat-form-field class="input-info field-text input-color">
+                                <input matInput type="text"
+                                  placeholder="Color del botón"
+                                  formControlName="backgroundColor"
+                                  [(ngModel)]="screen.button.backgroundColor"
+                                  required
+                                  maxlength="7">
+                                <input matInput type="color"
+                                  placeholder="Color del botón"
+                                  formControlName="backgroundColor"
+                                  [(ngModel)]="screen.button.backgroundColor"
+                                  required
+                                  maxlength="7">
+                                <mat-hint>Ej: #ffffff</mat-hint>
+                                <mat-hint class="input-length" align="end">{{ screen.button.backgroundColor ? screen.button.backgroundColor.length : 0 }} / 7</mat-hint>
+                              </mat-form-field>
+
+                              <mat-form-field class="input-info field-text input-color">
+                                <input matInput type="text"
+                                  placeholder="Color del texto"
+                                  formControlName="color"
+                                  [(ngModel)]="screen.button.color"
+                                  required
+                                  maxlength="7">
+                                <input matInput type="color"
+                                  placeholder="Color del texto"
+                                  formControlName="color"
+                                  [(ngModel)]="screen.button.color"
+                                  required
+                                  maxlength="7">
+                                <mat-hint>Ej: #ffffff</mat-hint>
+                                <mat-hint class="input-length" align="end">{{ screen.button.color ? screen.button.color.length : 0 }} / 7</mat-hint>
+                              </mat-form-field>
+                            </ng-container>
+
+                            <div *ngIf="screen.confirmationBtn">
+                              <div class="user-location" *ngIf="screen.button.show">
+                                <mat-checkbox [(ngModel)]="screen.confirmationBtn.show" [ngModelOptions]="{ standalone: true }" (ngModelChange)="clearPagePWA($event)">Segunda pantalla de confirmación
+                                </mat-checkbox>
+                              </div>
+
+                              <!-- Images popup confirmation -->
+                              <app-load-file-button *ngIf="screen && showConfPreview"
+                                                    [text]="'Cargar imagen Mobile'"
+                                                    [extensions]="imageFile.extensions"
+                                                    [emitUrl]="true"
+                                                    [showUrl]="false"
+                                                    [folder]="uploadFolder"
+                                                    (url)="receiveConfirmationUrl($event, 'mobileUrl', screen)"
+                                                    [isLoading]="isUploadingImage"
+                                                    [inputUrl]="screen.mobileUrl"
+                                                    [description]="'Dimensiones: 250 x 158 px'">
+                              </app-load-file-button>
+
+                              <app-load-file-button *ngIf="screen && showConfPreview"
+                                                    [text]="'Cargar imagen Desktop'"
+                                                    [extensions]="imageFile.extensions"
+                                                    [emitUrl]="true"
+                                                    [showUrl]="false"
+                                                    [folder]="uploadFolder"
+                                                    (url)="receiveConfirmationUrl($event, 'desktopUrl', screen)"
+                                                    [isLoading]="isUploadingImage"
+                                                    [inputUrl]="screen.desktopUrl"
+                                                    [description]="'Dimensiones: 350 x 450px'">
+                              </app-load-file-button>
+                            </div>
+
+                            <mat-form-field class="input-info field-text input-color" *ngIf="screen.confirmationBtn.show">
+                              <input matInput type="text"
+                                     placeholder="Color del botón"
+                                     formControlName="confirmationBackColor"
+                                     [(ngModel)]="screen.confirmationBtn.backgroundColor"
+                                     required
+                                     maxlength="7">
+                              <input matInput type="color"
+                                     placeholder="Color del botón"
+                                     formControlName="confirmationBackColor"
+                                     [(ngModel)]="screen.confirmationBtn.backgroundColor"
+                                     required
+                                     maxlength="7">
+                              <mat-hint>Ej: #ffffff</mat-hint>
+                              <mat-hint class="input-length" align="end">{{ screen.confirmationBtn.backgroundColor ? screen.confirmationBtn.backgroundColor.length : 0 }} / 7</mat-hint>
+                            </mat-form-field>
+
+                            <mat-form-field class="input-info field-text input-color" *ngIf="screen.confirmationBtn.show">
+                              <input matInput type="text"
+                                     placeholder="Color del texto"
+                                     formControlName="confirmationColor"
+                                     [(ngModel)]="screen.confirmationBtn.color"
+                                     required
+                                     maxlength="7">
+                              <input matInput type="color"
+                                     placeholder="Color del texto"
+                                     formControlName="confirmationColor"
+                                     [(ngModel)]="screen.confirmationBtn.color"
+                                     required
+                                     maxlength="7">
+                              <mat-hint>Ej: #ffffff</mat-hint>
+                              <mat-hint class="input-length" align="end">{{ screen.confirmationBtn.color ? screen.confirmationBtn.color.length : 0 }} / 7</mat-hint>
+                            </mat-form-field>
+
+                            <!-- Redirection -->
+                            <div *ngIf="!campaign.isCustom">
+                            <mat-form-field class="input-info field-text">
+                              <mat-label>Redirección</mat-label>
+                              <mat-select [(ngModel)]="redirection" [ngModelOptions]="{standalone: true}"
+                                          [disabled]="screen.confirmationBtn.show"
+                                          (ngModelChange)="onPagePWAChange()" required>
+                                <mat-option value="av">Simular Avance</mat-option>
+                                <mat-option value="sav">Simular Super Avance</mat-option>
+                                <mat-option value="avsav">Avances</mat-option>
+                                <mat-option value="sg">Beneficios de categoria</mat-option>
+                                <mat-option value="/home/beneficios">Catálogo de beneficios</mat-option>
+                                <mat-option value="nsa">Promoción nueva cuenta vista</mat-option>
+                                <mat-option value="benefit-detail">Beneficio [Parametro: id del beneficio]</mat-option>
+                                <mat-option value="sa">Cuenta vista</mat-option>
+                                <mat-option value="acc">Tarjeta adicional</mat-option>
+                                <mat-option value="cc">Tarjeta de crédito</mat-option>
+                                <mat-option value="hdap">Home DAP</mat-option>
+                                <mat-option value="sdap">Simulación DAP</mat-option>
+                                <mat-option value="update">Actualiza Datos</mat-option>
+                                <mat-option value="credit">Crédito de Consumo</mat-option>
+                                <mat-option value="pay">Pago de Tarjeta</mat-option>
+                                <mat-option value="reissue">Reemisión de Tarjeta</mat-option>
+                                <mat-option value="dashboard-rpgo">Dashboard Ripley Puntos</mat-option>
+                                <mat-option value="external">Redirección Externa</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field class="input-info field-text">
+                              <input matInput type="text"
+                                placeholder="Pagina de redirección"
+                                [(ngModel)]="screen.pagePWA" [ngModelOptions]="{standalone: true}"
+                                [disabled]="screen.confirmationBtn.show || disablePwa"
+                                (ngModelChange)="onUrlPageChange()"
+                                required
+                                maxlength="2000">
+                              <mat-hint>Ej: https://www.google.com</mat-hint>
+                              <mat-hint class="input-length" align="end">{{ screen.pagePWA ? screen.pagePWA.length : 0 }} / 2000</mat-hint>
+                            </mat-form-field>
+
+                            <mat-form-field class="input-info field-text">
+                              <input matInput type="text"
+                                placeholder="Parametro de redirección"
+                                [(ngModel)]="screen.paramsPWA" [ngModelOptions]="{standalone: true}"
+                                maxlength="2000" [disabled]="screen.confirmationBtn.show">
+                              <mat-hint>Ej: 2GX1emzFXFsBTjGD0Y1G</mat-hint>
+                              <mat-hint class="input-length" align="end">{{ screen.paramsPWA ? screen.paramsPWA.length : 0 }} / 2000</mat-hint>
+                            </mat-form-field>
+
+                            <!-- Quota and ammount -->
+                            <div class="user-location">
+                              <mat-checkbox [(ngModel)]="screen.details.active" [ngModelOptions]="{ standalone: true }">Monto y cuota
+                              </mat-checkbox>
+                            </div>
+
+                            <mat-form-field class="input-info field-text">
+                              <input matInput type="number"
+                                placeholder="Monto del Avance / SuperAvance / Consumo"
+                                formControlName="amount"
+                                [(ngModel)]="screen.details.amount"
+                                onkeydown="return event.keyCode !== 69"
+                                >
+                              <mat-hint>Ej: 800000</mat-hint>
+                            </mat-form-field>
+
+                            <mat-form-field class="input-info field-text">
+                              <input matInput type="number"
+                                placeholder="Número de cuotas"
+                                formControlName="quota"
+                                [(ngModel)]="screen.details.quota"
+                                onkeydown="return event.keyCode !== 69"
+                                >
+                              <mat-hint>Ej: 18</mat-hint>
+                            </mat-form-field>
+                          </div>
+                          </section>
+                        </section>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </section>
+              </section>
+            </section>
+          </section>
+        </div>
+
+        <!-- Preview -->
+        <div *ngIf="campaign && !campaign.isCustom" class="container-view-mobile" id="sticky">
+          <p>Pantalla: {{ previewScreen.id }}</p><br>
+          <div class="banners-container">
+
+            <div>
+              <div class="screen-container minime-container mobile"
+                [ngStyle]="{'background-image': utils.getScssUrl(previewScreen.imageURL)}">
+                <div class="modal-close">
+                  <button class="button-close i-close"></button>
+                </div>
+                <button *ngIf="previewScreen.button?.show"
+                  class="brand-button next button"
+                  [ngClass]="previewScreen.button.class"
+                  [ngStyle]="{'background': previewScreen.button.backgroundColor, 'color': previewScreen.button.color}">
+                  {{ getHtmlContent(previewScreen.button.text) }}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="screen-container minime-container desktop"
+                [ngStyle]="{'background-image': utils.getScssUrl(previewScreen.imageURLDesktop)}">
+                <div class="modal-close">
+                  <button class="button-close i-close desktop"></button>
+                </div>
+                <button *ngIf="previewScreen.button?.show"
+                  class="brand-button next button desktop"
+                  [ngClass]="previewScreen.button.class"
+                  [ngStyle]="{'background': previewScreen.button.backgroundColor, 'color': previewScreen.button.color}">
+                  {{ getHtmlContent(previewScreen.button.text) }}
+                </button>
+              </div>
+            </div>
+          </div>
+          <br><br><br><br>
+          <div *ngIf="showConfPreview">
+            <p>Pantalla: confirmación</p>
+            <div class="banners-container">
+              <div>
+                <div class="screen-container minime-container mobile"
+                     [ngStyle]="{'background-image': utils.getScssUrl(previewScreen.confirmationImageURL)}">
+                  <div class="modal-close">
+                    <button class="button-close i-close"></button>
+                  </div>
+                  <button class="brand-button-confirmation next button"
+                          [ngClass]="previewScreen.confirmationBtn.class"
+                          [ngStyle]="{'background': previewScreen.confirmationBtn.backgroundColor, 'color': previewScreen.confirmationBtn.color}">
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <div class="screen-container minime-container desktop"
+                     [ngStyle]="{'background-image': utils.getScssUrl(previewScreen.confirmationImageURLDesktop)}">
+                  <div class="modal-close">
+                    <button class="button-close i-close desktop"></button>
+                  </div>
+                  <button class="brand-button-confirmation next button desktop"
+                          [ngClass]="previewScreen.confirmationBtn.class"
+                          [ngStyle]="{'background': previewScreen.confirmationBtn.backgroundColor, 'color': previewScreen.confirmationBtn.color}">
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </mat-card-content>
+      <div class="container-buttons">
+        <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">volver</button>
+        <div *ngIf="!id && !campaign.isCustom" class="main-buttons">
+          <button mat-raised-button (click)="saveCampaign()" class="button-primary"
+            [disabled]="!campaignForm.valid || idValidator() || !minimeForm.valid">Crear</button>
+        </div>
+        <div *ngIf="id" class="main-buttons">
+          <button mat-raised-button (click)="updateCampaign()" class="button-primary"
+            [disabled]="!campaignForm.valid || !minimeForm.valid">Actualizar</button>
+        </div>
+        <div *ngIf="!id && campaign.isCustom" class="main-buttons">
+          <button mat-raised-button (click)="saveCampaign()" class="button-primary"
+            [disabled]="!campaignForm.valid || idValidator() || !screens.length || !uploadedCustomCampaign || !screens[0].imageURLDesktop ">Crear</button>
+        </div>
+      </div>
+    </mat-card>
+  </div>

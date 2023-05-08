@@ -1,0 +1,144 @@
+import { Collapsible } from './collapsible';
+import { SegmentationItem } from './segmentationItem';
+
+export class NewBenefit {
+    public id: string;
+    public codesFilePath: Array<string>;
+    public templateType: string;
+    public listHeaderText: string;
+    public cardImageUrl: string;
+    public mainImageUrl: string;
+    public logoImageUrl: string;
+    public title: string;
+    public subtitle: string;
+    public benefitDiscount: string;
+    public durationText: string;
+    public isLocallyConsume: boolean;
+    public isDelivery: boolean;
+    public isMasterCardRequired: boolean;
+    public isMasterCardBlackRequired: boolean;
+    public isMCDebitVistaRequired: boolean;
+    public isMCDebitCCRequired: boolean;
+    public isDebitCardRequired: boolean; //Propiedad de Debit Mastercard, necesaria por retrocompatibilidad.
+    public isCreditCardRequired: boolean; //Propiedad de C. Ripley, necesaria por retrocompatibilidad.
+    public isDebitRequired: boolean; //Propiedad de Debito Ripley, necesaria por retrocompatibilidad.
+
+    public cardText: string;
+    public benefitShortDescrption: string;
+    public benefitDescription: string;
+    public addressList: Array<string>;
+    public phoneList: Array<string>;
+    public coverage: string;
+    public bussinessHourList: Array<string>;
+    public siteUrl: string;
+    public termsAndCondition: string;
+    public type: string;
+    public typeId: string;
+    public news: boolean;
+
+    public hasAdditionalGoldBenefit: boolean;
+    public hasAdditionalSilverBenefit: boolean;
+    public goldBenefitDiscount: string;
+    public silverBenefitDiscount: string;
+    public goldBenefitDetail: string;
+    public silverBenefitDetail: string;
+
+    public goldSilverInformationDiscount: string;
+    public selectedSegmentation: string;
+    public segmentationInfo: SegmentationItem[];
+    public durationBenefitStart: string;
+    public dirationBenefitEnd: string;
+    public orderPriority: number;
+    public codeType: string;
+    public codeSubType: string;
+    public hasCode: boolean;
+    public textCode: string;
+    public uniqueCode: string;
+    public linkText: string;
+    public dynamicUrl: string;
+    public additionalDescriptionGoldSilver: string;
+    public startDate: any;
+    public endDate: any;
+    public shareText: string;
+    public cardPrice: number;
+    public normalPrice: number;
+    public ripleyPoints: string;
+    public internetPrice: number;
+    public skuList: Array<string>;
+    public status: string;
+    public statusPersonalBenefit: string;
+    public showLink: boolean;
+    public rutsFilePath: Array<string>;
+    public rutsUnassignFilePath: Array<string>;
+    public tags: Array<any>;
+    public collapsibles: Collapsible;
+    public codesStats: any;
+
+
+    constructor() {
+      this.codesFilePath = [];
+      this.templateType = '';
+      this.listHeaderText = '';
+      this.cardImageUrl = '';
+      this.mainImageUrl = '';
+      this.logoImageUrl = '';
+      this.title = '';
+      this.subtitle = '';
+      this.benefitDiscount = '';
+      this.durationText = '';
+      this.isLocallyConsume = false;
+      this.isDelivery = false;
+      this.isMasterCardRequired = false;
+      this.isMasterCardBlackRequired = false;
+      this.isMCDebitVistaRequired = false;
+      this.isMCDebitCCRequired = false;
+      this.isDebitCardRequired = false;
+      this.isCreditCardRequired = false;
+      this.isDebitRequired = false;
+      this.cardText = '';
+      this.benefitShortDescrption = '';
+      this.benefitDescription = '';
+      this.addressList = [];
+      this.phoneList = [];
+      this.coverage = '';
+      this.bussinessHourList = [];
+      this.siteUrl = '';
+      this.termsAndCondition = '';
+      this.type = '';
+      this.news = false;
+      this.hasAdditionalGoldBenefit = false;
+      this.hasAdditionalSilverBenefit = false;
+      this.goldBenefitDiscount = '';
+      this.silverBenefitDiscount = '';
+      this.goldBenefitDetail = '';
+      this.silverBenefitDetail = '';
+      this.goldSilverInformationDiscount = '';
+      this.durationBenefitStart = '';
+      this.dirationBenefitEnd = '';
+      this.orderPriority = 0;
+      this.codeType = '';
+      this.codeSubType = '';
+      this.hasCode = false;
+      this.textCode = '';
+      this.uniqueCode = '';
+      this.linkText = '';
+      this.dynamicUrl = '';
+      this.additionalDescriptionGoldSilver = '';
+      this.startDate = '';
+      this.endDate = '';
+      this.shareText = '';
+      this.cardPrice = 0;
+      this.normalPrice = 0;
+      this.ripleyPoints = '';
+      this.internetPrice = 0;
+      this.skuList = [];
+      this.status = '';
+      this.statusPersonalBenefit = '';
+      this.showLink = false;
+      this.rutsFilePath = [];
+      this.rutsUnassignFilePath = [];
+      this.tags = [];
+      this.collapsibles = new Collapsible();
+      this.codesStats = {};
+    }
+}

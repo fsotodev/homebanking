@@ -1,0 +1,112 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> Banner
+        <span class="title-highlighted">Promocional</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <div class="container-form" [formGroup]="bannerForm">
+        <section class="dates-info">
+          <mat-form-field>
+            <mat-label>Tipo de promoción</mat-label>
+            <mat-select formControlName="id" (selectionChange)="changeSelectType($event)">
+              <mat-option *ngFor="let type of BANNER_TYPE" value="{{type.id}}">
+                {{ type.tittle }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </section>
+
+        <section class="send-method-box">
+          <div class="user-location">
+            <mat-checkbox formControlName="onOff" [(ngModel)]="banner.onOff">
+              Activo en PWA
+            </mat-checkbox>
+          </div>
+        </section>
+
+        <section class="date-box">
+          <span class="title-section">Imagen de banner</span>
+          <div class="special-info">
+            <div class="buttons-box">
+              <div class="upload-button-quaternaty">
+                <button mat-raised-button class="button-quaternaty">Subir imagen</button>
+                <input class="file-input" type="file" (change)="uploadNotificationImage($event.target.files, 'small')"
+                  accept=".png,.jpg,.svg" [disabled]="isUploadingImage">
+                <div *ngIf="isUploadingImage" class="spinner-button">
+                  <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                </div>
+                <div class="name-archive" *ngIf="!isUploadingImage">
+                  {{ banner?.url ? banner.url : 'Ningún archivo cargado.' }}</div>
+                <span class="tip-image">Formato: 50x50. Extensión imagen: .png .jpg .svg</span>
+              </div>
+              <!-- Preview -->
+              <img *ngIf="!isUploadingImage && banner.url" [src]="banner?.url">
+            </div>
+          </div>
+        </section>
+
+        <section class="date-box benefit-header-box">
+          <section class="dates-info">
+            <mat-form-field class="input-info field-text">
+              <input matInput type="text" placeholder="Acción de redirección" [(ngModel)]="banner.type"
+                formControlName="type">
+              <mat-hint>Esta acción puede ser hacia un link externo (external) o una vista interna de la app (internal).
+              </mat-hint>
+            </mat-form-field>
+            <div class="available-pages-section">
+              <p class="subtitle-section">Redirección de notificación al clickear:</p>
+              <mat-chip-list>
+                <mat-chip (click)="banner.type = 'internal'">Interno</mat-chip>
+                <mat-chip (click)="banner.type = 'external'">Externo</mat-chip>
+              </mat-chip-list>
+            </div>
+          </section>
+        </section>
+
+        <section class="date-box benefit-header-box">
+          <section class="dates-info">
+            <mat-form-field class="input-info field-text">
+              <input matInput type="text" placeholder="Ruta de redirección" [(ngModel)]="banner.redirect"
+                formControlName="redirect">
+              <mat-hint>Ruta a la cual la notificación hara la redirección. Debe tener concordancia con la opción
+                previamente seleccionada.
+              </mat-hint>
+            </mat-form-field>
+            <div class="available-pages-section">
+              <p class="subtitle-section">Vista a redirigir</p>
+              <mat-chip-list>
+                <mat-chip (click)="banner.redirect = '/home/avances'">Avances</mat-chip>
+                <mat-chip (click)="banner.redirect = '/home/beneficios'">Beneficio</mat-chip>
+                <mat-chip (click)="banner.redirect = '/home/suscripciones'">Suscripciones</mat-chip>
+                <mat-chip (click)="banner.redirect = '/home/ripley-puntos-go/dashboard'">Ripley Puntos</mat-chip>
+                <mat-chip (click)="banner.redirect = '/home/ripley-puntos-go'">Canjes</mat-chip>
+              </mat-chip-list>
+            </div>
+          </section>
+        </section>
+
+        <section class="date-box benefit-header-box" *ngIf="banner.id === 'popup'">
+          <section class="dates-info">
+            <mat-form-field class="input-info field-text">
+              <input matInput type="number" placeholder="Duración" onkeydown="return event.keyCode !== 69"
+                [(ngModel)]="banner.activeSeconds" formControlName="activeSeconds" required>
+              <mat-hint>Duración en segundos del banner en pantalla.
+              </mat-hint>
+            </mat-form-field>
+          </section>
+        </section>
+      </div>
+    </mat-card-content>
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">Volver</button>
+      <div class="main-buttons">
+        <button id='saveButton' mat-raised-button (click)="handleRedirect()" class="button-primary"
+          [disabled]="!bannerForm.valid">Guardar</button>
+      </div>
+    </div>
+  </mat-card>
+</div>

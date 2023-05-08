@@ -1,0 +1,140 @@
+@import '../../../global.scss';
+
+.main-container .main-container-form .container-info-form {
+  flex-direction: column;
+
+  .container-form {
+    width: 650px;
+  }
+}
+
+
+.progress-bar-section {
+  width: 25%;
+}
+
+.title-section {
+  font-size: 16px;
+  font-family: $font-regular;
+  color: $purple;
+}
+
+.info-section {
+  margin: 10px 0;
+  div {
+    margin-top: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .invalid-file {
+    color: red;
+  }
+}
+
+.upload-info-section {
+  margin: 40px 0 0;
+}
+
+.container-error {
+  height: 16px;
+  width: 100%;
+
+  .error-message {
+    font-size: 14px;
+    text-align: left;
+    margin-top: 10px;
+  }
+}
+
+.search {
+  position: absolute;
+  z-index: 2;
+  top: 8px;
+  right: 0;
+  margin: 0 26px;
+
+  .input-search {
+    width: 174px;
+    height: 32px;
+    outline-color: $white;
+    border: 0;
+    padding-left: 30px;
+    font-size: 11.5px;
+    font-family: $font-regular;
+    letter-spacing: 0.3px;
+  }
+}
+
+.mat-row {
+  min-height: 30px;
+  cursor: pointer;
+}
+
+.mat-row:hover {
+  border-bottom: 1px solid currentColor;
+  font-size: 600;
+  border-top: 1px solid currentColor;
+}
+
+.footer-button {
+  margin: 10px;
+}
+
+.table-container {
+  margin: 10px 0;
+}
+
+.form-product {
+  margin: 10px 0;
+}
+
+.file-input {
+  display: none;
+}
+
+.card-image {
+  max-width: 200px;
+  margin-top: 15px;
+  max-height: 125px;
+}
+
+.mat-row {
+  padding: 3px 24px;
+}
+
+.mat-header-cell {
+  color: #4f2d7f;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.mat-column-fullName {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 50% !important;
+  width: 50% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-active {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 50px !important;
+  width: 50px !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}

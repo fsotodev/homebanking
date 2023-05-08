@@ -1,0 +1,24 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title">Solicitudes Seguro de cesantía</p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <div class="upload-button-quaternaty">
+        <div class="info-section">
+          <div class="tip-image">Descarga de la información de clientes que han solicitado seguro de cesantía.</div>
+        </div>
+        <button mat-raised-button class="button-quaternaty" [disabled]="loading"
+          (click)="downloadFile()">Descargar</button>
+        <div *ngIf="!!loading" class="upload-info-section">
+          <span class="title-section">Descargando...</span>
+        </div>
+      </div>
+    </mat-card-content>
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">Volver</button>
+    </div>
+  </mat-card>
+</div>

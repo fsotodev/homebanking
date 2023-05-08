@@ -1,0 +1,64 @@
+<div class="main-container">
+  <mat-progress-spinner *ngIf="loadingCardReissue" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+  <mat-card *ngIf="!loadingCardReissue" class="container-info">
+    <div class="container-title">
+      <p class="title">Carga de RUT <span class="title-highlighted">PWA</span></p>
+    </div>
+  </mat-card>
+
+  <mat-card *ngIf="!loadingCardReissue" class="main-container-form">
+    <mat-card class="main-table">
+      <mat-tab-group class="tab-content" [selectedIndex]="tabSelectedCard" (selectedTabChange)="tabChanged($event)">
+        <mat-tab label="Reemitir Tarjeta" class="title-tab">
+          <mat-card-content class="container-info-form">
+            <div class="container-form" >
+              <mat-label class="user-location">Configuración UserConfig </mat-label>
+              <div class="upload-button-quaternaty">
+                <button mat-raised-button class="button-quaternaty" [disabled]="loadingCardReissueCsv">Subir archivo
+                  <input #inputFile class="file-input" type="file" (change)="uploadFile($event.target.files)" accept=".csv"
+                         [disabled]="loadingCardReissue">
+                </button>
+                <div class="info-section">
+                  <div *ngIf="fileCard"> {{ fileCard[0]?.name }}
+                    {{ loadingCardReissue && !validFileCard? '(Validando archivo...)' : validFileCard ? '(Archivo válido)': '(Archivo no válido)'}}
+                  </div>
+                  <div *ngIf="!validFileCard" class="tip-image">Formato de archivo: .csv</div>
+                  <br>
+                  <div class="upload-instructions">
+                    <span class="title-instructions">IMPORTANTE A CONSIDERAR PARA CARGA DE ARCHIVOS </span><br>
+                    - Archivo <span class="text-bold">formato .csv</span>.<br>
+                    - <span class="text-bold">Una sola columna</span>.<br>
+                    - Sin cabecera, es decir, el archivo debe contener <span class="text-bold">únicamente ruts</span>.<br>
+                    - Formato de <span class="text-bold"> ruts con dv, sin puntos, sin guión y con k minúscula</span>.<br>
+                    - La columna contenedora de los ruts, no debe tener ningún tipo de <span class="text-bold">formato especial aplicado</span>.<br>
+                    - El archivo debe contener<span class="text-bold">máximo 1.000.000 de ruts</span>.<br>
+                  </div>
+                </div>
+                <div *ngIf="!!loadingCardReissue && validFileCard" class="upload-info-section">
+                  <span class="title-section">Subiendo códigos: {{ percUsersCommitedCard}}%</span>
+                  <section class="progress-bar-section">
+                    <mat-progress-bar color="primary" mode="determinate" [value]="percUsersCommitedCard">
+                    </mat-progress-bar>
+                  </section>
+                </div>
+              </div>
+
+            </div>
+          </mat-card-content>
+          <div class="container-buttons">
+            <button mat-button (click)="goHome()" class="i-left-arrow button-tertiary">Home</button>
+            <div class="main-buttons">
+              <button mat-raised-button (click)="uploadCodes(); inputFile.value = ''" class="button-primary"
+                      [disabled]="!validFileCard || loadingCardReissue === true">Cargar
+              </button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Carga dinámica de colecciones" class="title-tab">
+          <app-insurance-card></app-insurance-card>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </mat-card>
+</div>
+

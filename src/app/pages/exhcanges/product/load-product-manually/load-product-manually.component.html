@@ -1,0 +1,91 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> Nueva
+        <span class="title-highlighted">Transacción</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <div class="container-form" [formGroup]="transactionSearchForm">
+        <section>
+          <mat-form-field class="input-info field-text">
+            <input matInput maxlength="20" placeholder="User Id (RUT)" formControlName="userId" required>
+            <mat-hint>Ej: 12343454k (Sin puntos ni guiones).</mat-hint>
+          </mat-form-field>
+          <div class="input-info field-text">
+            <button mat-raised-button (click)="showUserTransactions()" color="primary"
+              [disabled]="!transactionSearchForm.valid">Consultar canjes</button>
+          </div>
+        </section>
+      </div>
+
+      <div>
+        <p class="title"> Consultar Saldo de
+          <span class="title-highlighted">Giftcard</span>
+        </p>
+      </div>
+      <div class="container-form" [formGroup]="balanceGiftcardForm">
+        <section>
+          <mat-form-field class="input-info field-text">
+            <input matInput placeholder="Folio giftcard" formControlName="productFolio" required>
+            <mat-hint>Ej: 1234567 </mat-hint>
+          </mat-form-field>
+          <div class="input-info field-text">
+            <button mat-raised-button (click)="showBalance()" color="primary"
+              [disabled]="!balanceGiftcardForm.valid">Consultar Saldo</button>
+          </div>
+        </section>
+      </div>
+      <div class="container-form" [formGroup]="productTransactionForm">
+        <div class="benefit-header-box">
+          <p class="title-section">Categoría y Producto</p>
+          <section class="dates-info">
+            <mat-form-field>
+              <mat-label>Categoría</mat-label>
+              <mat-select formControlName="categoryMap" [(ngModel)]="selectedCategory"
+                (change)="changeSelectCategory()">
+                <mat-option *ngFor="let category of categories" value="{{category.categoryId}}">{{ category.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Producto</mat-label>
+              <mat-select formControlName="products">
+                <mat-option *ngFor="let product of getProductsByCategory()" (click)="loadProduct(product)"
+                  value="{{product.fullName}}">{{product.fullName}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </section>
+          <p class="title-section" *ngIf="productTransaction.product !== null">Transacción</p>
+          <section class="dates-info" *ngIf="productTransaction.product !== null">
+            <mat-form-field class="input-info field-text">
+              <input matInput maxlength="20" placeholder="User Id (RUT)" formControlName="userId"
+                [(ngModel)]="productTransaction.userId" required>
+              <mat-hint>Ej: 12343454k (Sin puntos ni guiones).</mat-hint>
+            </mat-form-field>
+            <mat-form-field class="input-info field-text">
+              <input matInput type="number" min="0" placeholder="Código Auris" formControlName="aurisNumber"
+                [(ngModel)]="productTransaction.aurisNumber" onkeydown="return event.keyCode !== 69">
+              <mat-hint>Ingresa el código Auris de 9 dígitos (sin guión) asociado a este canje.</mat-hint>
+            </mat-form-field>
+          </section>
+        </div>
+        <div *ngIf="productTransaction.product" class="container-view-mobile">
+          <app-product-viewer [product]="productTransaction.product"
+            [expirationDate]="productTransaction.expirationDate">
+          </app-product-viewer>
+        </div>
+      </div>
+
+    </mat-card-content>
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">volver</button>
+      <div class="main-buttons">
+        <button mat-raised-button (click)="saveTransaction()" class="button-primary"
+          [disabled]="!productTransactionForm.valid">Crear</button>
+      </div>
+    </div>
+  </mat-card>
+</div>

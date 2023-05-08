@@ -1,0 +1,13 @@
+.banners-container {
+  display: flex;
+  flex-direction: row;
+}
+
+#sticky {
+  position: sticky;
+  position: -webkit-sticky;
+  width: fit-content;
+  height: fit-content;
+  top: 100px;
+  display: flex;
+}

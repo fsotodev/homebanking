@@ -1,0 +1,34 @@
+<div class="dates-table">
+  <mat-table #table [dataSource]="benefitCodeDataSource">
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef>Categoria</mat-header-cell>
+      <mat-cell *matCellDef="let benefit"> {{benefit.type}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef>Titulo del beneficio</mat-header-cell>
+      <mat-cell *matCellDef="let benefit">{{benefit.title}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>Id Beneficio</mat-header-cell>
+      <mat-cell *matCellDef="let benefit">{{benefit.id}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="codesStock">
+      <mat-header-cell *matHeaderCellDef>Stock codigos</mat-header-cell>
+      <mat-cell *matCellDef="let benefit">{{benefit.codesStock ?? 0}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef>Publicado</mat-header-cell>
+      <mat-cell *matCellDef="let benefit">{{benefit.statusPersonalBenefit === 'Publicado'? benefit.statusPersonalBenefit : benefit.status}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="addFileCode">
+      <mat-header-cell *matHeaderCellDef>
+        Acción
+      </mat-header-cell>
+      <mat-cell *matCellDef="let benefit" class="actions-table">
+        <button class="i-add" (click)="uploadCodeFiles(benefit.id)"></button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>

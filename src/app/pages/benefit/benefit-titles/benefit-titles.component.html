@@ -1,0 +1,236 @@
+<div class="main-container">
+  <mat-card class="container-info group-flex">
+    <div class="container-title">
+      <p class="title">
+        Tipos de
+        <span class="title-highlighted">Beneficios</span>
+      </p>
+    </div>
+    <div class="container-actions group-flex">
+      <button
+        *ngIf="!isEditing && !isCreating"
+        (click)="createCategory()"
+        mat-raised-button
+        color="primary">
+        Nueva categoría
+    </button>
+      <button
+        *ngIf="!isEditing && !isCreating"
+        (click)="toggleEditing()"
+        mat-raised-button
+        color="primary">
+        Editar
+      </button>
+      <button
+        *ngIf="isEditing || isCreating"
+        [disabled]="isCreating && !(formGroup.valid && formGroup.get('icon').value && formGroup.get('icon').value !== '')"
+        mat-raised-button
+        (click)="saveChanges()"
+        color="primary">
+        Guardar
+      </button>
+      <button
+        *ngIf="isEditing"
+        (click)="cancelEditing()"
+        mat-raised-button
+        color="primary">
+        Cancelar
+      </button>
+      <button
+        *ngIf="isCreating"
+        (click)="cancelCreating()"
+        mat-raised-button
+        color="primary">
+        Cancelar
+      </button>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <table
+      mat-table
+      #table
+      *ngIf="!loading && !isCreating"
+      [dataSource]="benefitCategories"
+      class="main-table">
+      <ng-container matColumnDef="ref">
+        <th mat-header-cell *matHeaderCellDef>Código Antiguo</th>
+        <td mat-cell *matCellDef="let element">
+          <span>
+          {{  originalTypes.includes(element.type)? element.type : 'SIN DEFINIR' }} 
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Título sección</th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="!isEditing">{{ element.sectionTitle }}</span>
+          <input
+            *ngIf="isEditing"
+            matInput
+            type="text"
+            [(ngModel)]="element.sectionTitle"
+            class="input-name"
+          />
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="order">
+        <th mat-header-cell *matHeaderCellDef>Orden</th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="!isEditing">{{ element.order }} 
+            <span *ngIf="originalTypesId.includes(element.id)">*</span>
+          </span>
+
+          <span *ngIf="isEditing && originalTypesId.includes(element.id)">*</span>
+          <input
+            *ngIf="isEditing"
+            matInput
+            type="number"
+            [(ngModel)]="element.order"
+            class="input-name"
+          />
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="icon">
+        <th mat-header-cell *matHeaderCellDef>Ícono</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <img
+            *ngIf="element.icon"
+            class="category-icon"
+            [src]="element.icon"
+            alt="Icono"
+            width="32px"
+          />
+          <button mat-button
+            color="primary"
+            *ngIf="isEditing"
+            (click)="fileInput.click()"
+          >
+            Editar
+          </button>
+          <button mat-button
+            color="warn"
+            *ngIf="isEditing"
+            (click)="deleteIcon(i)"
+          >
+            Eliminar
+          </button>
+          <input hidden
+            (change)="uploadIconFile($event.target.files, i)"
+            #fileInput
+            type="file"
+            accept=".png, .jpg, .svg, .jpeg"
+          />
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="active">
+        <th mat-header-cell *matHeaderCellDef>Activo</th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="!isEditing">{{ element.active ? "Sí" : "No" }}</span>
+          <span *ngIf="isEditing">
+            <mat-slide-toggle class="full-width" [(ngModel)]="element.active">
+            </mat-slide-toggle
+          ></span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="disclaimer">
+        <td mat-footer-cell *matFooterCellDef colspan="5">
+          Solo los tipos de beneficios marcados con asterisco (*) son visibles en vista típica de beneficios PWA
+        </td>
+      </ng-container>
+      
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-footer-row *matFooterRowDef="['disclaimer']" class="types-footer-row"></tr>
+
+    </table>
+    <mat-card-content class="container-info-form" *ngIf="!loading && !isCreating">
+      <div class="benefit-container">
+        <section class="personal-containter">
+          <h3>Categoría "Para ti"</h3>
+          La categoría "Para ti" aparecerá en PWA siempre y cuando exista un
+          beneficio asociado al rut del cliente. Solo se puede modificar el
+          título de esta categoría
+          <mat-form-field class="personal-form" *ngIf="isEditing">
+            <mat-label>Título de la sección</mat-label>
+            <input
+              matInput
+              class="personal-form-input"
+              placeholder="Título sección para ti"
+              [(ngModel)]="personalType.sectionTitle"
+            />
+          </mat-form-field>
+
+          <div *ngIf="!isEditing" class="personal-form">
+            <strong>Título de la sección:</strong>
+            {{ personalType.sectionTitle }}
+          </div>
+        </section>
+      </div>
+    </mat-card-content>
+
+    <mat-card-content  *ngIf="!loading && isCreating">     
+      <div class="create-benefit-container" [formGroup]="formGroup">
+        <h3><strong>Nueva categoría</strong></h3>
+        <br />
+
+        <mat-form-field class="full-width ">
+          <mat-label>
+            Código Versión Antigua PWA
+          </mat-label>
+          <mat-select formControlName="code">
+            <mat-option *ngFor="let originalType of originalTypes" [value]="originalType">
+              {{originalType}}
+            </mat-option>
+          </mat-select>
+          <mat-hint> Para los clientes con versiones anteriores de la PWA, este beneficio se visualizará en la categoría seleccionada</mat-hint>
+
+        </mat-form-field>
+
+        <mat-form-field class="full-width ">
+          <mat-label>Título categoría</mat-label>
+          <input matInput type="text" formControlName="title" required>
+        </mat-form-field>
+
+        <div class="full-width">
+          <button mat-raised-button
+            color="primary"
+            (click)="createFileInput.click()">
+            Subir ícono
+          </button>
+          <br />
+          <input hidden
+            (change)="uploadNewIconFile($event.target.files)"
+            #createFileInput
+            type="file"
+            accept=".png, .jpg, .svg, .jpeg" />
+          <mat-form-field class="full-width">
+            <mat-label>Ícono categoría</mat-label>
+            <input matInput type="text" formControlName="icon" disabled>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field class="full-width ">
+          <mat-label>Orden categoría</mat-label>    
+          <input matInput type="number" formControlName="order" required>
+        </mat-form-field>
+      
+      </div>
+    </mat-card-content>
+
+    <div class="container-buttons">
+      <button
+        mat-button
+        (click)="goBack()"
+        class="i-left-arrow button-tertiary"
+      >
+        volver
+      </button>
+    </div>
+  </mat-card>
+</div>

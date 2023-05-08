@@ -1,0 +1,99 @@
+@import '~sass/abstracts/variables';
+.container-table {
+  padding: 0 15px;
+}
+
+table {
+  width: 100%;
+}
+
+.br-btn-solid {
+  height: 35px;
+}
+
+tr.mat-header-row {
+  background-color: $br-gray-prod;
+  height: 40px;
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+ background-color: $br-purple-800;
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: rgba($br-purple-800,.54);
+}
+
+th.mat-header-cell {
+  text-align: center;
+}
+
+td.mat-cell {
+  text-align: center;
+}
+
+.checkbox {
+  background-color: $br-purple-800;
+}
+
+.i-trash-alt {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  filter: invert(100%);
+}
+
+.pagination-with-button {
+  width: 10%;
+  display: flex;
+  align-items: center;
+}
+
+.hidden-element {
+  display: none;
+}
+
+.br-btn-link {
+  text-decoration: unset;
+  padding: unset;
+}
+
+::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: $br-purple-800;
+}
+
+.col-actions {
+  width: 275px;
+}
+
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+  padding-left: unset;
+}
+
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  padding-right: unset;
+}
+
+.search {
+  padding: 0 15px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .input-search {
+    width: 174px;
+    height: 32px;
+    outline-color: white;
+    border: 0;
+    padding-left: 30px;
+    font-size: 11.5px;
+    // font-family: ;
+    letter-spacing: 0.3px;
+  }
+}
+
+.i-search {
+  background-position: 10px center;
+  background-size: 12px;
+}

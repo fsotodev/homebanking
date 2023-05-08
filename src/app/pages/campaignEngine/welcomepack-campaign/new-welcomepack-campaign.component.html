@@ -1,0 +1,630 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title">
+        Nueva
+        <span class="title-highlighted">Campaña: Welcome</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <div class="column">
+        <div [hidden]="isASingleWelcomepack">
+          <h4>Productos</h4>
+          <div class="column">
+            <mat-checkbox
+              [(ngModel)]="hasTr"
+              [ngModelOptions]="{ standalone: true }"
+              >Tarjeta Ripley</mat-checkbox>
+            <mat-checkbox
+              [(ngModel)]="hasTrm"
+              [ngModelOptions]="{ standalone: true }"
+              >Tarjeta Ripley Mastercard</mat-checkbox>
+            <mat-checkbox
+              [(ngModel)]="hasSa"
+              [ngModelOptions]="{ standalone: true }"
+              >Cuenta Vista</mat-checkbox>
+            <mat-checkbox
+              [(ngModel)]="hasTrSa"
+              [ngModelOptions]="{ standalone: true }"
+              >Tarjeta Ripley + Cuenta Vista</mat-checkbox>
+            <mat-checkbox
+              [(ngModel)]="hasTrmSa"
+              [ngModelOptions]="{ standalone: true }"
+              >Tarjeta Ripley Mastercard + Cuenta Vista</mat-checkbox>
+          </div>
+        </div>
+        <!-- Campaign Form -->
+        <form
+          class="container-form"
+          [formGroup]="welcomepackForm"
+        >
+          <section class="date-box benefit-header-box">
+            <section class="dates-info">
+              <!-- Core -->
+              <section>
+                <div class="user-location">
+                  <mat-checkbox formControlName="activePWA">
+                    Activo en PWA
+                  </mat-checkbox>
+                </div>
+                <mat-form-field class="input-info field-text">
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Id de campaña"
+                    formControlName="id"
+                    required
+                    maxlength="35"
+                  />
+                  <mat-hint>Sin espacios, Ej: banner-AvSav-2.5mm</mat-hint>
+                  <mat-hint class="input-length" align="end"
+                    >{{ campaignId.length }} / 35</mat-hint
+                  >
+                  <mat-error *ngIf="welcomepackForm.get('id').hasError('baseIdUsed')">Este id ya está en uso</mat-error>
+                </mat-form-field>
+                <mat-form-field class="input-info field-text">
+                  <input
+                    matInput
+                    type="number"
+                    placeholder="Prioridad"
+                    formControlName="priority"
+                    onkeydown="return event.keyCode !== 69"
+                    required
+                  />
+                  <mat-hint>Ej: 2</mat-hint>
+                </mat-form-field>
+                <mat-form-field class="input-info field-text">
+                  <input
+                    matInput
+                    type="number"
+                    placeholder="Máximo de visualizaciones"
+                    formControlName="maxViews"
+                    onkeydown="return event.keyCode !== 69"
+                  />
+                  <mat-hint>Ej: 3</mat-hint>
+                </mat-form-field>
+                <mat-form-field class="input-info field-text">
+                  <input
+                    matInput
+                    type="number"
+                    placeholder="Máximo de goals (cantidad de veces en que el cliente llega a la última vista del welcome pack)"
+                    formControlName="maxGoals"
+                    onkeydown="return event.keyCode !== 69"
+                    required
+                  />
+                  <mat-hint>Ej: 1</mat-hint>
+                </mat-form-field>
+              </section>
+              <!-- Filters -->
+              <section>
+                <br />
+                <div formGroupName="filters">
+                  <div class="user-location">
+                    <mat-checkbox formControlName="allUsers">Filtros aplican para todos los usuarios (sin rutero)</mat-checkbox>
+                  </div>
+                  <div class="user-location">
+                    <mat-checkbox formControlName="segment">Filtro por categoría activo</mat-checkbox>
+                  </div>
+                  <div class="user-location">
+                    <mat-checkbox formControlName="segmentRipley">Categoría Ripley</mat-checkbox>
+                    <br>
+                    <mat-checkbox formControlName="segmentOne">Categoría One</mat-checkbox>
+                    <br>
+                    <mat-checkbox formControlName="segmentBronze">Categoría Plus</mat-checkbox>
+                    <br>
+                    <mat-checkbox formControlName="segmentSilver">Categoría Silver</mat-checkbox>
+                    <br>
+                    <mat-checkbox formControlName="segmentGold">Categoría Gold</mat-checkbox>
+                  </div>
+                  <!-- Product -->
+                  <mat-form-field class="input-info field-text">
+                    <mat-label>Condicion de filtro de productos</mat-label>
+                    <mat-select formControlName="haveProductCondition">
+                      <mat-option value="or">ó / or / ||</mat-option>
+                      <mat-option value="and">y / and / &&</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <!-- Dates -->
+                  <h4>Rango de fechas de la campaña</h4>
+                  <div class="dates-info">
+                    <mat-form-field class="date">
+                      <input
+                        matInput
+                        [matDatepicker]="startDate"
+                        placeholder="Fecha de inicio"
+                        formControlName="startDate"
+                        required
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="startDate"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker
+                        #startDate
+                        disabled="false"
+                      ></mat-datepicker>
+                    </mat-form-field>
+                    <br />
+                    <mat-form-field class="date">
+                      <input
+                        matInput
+                        [matDatepicker]="endDate"
+                        placeholder="Fecha de término"
+                        formControlName="endDate"
+                        required
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="endDate"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker
+                        #endDate
+                        disabled="false"
+                      ></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <h4>Fecha de captación de los clientes</h4>
+                  <div>
+                    <!-- SA -->
+                    <div class="user-location">
+                      <mat-checkbox formControlName="productDateSA">Fecha de Alta Cuenta Vista</mat-checkbox>
+                    </div>
+                    <div class="date-range" *ngIf="filters.productDateSA">
+                      <mat-form-field class="date">
+                        <input matInput
+                          [matDatepicker]="productDateStartSA"
+                          placeholder="Fecha de inicio"
+                          formControlName="productDateStartSA">
+                        <mat-datepicker-toggle matSuffix [for]="productDateStartSA"></mat-datepicker-toggle>
+                        <mat-datepicker #productDateStartSA disabled="false"></mat-datepicker>
+                      </mat-form-field>
+                      <mat-form-field class="date">
+                        <input matInput
+                          [matDatepicker]="productDateEndSA"
+                          placeholder="Fecha de término"
+                          formControlName="productDateEndSA">
+                        <mat-datepicker-toggle matSuffix [for]="productDateEndSA"></mat-datepicker-toggle>
+                        <mat-datepicker #productDateEndSA disabled="false"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <!-- TR -->
+                    <div class="user-location">
+                      <mat-checkbox formControlName="productDateTR">Fecha de Alta Tarjeta Ripley</mat-checkbox>
+                    </div>
+                    <div class="date-range" *ngIf="filters.productDateTR">
+                      <mat-form-field class="date" >
+                        <input matInput
+                          [matDatepicker]="productDateStartTR"
+                          placeholder="Fecha de inicio"
+                          formControlName="productDateStartTR">
+                        <mat-datepicker-toggle matSuffix [for]="productDateStartTR"></mat-datepicker-toggle>
+                        <mat-datepicker #productDateStartTR disabled="false"></mat-datepicker>
+                      </mat-form-field>
+                      <mat-form-field class="date">
+                        <input matInput
+                          [matDatepicker]="productDateEndTR"
+                          placeholder="Fecha de término"
+                          formControlName="productDateEndTR">
+                        <mat-datepicker-toggle matSuffix [for]="productDateEndTR"></mat-datepicker-toggle>
+                        <mat-datepicker #productDateEndTR disabled="false"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <!-- TRM -->
+                    <div class="user-location">
+                      <mat-checkbox formControlName="productDateTRM">Fecha de Alta Tarjeta Ripley Mastercard</mat-checkbox>
+                    </div>
+                    <div class="date-range" *ngIf="filters.productDateTRM">
+                      <mat-form-field class="date">
+                        <input matInput
+                          [matDatepicker]="productDateStartTRM"
+                          placeholder="Fecha de inicio"
+                          formControlName="productDateStartTRM">
+                        <mat-datepicker-toggle matSuffix [for]="productDateStartTRM"></mat-datepicker-toggle>
+                        <mat-datepicker #productDateStartTRM disabled="false"></mat-datepicker>
+                      </mat-form-field>
+                      <mat-form-field class="date">
+                        <input matInput
+                          [matDatepicker]="productDateEndTRM"
+                          placeholder="Fecha de término"
+                          formControlName="productDateEndTRM">
+                        <mat-datepicker-toggle matSuffix [for]="productDateEndTRM"></mat-datepicker-toggle>
+                        <mat-datepicker #productDateEndTRM disabled="false"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </section>
+          </section>
+          <!-- Screens -->
+          <section>
+            <br />
+            <h4>Pantalla de Productos</h4>
+            <mat-form-field
+              *ngIf="cardWPScreens.length"
+              class="screen-select"
+              appearance="fill"
+            >
+              <mat-label>Productos {{ cardWPScreen.id }}</mat-label>
+              <mat-select [(value)]="cardWPScreen.id" name="cardsWP" required>
+                <mat-option
+                  *ngFor="let screen of cardWPScreens"
+                  [value]="screen.id"
+                >
+                  {{ screen.id }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button
+              *ngIf="cardWPScreen"
+              type="button"
+              class="button-quaternaty"
+              (click)="loadCardsWPPreview()"
+            >
+              Ver Preview
+            </button>
+            <button
+              *ngIf="cardWPScreen && cardWPScreen.id"
+              type="button"
+              class="button-quaternaty"
+              (click)="openEditTab('new-cards-screen', cardWPScreen.id)"
+            >
+              Editar
+            </button>
+            <h4>Pantalla de Beneficios</h4>
+            <div *ngIf="!isASingleWelcomepack; else multipleWelcomepacks">
+              <div *ngIf="hasTr && benefitTrScreens.length">
+                <mat-form-field class="screen-select" appearance="fill">
+                  <mat-label>P. beneficios TR</mat-label>
+                  <mat-select [(value)]="trBenefitScreen.id" name="tr">
+                    <mat-option
+                      *ngFor="let screen of benefitTrScreens"
+                      [value]="screen.id"
+                    >
+                      {{ screen.id }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button
+                  *ngIf="trBenefitScreen"
+                  class="button-quaternaty"
+                  type="button"
+                  (click)="loadBenefitPreview('BENEFIT_TR')"
+                >
+                  Ver Preview
+                </button>
+                <button
+                  *ngIf="trBenefitScreen && trBenefitScreen.id"
+                  class="button-quaternaty"
+                  type="button"
+                  (click)="openEditTab('new-benefit-screen', trBenefitScreen.id)"
+                >
+                  Editar
+                </button>
+              </div>
+              <div *ngIf="hasTrm && benefitTrmScreens.length">
+                <mat-form-field class="screen-select" appearance="fill">
+                  <mat-label>P. beneficios TRM</mat-label>
+                  <mat-select [(value)]="trmBenefitScreen.id" name="trm">
+                    <mat-option
+                      *ngFor="let screen of benefitTrmScreens"
+                      [value]="screen.id"
+                    >
+                      {{ screen.id }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button
+                  *ngIf="trmBenefitScreen"
+                  class="button-quaternaty"
+                  type="button"
+                  (click)="loadBenefitPreview('BENEFIT_TRM')"
+                >
+                  Ver Preview
+                </button>
+                <button
+                  *ngIf="trmBenefitScreen && trmBenefitScreen.id"
+                  class="button-quaternaty"
+                  type="button"
+                  (click)="openEditTab('new-benefit-screen', trmBenefitScreen.id)"
+                >
+                  Editar
+                </button>
+              </div>
+              <div *ngIf="hasSa && benefitSaScreens.length">
+                <mat-form-field class="screen-select" appearance="fill">
+                  <mat-label>P. beneficios SA</mat-label>
+                  <mat-select [(value)]="saBenefitScreen.id" name="sa">
+                    <mat-option
+                      *ngFor="let screen of benefitSaScreens"
+                      [value]="screen.id"
+                    >
+                      {{ screen.id }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button
+                  *ngIf="saBenefitScreen"
+                  class="button-quaternaty"
+                  type="button"
+                  (click)="loadBenefitPreview('BENEFIT_SA')"
+                >
+                  Ver Preview
+                </button>
+                <button
+                  *ngIf="saBenefitScreen && saBenefitScreen.id"
+                  class="button-quaternaty"
+                  type="button"
+                  (click)="openEditTab('new-benefit-screen', saBenefitScreen.id)"
+                >
+                  Editar
+                </button>
+              </div>
+              <div *ngIf="hasTrSa && benefitTrSaScreens.length">
+                <mat-form-field class="screen-select" appearance="fill">
+                  <mat-label>P. beneficios TR + SA</mat-label>
+                  <mat-select [(value)]="trSaBenefitScreen.id" name="trSa">
+                    <mat-option
+                      *ngFor="let screen of benefitTrSaScreens"
+                      [value]="screen.id"
+                    >
+                      {{ screen.id }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button
+                  *ngIf="trSaBenefitScreen"
+                  class="button-quaternaty"
+                  class="button-quaternaty"
+                  type="button"
+                  (click)="loadBenefitPreview('BENEFIT_TR_SA')"
+                >
+                  Ver Preview
+                </button>
+                <button
+                  *ngIf="trSaBenefitScreen && trSaBenefitScreen.id"
+                  class="button-quaternaty"
+                  type="button"
+                  (click)="
+                    openEditTab('new-benefit-screen', trSaBenefitScreen.id)
+                  "
+                >
+                  Editar
+                </button>
+              </div>
+              <div *ngIf="hasTrmSa && benefitTrmSaScreens.length">
+                <mat-form-field class="screen-select" appearance="fill">
+                  <mat-label>P. beneficios TRM + SA</mat-label>
+                  <mat-select [(value)]="trmSaBenefitScreen.id" name="trmSa">
+                    <mat-option
+                      *ngFor="let screen of benefitTrmSaScreens"
+                      [value]="screen.id"
+                    >
+                      {{ screen.id }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button
+                  *ngIf="trmSaBenefitScreen"
+                  class="button-quaternaty"
+                  type="button"
+                  (click)="loadBenefitPreview('BENEFIT_TRM_SA')"
+                >
+                  Ver Preview
+                </button>
+                <button
+                  *ngIf="trmSaBenefitScreen && trmSaBenefitScreen.id"
+                  type="button"
+                  class="button-quaternaty"
+                  (click)="
+                    openEditTab('new-benefit-screen', trmSaBenefitScreen.id)
+                  "
+                >
+                  Editar
+                </button>
+              </div>
+            </div>
+            <ng-template #multipleWelcomepacks>
+              <mat-form-field class="screen-select" appearance="fill">
+                <mat-label>P. beneficios</mat-label>
+                <mat-select [(value)]="singleBenefitScreen.id" name="trmSa">
+                  <mat-option
+                    *ngFor="let screen of benefitScreens"
+                    [value]="screen.id"
+                  >
+                    {{ screen.id }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button
+                *ngIf="singleBenefitScreen"
+                class="button-quaternaty"
+                type="button"
+                (click)="loadBenefitPreview('BENEFIT_SINGLE')"
+              >
+                Ver Preview
+              </button>
+              <button
+                *ngIf="singleBenefitScreen && singleBenefitScreen.id"
+                type="button"
+                class="button-quaternaty"
+                (click)="
+                  openEditTab('new-benefit-screen', singleBenefitScreen.id)
+                "
+              >
+                Editar
+              </button>
+            </ng-template>
+            <h4>Pantalla de Ripley puntos go</h4>
+            <mat-form-field
+              *ngIf="ripleyPointsScreens.length"
+              class="screen-select"
+              appearance="fill"
+            >
+              <mat-label>P. Ripley puntos go</mat-label>
+              <mat-select
+                [(value)]="ripleyPointScreen.id"
+                name="ripleyPoints"
+                required
+              >
+                <mat-option
+                  *ngFor="let screen of ripleyPointsScreens"
+                  [value]="screen.id"
+                >
+                  {{ screen.id }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button
+              *ngIf="ripleyPointScreen"
+              class="button-quaternaty"
+              type="button"
+              (click)="loadRipleyPointPreview('RIPLEY_POINTS_GO')"
+            >
+              Ver Preview
+            </button>
+            <button
+              *ngIf="ripleyPointScreen && ripleyPointScreen.id"
+              class="button-quaternaty"
+              type="button"
+              (click)="
+                openEditTab('new-ripley-points-screen', ripleyPointScreen.id)
+              "
+            >
+              Editar
+            </button>
+          </section>
+        </form>
+      </div>
+      <!-- Preview -->
+      <section id="sticky">
+        <h4>{{ previewTitle }}</h4>
+        <div *ngIf="selectedPreview === 'CARDS'" class="screen">
+          <app-cardswp-preview [screen]="cardWPScreen" [itemList]="cardItems">
+          </app-cardswp-preview>
+        </div>
+        <div *ngIf="selectedPreview === 'BENEFIT_SINGLE'">
+          <app-benefits-preview
+            [wave]="singleBenefitScreen.wave"
+            [containerTopBackgroundColor]="singleBenefitScreen.backgroundColorTop"
+            [containerBackgroundColor]="singleBenefitScreen.backgroundColor"
+            [useSlider]="true"
+            [mainTitle]="singleBenefitScreen.mainTitle"
+            [subTitle]="singleBenefitScreen.subTitle"
+            [exitButton]="singleBenefitScreen.exitButton"
+            [sliderBenefits]="sliderBenefits"
+            [listBenefits]="listBenefits"
+            [isFromWelcomepackForm]="true"
+          >
+          </app-benefits-preview>
+        </div>
+        <div *ngIf="selectedPreview === 'BENEFIT_TR'">
+          <app-benefits-preview
+            [wave]="trBenefitScreen.wave"
+            [containerTopBackgroundColor]="trBenefitScreen.backgroundColorTop"
+            [containerBackgroundColor]="trBenefitScreen.backgroundColor"
+            [useSlider]="true"
+            [mainTitle]="trBenefitScreen.mainTitle"
+            [subTitle]="trBenefitScreen.subTitle"
+            [exitButton]="trBenefitScreen.exitButton"
+            [sliderBenefits]="sliderBenefits"
+            [listBenefits]="listBenefits"
+            [isFromWelcomepackForm]="true"
+          >
+          </app-benefits-preview>
+        </div>
+        <div *ngIf="selectedPreview === 'BENEFIT_TRM'">
+          <app-benefits-preview
+            [wave]="trmBenefitScreen.wave"
+            [containerTopBackgroundColor]="trmBenefitScreen.backgroundColorTop"
+            [containerBackgroundColor]="trmBenefitScreen.backgroundColor"
+            [useSlider]="true"
+            [mainTitle]="trmBenefitScreen.mainTitle"
+            [subTitle]="trmBenefitScreen.subTitle"
+            [exitButton]="trmBenefitScreen.exitButton"
+            [sliderBenefits]="sliderBenefits"
+            [listBenefits]="listBenefits"
+            [isFromWelcomepackForm]="true"
+          >
+          </app-benefits-preview>
+        </div>
+        <div *ngIf="selectedPreview === 'BENEFIT_SA'">
+          <app-benefits-preview
+            [wave]="saBenefitScreen.wave"
+            [containerTopBackgroundColor]="saBenefitScreen.backgroundColorTop"
+            [containerBackgroundColor]="saBenefitScreen.backgroundColor"
+            [useSlider]="true"
+            [mainTitle]="saBenefitScreen.mainTitle"
+            [subTitle]="saBenefitScreen.subTitle"
+            [exitButton]="saBenefitScreen.exitButton"
+            [sliderBenefits]="sliderBenefits"
+            [listBenefits]="listBenefits"
+            [isFromWelcomepackForm]="true"
+          >
+          </app-benefits-preview>
+        </div>
+        <div *ngIf="selectedPreview === 'BENEFIT_TR_SA'">
+          <app-benefits-preview
+            [wave]="trSaBenefitScreen.wave"
+            [containerTopBackgroundColor]="trSaBenefitScreen.backgroundColorTop"
+            [containerBackgroundColor]="trSaBenefitScreen.backgroundColor"
+            [useSlider]="true"
+            [mainTitle]="trSaBenefitScreen.mainTitle"
+            [subTitle]="trSaBenefitScreen.subTitle"
+            [exitButton]="trSaBenefitScreen.exitButton"
+            [sliderBenefits]="sliderBenefits"
+            [listBenefits]="listBenefits"
+            [isFromWelcomepackForm]="true"
+          >
+          </app-benefits-preview>
+        </div>
+        <div *ngIf="selectedPreview === 'BENEFIT_TRM_SA'">
+          <app-benefits-preview
+            [wave]="trmSaBenefitScreen.wave"
+            [containerTopBackgroundColor]="
+              trmSaBenefitScreen.backgroundColorTop
+            "
+            [containerBackgroundColor]="trmSaBenefitScreen.backgroundColor"
+            [useSlider]="true"
+            [mainTitle]="trmSaBenefitScreen.mainTitle"
+            [subTitle]="trmSaBenefitScreen.subTitle"
+            [exitButton]="trmSaBenefitScreen.exitButton"
+            [sliderBenefits]="sliderBenefits"
+            [listBenefits]="listBenefits"
+            [isFromWelcomepackForm]="true"
+          >
+          </app-benefits-preview>
+        </div>
+        <div *ngIf="selectedPreview === 'RIPLEY_POINTS_GO'">
+          <div class="screen">
+            <app-ripley-points-preview
+              [ripleyPointsWP]="ripleyPointScreen"
+            ></app-ripley-points-preview>
+          </div>
+        </div>
+      </section>
+    </mat-card-content>
+    <div class="container-buttons">
+      <button
+        mat-button
+        (click)="goBack()"
+        class="i-left-arrow button-tertiary back-btn"
+      >
+        volver
+      </button>
+      <button
+        mat-raised-button
+        class="button-primary"
+        [disabled]="
+          isLoading || welcomepackForm.invalid || welcomepackForm.pristine
+        "
+        type="button"
+        (click)="createWelcomepacks()"
+      >
+        Crear
+      </button>
+    </div>
+  </mat-card>
+</div>

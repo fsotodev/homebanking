@@ -1,0 +1,16 @@
+<div class="main-container">
+  <mat-card class="main-table">
+    <div class="search">
+      <input type="text" (keyup)="triggerFilter()" [(ngModel)]="filterValue" placeholder="Buscar..."
+        class="input-search i-search">
+    </div>
+    <mat-tab-group class="tab-content" [selectedIndex]="" (selectedTabChange)="tabChanged($event)">
+      <mat-tab label="Listado Codigos" class="title-tab">
+        <app-tab-code></app-tab-code>
+      </mat-tab>
+      <mat-tab label="Listado Ruts" class="title-tab">
+        <app-tab-rut></app-tab-rut>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

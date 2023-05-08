@@ -1,0 +1,35 @@
+@import '../../../global.scss';
+
+.main-table {
+    width: 1160px;
+    background-color: $white;
+    padding: 0;
+    margin: 0px auto;
+    font-family: $font-bold;
+
+
+
+    .search {
+        position: absolute;
+        z-index: 2;
+        top: 8px;
+        right: 0;
+        margin: 0 26px;
+
+        .input-search {
+            width: 174px;
+            height: 32px;
+            outline-color: $white;
+            border: 0;
+            padding-left: 30px;
+            font-size: 11.5px;
+            font-family: $font-regular;
+            letter-spacing: 0.3px;
+        }
+    }
+}
+
+.i-search {
+    background-position: 10px center;
+    background-size: 12px;
+}

@@ -1,0 +1,79 @@
+<div class="container" [formGroup]="baseForm">
+  <div class="row">
+    <div class="col-8 link">
+      <button type="button" class="br-btn-link">Volver</button>
+    </div>
+    <div class="col-2 text-end ">
+      <button type="button" class="br-btn-solid br-btn-circle " (click)="send()">Guardar cambios</button>
+    </div>
+    <div class="col-2 text-end">
+      <button type="button" class="br-btn-link">Cancelar</button>
+    </div>
+  </div>
+  <hr>
+  <br>
+  <div class="row">
+    <div class="col">
+      <h3>Nueva Campaña: Slider Banner Home</h3><br>
+    </div>
+  </div>
+  <div class="row" formGroupName="formChildren">
+    <div class="col">
+      <div class="br-accordion" id="campaignInfo">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading-info">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-info" aria-expanded="true" aria-controls="collapse-info">
+              Información de campaña
+            </button>
+          </h2>
+          <div id="collapse-info" class="accordion-collapse collapse show" aria-labelledby="heading-info" data-bs-parent="#campaignInfo">
+            <div class="accordion-body">
+              <app-base-fields formControlName="baseFieldChild"></app-base-fields>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading-ruts">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ruts" aria-expanded="false" aria-controls="collapse-ruts">
+              Cargar RUTs
+            </button>
+          </h2>
+          <div id="collapse-ruts" class="accordion-collapse collapse" aria-labelledby="heading-ruts" data-bs-parent="#campaignInfo">
+            <div class="accordion-body">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem cum delectus dignissimos dolorum ducimus earum esse exercitationem expedita ipsum laboriosam modi perferendis perspiciatis, quod saepe sed sit velit vitae voluptatum.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading-img">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-img" aria-expanded="false" aria-controls="collapse-img">
+              Adjuntar imágenes
+            </button>
+          </h2>
+          <div id="collapse-img" class="accordion-collapse collapse" aria-labelledby="heading-img" data-bs-parent="#campaignInfo">
+            <div class="accordion-body">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad animi asperiores beatae blanditiis consequuntur doloremque, earum explicabo fuga libero magnam maiores modi omnis optio perspiciatis porro quasi repellat, vel vero?
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading-extra-info">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-extra-info" aria-expanded="false" aria-controls="collapse-extra-info">
+              Información adicional
+            </button>
+          </h2>
+          <div id="collapse-extra-info" class="accordion-collapse collapse" aria-labelledby="heading-extra-info" data-bs-parent="#campaignInfo">
+            <div class="accordion-body">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorum ipsa voluptates? Amet, architecto, veritatis. Delectus deserunt harum hic incidunt labore nobis, nulla praesentium sint suscipit vel. Mollitia, quasi voluptates?
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      Previsualizacion
+    </div>
+  </div>
+
+
+</div>

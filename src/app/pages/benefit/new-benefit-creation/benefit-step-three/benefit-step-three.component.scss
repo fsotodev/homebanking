@@ -1,0 +1,26 @@
+@import '../../../../../global.scss';
+
+.full-width {
+    min-width: 150px;
+    max-width: 500px;
+    width: 80%;
+}
+
+.btn-delete-list {
+    float: right;
+}
+
+li {
+    height: 42px;
+    border-bottom: grey;
+    border-bottom-style: dotted;
+}
+
+.example-text {
+    display: block;
+}
+
+.step-title {
+    font-size: 24px;
+    font-weight: 500;
+}

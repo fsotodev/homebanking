@@ -1,0 +1,42 @@
+<div class="main-container">
+  <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+  <mat-card *ngIf="!isLoading"  class="container-info">
+    <div class="container-title">
+      <p class="title"> Notificaciones Push
+        <span class="title-highlighted">EPU</span>
+      </p>
+    </div>
+  </mat-card>
+
+  <mat-card *ngIf="!isLoading" class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <div class="container-form" [formGroup]="form">
+        <h2>Día de Factura</h2>
+        <section formArrayName="groups" *ngFor="let order of form.controls.groups.controls; let i = index" class="date-box">
+          <mat-checkbox [checked]="selected === i" (change)="selected = i" [formControlName]="i" class="example-margin"> Vencimiento:{{days[i].due}}, Estado de Cuenta: {{days[i].state}}</mat-checkbox>
+        </section>
+      </div>
+
+      <div class="container-form" [formGroup]="form2">
+        <h2>Dígitos Verificadores</h2>
+        <section formArrayName="groups" *ngFor="let order of form2.controls.groups.controls; let i = index" class="date-box">
+          <mat-checkbox [formControlName]="i" class="example-margin"> {{digits[i].digit}}</mat-checkbox>
+        </section>
+      </div>
+      <div class="container-form" [formGroup]="form3">
+        <h2>Plataformas</h2>
+        <section formArrayName="groups" *ngFor="let order of form3.controls.groups.controls; let i = index" class="date-box">
+          <mat-checkbox [formControlName]="i" class="example-margin"> {{platforms[i].platform}}</mat-checkbox>
+        </section>
+      </div>
+    </mat-card-content>
+
+    <div class="container-buttons">
+      <button mat-button (click)="goHome()" class="i-left-arrow button-tertiary">Home</button>
+      <div class="main-buttons">
+        <button mat-raised-button (click)="submit()" class="button-primary"
+                [disabled]="disabledSave()">Enviar</button>
+      </div>
+    </div>
+  </mat-card>
+</div>

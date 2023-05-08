@@ -1,0 +1,8 @@
+<app-table-generic [dataTable]="exampleData"
+                 [definitionColumns]="definitionColumns"
+                 [withButtonDelete]="true"
+                 [displayedColumns]="exampleCols"
+                 (deleteElements)="toDelete($event)"
+                 (event)="getNewEvent($event)"
+                 (actionButton)="getNewAction($event)"
+></app-table-generic>

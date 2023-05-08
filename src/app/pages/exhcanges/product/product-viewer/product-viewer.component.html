@@ -1,0 +1,43 @@
+<div class="main-container-mobile">
+  <div class="draw-reciever"></div>
+  <div class="draw-display">
+    <div class="i-bar-phone"></div>
+    <div class="menu-app">
+      <div class="i-back"></div>
+      <span class="header-app">Canjear Puntos</span>
+      <div class="i-menu"></div>
+    </div>
+    <div class="info-app">
+
+      <div class="container-info-benefits">
+          <div class="description">
+              <p class="action-select"> {{ product.actionSelectProduct ? product.actionSelectProduct : 'Mensaje de confirmación de canje' }} </p>
+          </div>
+      </div>
+      <div class="container-photo">
+        <div class="container-info-benefits">
+            <div class="description">
+                <p class="title"> {{ product.confirmationSelectedTitle ? product.confirmationSelectedTitle : 'Título de confirmación' }} </p>
+            </div>
+        </div>
+        <img src="{{product.image}}" alt="Imagen" title="Imagen del producto" class="primary-photo">
+    </div>
+
+    <div class="container-info-benefits">
+        <div class="description">
+            <p class="title"> {{ product.selectedTitle ? product.selectedTitle : 'Título de producto seleccionado' }} </p>
+            <p class="subtitle">{{ product.selectedSubtitle ? product.selectedSubtitle : 'Subtítulo de producto seleccionado' }} </p>
+            <p *ngIf="product.category === 'gift-card'" class="text-validation">Vence: {{ dateOneYear | date:'dd/MM/yyyy'}} </p>
+            <p *ngIf="product.category !== 'latam' && product.category !== 'gift-card' && expirationDate" class="text-validation">Vence: {{ expirationDate.toDate() | date:'dd/MM/yyyy'}} </p>
+        </div>
+        <div class="button-container">
+          <div class="purple-button">Continuar</div>
+        </div>
+        <div class="button-container">
+          <div class="button alternative i-add">Ver Términos y Condiciones</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="draw-home-button"></div>
+</div>

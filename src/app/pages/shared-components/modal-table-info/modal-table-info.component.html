@@ -1,0 +1,98 @@
+<div class="modal-container">
+  <div class="box-info-modal">
+    <h2 class="title-modal title-modal-{{modalData?.titleColor}}" mat-dialog-title [innerHTML]="modalData?.title"></h2>
+    <p class="message-modal">Canjes realizados por el usuario {{params?.userId}}</p>
+    <div class="table-header" *ngIf="!!dataSource && !loading">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro">
+      </mat-form-field>
+    </div>
+    <div *ngIf="!dataSource && !loading">
+      <p>Sin resultados.</p>
+    </div>
+    <div *ngIf="loading" class="loading-bar">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <div class="table-container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort>
+
+        <!-- fullName Column -->
+        <ng-container matColumnDef="fullName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.fullName}} </mat-cell>
+        </ng-container>
+
+        <!-- category Column -->
+        <ng-container matColumnDef="category">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Categoría </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.category}} </mat-cell>
+        </ng-container>
+
+        <!-- points Column -->
+        <ng-container matColumnDef="points">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Ripley Puntos </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.points}} </mat-cell>
+        </ng-container>
+
+        <!-- status Column -->
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.status}} </mat-cell>
+        </ng-container>
+
+        <!-- createdAt Column -->
+        <ng-container matColumnDef="createdAt">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de creación </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{getParsedDate(row.createdAt)}} </mat-cell>
+        </ng-container>
+
+        <!-- executedBy Column -->
+        <ng-container matColumnDef="executedBy">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Ejecutado por </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.executedBy?.email}} </mat-cell>
+        </ng-container>
+
+        <!-- aurisNumber Column -->
+        <ng-container matColumnDef="aurisNumber">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> aurisNumber </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.aurisNumber ? row.aurisNumber : 'No asignado'}} </mat-cell>
+        </ng-container>
+
+        <!-- folio Column -->
+        <ng-container matColumnDef="productFolio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Folio </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.category === 'gift-card' ? row.productFolio : '-'}} </mat-cell>
+        </ng-container>
+
+        <!-- code Column -->
+        <ng-container matColumnDef="code">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.code ? row.code: 'Sin código'}} </mat-cell>
+        </ng-container>
+
+        <!-- origin Column -->
+        <ng-container matColumnDef="origin">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Canal </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.origin ? row.origin: 'APP'}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="box-button-modal">
+    <button class="mat-raised-button button-tertiary" *ngIf="!!modalData?.leftButton" (click)="closeModal('left')">
+      {{ modalData?.leftButton }}</button>
+    <button class="mat-raised-button button-primary" (click)="closeModal('right')">{{ modalData?.rightButton }}</button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,69 @@
+<div class="main-container">
+  <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+  <mat-card *ngIf="!isLoading" class="container-info">
+    <div class="container-title">
+      <p class="title"> Categorías de
+        <span class="title-highlighted">Canje</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-table">
+    <div class="search">
+      <input type="text" (keyup)="applyFilter($event.target.value)" placeholder="Buscar..."
+        class="input-search i-search">
+    </div>
+    <div *ngIf="!isLoading" class="tab-content">
+      <div class="dates-table">
+        <mat-table [dataSource]="categoriesDataSource">
+          <ng-container matColumnDef="order">
+            <mat-header-cell *matHeaderCellDef> Orden </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <input matInput type="number" [(ngModel)]="element.order" (change)="setOrderOnCategory(element)"
+                     class="input-order">
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="category">
+            <mat-header-cell *matHeaderCellDef> Categoría </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.name ? element.name : element.categoryId}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.active ? 'Publicado' : 'No Publicado'}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="expirationDate">
+            <mat-header-cell *matHeaderCellDef> Fecha Expiración </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ getExpirationDate(element.expirationDate) }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="statusToggle">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <mat-slide-toggle class="example-margin" [color]="color"
+                                [checked]="element.active" (change)="toggleChange(element)"
+                                [disabled]="modifyingCategory || element.order === null || element.order === 0">
+              </mat-slide-toggle>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="modifyOrDelete">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element" class="actions-table">
+              <button (click)="editCategory(element)" class="i-edit" [disabled]="modifyingCategory"></button>
+              <button class="i-copy" (click)="copyCategory(element)" [disabled]="modifyingCategory"></button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+  </mat-card>
+  <div *ngIf="!isLoading" class="container-new-category">
+    <span class="title-button">Nueva Categoría</span>
+    <button mat-fab class="button-new-category" (click)="addCategory()">+</button>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="component-container">
+  <div class="upload-button-quaternaty">
+    <button [disabled]="isLoading || isDisabled" mat-raised-button class="button-quaternaty">{{text}}
+      <input class="file-input" type="file" (change)="change($event)" accept="{{extensionNames}}"
+        [disabled]="isLoading || isDisabled">
+    </button>
+
+    <div *ngIf="isLoading" class="spinner-button">
+      <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+    </div>
+    <div *ngIf="showExtensions" class="tip-image extensions">Formato de archivo: {{extensionNames}}</div>
+    <div *ngIf="description" class="tip-image">{{description}}</div>
+    <div *ngIf="!isLoading">
+      <div *ngIf="!fileUrl" class="name-archive">
+        Ningún archivo cargado
+      </div>
+    </div>
+
+    <div *ngIf="fileUrl">
+      <span class="name-archive">{{fileUrl}}</span>
+      <div *ngIf="showUrl && fileFirebaseUrl !== undefined">
+        <p>{{fileFirebaseUrl}}</p>
+        <div class="copy" (click)="copy(fileFirebaseUrl)">
+          <mat-icon class="i-copy"></mat-icon>
+          <p>copiar</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="image-section" *ngIf="showImage && fileFirebaseUrl">
+    <div class="image-container">
+      <div *ngIf="isRenderingImg" class="spinner-img">
+        <mat-progress-spinner color="accent" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+      </div>
+      <img [src]="fileFirebaseUrl" class="image" (load)="stopLoader()">
+    </div>
+    <div class="i-undo icon" *ngIf="fileFirebaseUrl && (fileFirebaseUrl !== inputUrl || keepChanging) && !isRenderingImg" (click)="undoChanges()"></div>
+    <div class="i-trash-alt icon" *ngIf="fileFirebaseUrl && !isRenderingImg" (click)="deleteImage()"></div>
+  </div>
+</div>

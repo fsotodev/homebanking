@@ -1,0 +1,30 @@
+.notification {
+    display: flex;
+    width: 580px;
+    margin: auto;
+    padding: 1rem;
+    border-radius: 8px;
+    align-items: center;
+    height: 46px;
+}
+
+.color-success{
+    background: #EBDAFF;
+
+    .text{
+        font-weight: 700;
+        font-size: 12px;
+        color: #3C215B;
+    }
+}
+
+.color-error{
+    background: #FFE9EB;
+
+    .text{
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+        color: #440006;
+    }
+}

@@ -1,0 +1,375 @@
+.full-width {
+    min-width: 150px;
+    max-width: 500px;
+    width: 80%;
+}
+
+.container-benefit-list {
+    display: flex;
+    flex-direction: column;
+    width: 310px;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+    border-radius: 4px;
+}
+
+.body-card-list {
+    padding: 8px;
+}
+
+.period {
+    position: absolute;
+    line-height: 13.5px;
+    color: white;
+    margin: 10px;
+    height: auto;
+    padding: 5px;
+    right: 160px;
+    line-height: 13.5px;
+    box-shadow: none;
+    border-radius: 3px;
+    background-color: rgb(142, 63, 147);
+}
+
+.logo-benefit {
+    position: absolute;
+    margin-top: 35px;
+
+    img {
+        background-color: white;
+        margin-left: 5px;
+    }
+
+}
+
+.advice-user {
+    border-radius: 4px;
+    background: #F8F8F8;
+}
+
+.title-benefit-list {
+    font-family: "Montserrat Semibold";
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: 0.15px;
+    color: #FFB81C;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.subtitle-benefit-list {
+    font-family: "Montserrat Semibold";
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0.1px;
+    color: #523178;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.discount-benefit-list {
+    font-family: "Montserrat Semibold";
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.15px;
+    color: #523178;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.coverage-benefit-list {
+    font-family: "Montserrat Semibold";
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0.1px;
+    color: #434447;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.short-desc-benefit-list {
+    font-family: "Montserrat Semibold";
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.1px;
+    color: #585858;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.more-info {
+    font-family: "Montserrat Semibold";
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.25px;
+    text-decoration-line: underline;
+    color: #8C4799;
+    margin-top: 9px;
+    margin-bottom: 5px;
+}
+
+.restofans-icon {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    background-color: var(--color-bg-grey-dark);
+    height: 60px;
+    align-items: center;
+}
+
+.cards-icon {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--color-bg-grey-dark);
+    height: 60px;
+    align-items: center;
+}
+
+.category-button-icon {
+    height: 34px;
+    width: 56px;
+    display: flex;
+    align-items: center;
+}
+
+.category-button-icon-card {
+    height: 34px;
+    width: 56px;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.category-button-icon-card-detail {
+    height: 34px;
+    width: 93px;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.card-text {
+    margin-left: 8px;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    letter-spacing: 0.15px;
+}
+
+.category-button-icon-opacity {
+    width: 40px;
+    height: 40px;
+    opacity: 30%;
+}
+
+.i-category-restofan {
+    background-repeat: no-repeat;
+    background-image: url(../../../../../assets/icon/benefits/restaurant.svg);
+}
+
+.i-category-delivery {
+    background-repeat: no-repeat;
+    background-image: url(../../../../../assets/icon/benefits/scooter-morado-vector.svg);
+}
+
+.i-category-pickup {
+    background-repeat: no-repeat;
+    background-image: url(../../../../../assets/icon/benefits/shopping-bag.svg);
+}
+
+.i-category-deb-mc {
+    background-repeat: no-repeat;
+    background-image: url(../../../../../assets/icon/benefits/debito-mc.svg);
+    background-size: 56px 34px !important;
+}
+
+.i-calendar {
+    background-repeat: no-repeat;
+    background-image: url(../../../../../assets/icon/benefits/calendar.svg);
+    background-size: 56px 34px !important;
+}
+
+.i-category-master {
+    background-repeat: no-repeat;
+    background-image: url(../../../../../assets/icon/benefits/credito.svg);
+    background-size: 56px 34px !important;
+}
+
+.i-category-credit {
+    background-repeat: no-repeat;
+    background-image: url(../../../../../assets/icon/benefits/ripley.svg);
+    background-size: 56px 34px !important;
+}
+
+.i-maps {
+    background-repeat: no-repeat;
+    background-image: url(../../../../../assets/icon/benefits/maps.svg);
+    background-size: 16px 16px !important;
+}
+
+.i-timer {
+    background-repeat: no-repeat;
+    background-image: url(../../../../../assets/icon/benefits/timer.svg);
+    background-size: 16px 16px !important;
+}
+
+.i-phone {
+    background-repeat: no-repeat;
+    background-image: url(../../../../../assets/icon/benefits/phone.svg);
+    background-size: 16px 16px !important;
+}
+
+.i-map-selection {
+    background-repeat: no-repeat;
+    background-image: url(../../../../../assets/icon/benefits/map-selection.svg);
+    background-size: 16px 16px !important;
+}
+
+.container-benefit-detail {
+    margin-top: 10px;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+    border-radius: 4px;
+    width: 375px;
+}
+
+.period-detail {
+    position: absolute;
+    background-color: #8C4799;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    width: 365px;
+    height: 42px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 3;
+}
+
+.main-image {
+    width: 375px;
+    height: 244px;
+}
+
+.logo-benefit-detail {
+    position: absolute;
+    margin-top: 110px;
+    background-color: white;
+    margin-left: 5px;
+}
+
+.logo-benefit-detail-img {
+    height: 110px;
+}
+
+.restofans-icon-detail {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    background-color: var(--color-bg-grey-dark);
+    height: 60px;
+    align-items: center;
+    align-items: center;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.mr-1 {
+    margin-left: 5px;
+}
+
+.category-card-icon {
+    width: 58px;
+    height: 36px;
+    padding: 3px;
+    border-radius: 7px;
+}
+
+
+.cards-icon-detail {
+    display: flex;
+    background-color: #F8F8F8;
+    height: 60px;
+    align-items: center;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+.category-button-icon-restofan {
+    height: 40px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    img {
+        height: 34px;
+        width: 34px;
+    }
+}
+
+.img-responsive {
+    align-content: stretch;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.img-logo {
+    height: 71px;
+}
+
+.text-info {
+    margin-left: 20px;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 21px;
+    letter-spacing: 0.25px;
+    color: #434447;
+}
+
+.section-info {
+    padding-left: 22px;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    color: #434447;
+}
+
+.gold-benefit {
+    color: #FFB81C;
+}
+
+.terms {
+    margin-left: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.25px;
+    text-decoration-line: underline;
+    color: #523178;
+}
+
+.btn-web {
+    width: 342px;
+    height: 48px;
+    background: #A695BF;
+    border-radius: 4px;
+    color: white;
+    border-color: #A695BF;
+    margin-left: 20px;
+}
+
+.cont-web {
+    height: 70px;
+}

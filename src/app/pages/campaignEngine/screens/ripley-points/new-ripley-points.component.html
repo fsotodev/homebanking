@@ -1,0 +1,102 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title">
+        {{ isEditing ? 'Actualizar ' : 'Nueva ' }}
+        <span class="title-highlighted">pantalla de Ripley puntos</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form" style="display: flex; flex-direction: column;">
+    <mat-card-content class="container-info-form">
+      <div class="column">
+        <form class="container-form"  [formGroup]="ripleyPointsForm">
+          <section class="dates-info">
+            <mat-form-field class="input-info field-text">
+              <input matInput type="text" placeholder="Id" formControlName="id" required maxlength="2000">
+              <mat-hint>Ej: ripleypoints-0225-SA</mat-hint>
+              <mat-hint class="input-length" align="end">{{ ripleyPointsWP.id ? ripleyPointsWP.id.length
+                : 0 }} / 2000</mat-hint>
+              <mat-error *ngIf="ripleyPointsForm.get('id').hasError('screenExistance')">El id ya está en uso</mat-error>
+
+            </mat-form-field>
+            <mat-form-field class="input-info field-text" formGroupName="mainTitle">
+              <input matInput type="text" 
+                placeholder="Título principal" 
+                formControlName="text"
+                required 
+                maxlength="2000">
+              <mat-hint>Ej: Bienvenido al mundo de tu tarjeta</mat-hint>
+              <mat-hint class="input-length" align="end">{{ ripleyPointsWP.mainTitle.length }} / 2000</mat-hint>
+            </mat-form-field>
+            <mat-form-field class="input-info field-text" formGroupName="subTitle">
+              <input matInput type="text" 
+                placeholder="Sub-título" 
+                formControlName="text"
+                required 
+                maxlength="2000">
+              <mat-hint>Ej: Bienvenido al mundo de tu tarjeta</mat-hint>
+              <mat-hint class="input-length" align="end">{{ ripleyPointsWP.subTitle.text.length }} / 2000</mat-hint>
+            </mat-form-field>
+            <h4>Beneficios</h4>
+            <section formArrayName="items" *ngFor="let benefit of ripleyPointsItems['controls']; let i=index">
+              <div  [formGroupName]="i">
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text" placeholder="Título elemento {{ i + 1 }}"
+                    formControlName="title"
+                    maxlength="2000">
+                  <mat-hint>Ej: 0sTOsiMsGdl5vmfT6c4e</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ benefit.get('description').value.length}} / 2000</mat-hint>
+                </mat-form-field>
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text" placeholder="Descripción elemento {{ i + 1 }}"
+                    formControlName="description"
+                    maxlength="2000">
+                  <mat-hint>Ej: 0sTOsiMsGdl5vmfT6c4e</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ benefit.get('description').value.length}} / 2000</mat-hint>
+                </mat-form-field>
+                <app-load-file-button [text]="uploadIconText(i)" [extensions]="extensions"
+                  [emitUrl]="true" [showUrl]="false" [folder]="uploadFolder" (url)="receiveUrl($event, benefit)"
+                  [isLoading]="isUploadingImage" [inputUrl]="benefit.get('iconURL').value"
+                  [description]="'Dimensiones: 20 x 20 px'">
+                </app-load-file-button>
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text" placeholder="Color elemento {{ i + 1 }}" formControlName="color">
+                  <mat-hint>Ej: #4f2d7f</mat-hint>
+                </mat-form-field>
+                <button 
+                  mat-icon-button 
+                  type="button" 
+                  (click)="removeRipleyPointItem(i)" 
+                  class="delete-btn">
+                  <mat-icon aria-label="Eliminar" class="i-trash-alt icon-small delete-icon"></mat-icon>
+                  Remover elemento {{ i + 1 }}
+                </button>
+              </div>
+            </section>
+            <br>
+            <button mat-button class="button-quaternaty no-w mat-button" type="button" (click)="addRipleyPointItem()">
+              Agregar beneficio
+            </button>
+          </section>
+        </form>
+      </div>
+      <div class="screen" id="sticky">
+        <div class="screen">
+          <app-ripley-points-preview [ripleyPointsWP]="ripleyPointsWP"></app-ripley-points-preview> 
+        </div>
+      </div>
+    </mat-card-content>
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary back-btn">volver</button>
+      <button mat-raised-button
+        class="button-primary"
+        [disabled]="isLoading || isFormInvalid"
+        type="button"
+        (click)="saveScreen()"
+      >
+        {{isEditing ? 'Actualizar' : 'Crear'}}
+      </button>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,57 @@
+@import '../../../../global.scss';
+
+.main-benefits-container {
+  display: flex;
+  flex-direction: column;
+
+  .title-section {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .period-list {
+    width: 100%;
+
+    .period-list-item {
+      .period-label {
+        margin-right: 20px;
+        display: inline;
+      }
+
+      .period-input {
+        margin-right: 20px;
+        width: 210px;
+      }
+
+      .period-button {
+        color: white;
+      }
+    }
+  }
+}
+
+.spinner {
+  margin-top: 20px;
+}
+
+::ng-deep {
+  .spinner-button {
+    height: 34px;
+    display: inline-block;
+    margin-left: 6px;
+
+    mat-progress-spinner.spinner.mat-progress-spinner.mat-progress-spinner-indeterminate-animation.mat-accent {
+      width: 18px !important;
+      height: 18px !important;
+
+      svg {
+        width: 18px !important;
+        height: 18px !important;
+
+        circle {
+          stroke: $purple;
+        }
+      }
+    }
+  }
+}

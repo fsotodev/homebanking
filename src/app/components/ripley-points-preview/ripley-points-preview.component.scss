@@ -1,0 +1,61 @@
+@import '../../../global.scss';
+
+.main-screen {
+  height: 785px;
+  border-radius: 10px;
+}
+
+.container-top {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  align-items: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 32px 8px 32px;
+  width: 100%;
+  .image {
+    width: 100%;
+  }
+  .main-title {
+    color: #ffbf3f;
+    font-size: 16px;
+    font-weight: unset;
+    line-height: 16px;
+    padding: 0 20px;
+  }
+}
+
+
+
+.container-bottom {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 0 32px;
+  width: 100%;
+  .benefits {
+    list-style: none;
+    padding: 0;
+    .benefits-item {
+      display: flex;
+      align-items: center;
+      .benefits-item__logo {
+        height: 20px;
+        margin-right: 16px;
+        width: 20px;
+      }
+      .benefits-item__title {
+        font: 13px $font-semibold;
+        margin-bottom: 6px;
+        width: 100%;
+      }
+      .benefits-item__description {
+        font: 13px $font-regular;
+        width: 100%;
+      }
+    }
+  }
+}

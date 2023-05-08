@@ -1,0 +1,56 @@
+<div class="step-title">Acciones</div>
+<div [formGroup]="fifthStepForm">
+  <p class="title-section title-image">Acción de botón multi-funcional</p>
+  <mat-slide-toggle class="full-width" formControlName="showLink" [(ngModel)]='show'></mat-slide-toggle>
+  
+  <div *ngIf="show">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Texto boton multifuncional" formControlName="linkText" [(ngModel)]="linkText">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Accion boton multifuncional" formControlName="dynamicUrl" [(ngModel)]="dynamicUrl">
+    </mat-form-field>
+    <mat-button-toggle-group #group class="full-width togle-style">
+      <mat-button-toggle (click)="setDynamicUrl('avsav')">
+        Avances
+      </mat-button-toggle>
+      <mat-button-toggle (click)="setDynamicUrl('benefits')">
+        Beneficios
+      </mat-button-toggle>
+      <mat-button-toggle (click)="setDynamicUrl('pay')">
+        Pagar
+      </mat-button-toggle>
+      <mat-button-toggle (click)="setDynamicUrl('transfer')">
+        Transferir
+      </mat-button-toggle>
+      <mat-button-toggle (click)="setDynamicUrl('newcode')">
+        Nuevo codigo
+      </mat-button-toggle>
+      <mat-button-toggle (click)="setDynamicUrl('subscribe')">
+        Suscribir
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <mat-form-field class="full-width mt-3">
+    <input matInput placeholder="Texto para compartir" formControlName="shareText" [(ngModel)]="shareText">
+    <mat-hint>URL del beneficio del sitio público</mat-hint>
+  </mat-form-field>
+
+  <div class="mt-2">
+    <button mat-button matStepperPrevious>Regresar</button>
+    <button mat-raised-button class="button-primary text-white mt-3" matStepperNext [disabled]="!fifthStepForm.valid"
+      (click)="saveStepFive()">Siguiente</button>
+    <button mat-raised-button class="button-secundary mt-3" [disabled]="!fifthStepForm.valid"
+      (click)="saveStepFive()">Previsualizar</button>
+  </div>
+ <!--
+  <div>
+    <div *ngIf="newBenefitService.selectedSegmentationType == 'sinsegmentacion'">
+      <button mat-button matStepperPrevious>Regresar</button>
+    <button mat-raised-button class="button-primary text-white mt-3" matStepperNext [disabled]="!fifthStepForm.valid"
+      (click)="saveStepFive()">Siguiente</button>
+    <button mat-raised-button class="button-secundary mt-3" [disabled]="!fifthStepForm.valid"
+      (click)="saveStepFive()">Previsualizar</button>
+  </div>
+  -->
+</div>

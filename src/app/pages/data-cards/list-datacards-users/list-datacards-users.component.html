@@ -1,0 +1,47 @@
+<div class="main-container">
+  <mat-progress-spinner *ngIf="loadingData" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+  <ng-container *ngIf="!loadingData">
+    <mat-card class="main-table" *ngIf="!loadingData">
+      <div class="search">
+        <input type="text" (keyup)="applyFilter($event.target.value)" placeholder="Buscar..."
+               class="input-search i-search">
+      </div>
+
+      <div class="dates-table">
+        <div *ngIf="usersList.length === 0" class="empty-message">Aún no hay usuarios creados.</div>
+        <mat-table *ngIf="usersList.length > 0" #table [dataSource]="usersDataSource">
+<!--               Periodicity Column -->
+          <ng-container matColumnDef="rut">
+            <mat-header-cell *matHeaderCellDef> RUT </mat-header-cell>
+            <mat-cell *matCellDef="let user" matTooltip=""> {{user.rut}} </mat-cell>
+          </ng-container>
+
+          <!-- Status toogle Column -->
+          <ng-container matColumnDef="enabled">
+            <mat-header-cell *matHeaderCellDef> HABILITADO </mat-header-cell>
+            <mat-cell *matCellDef="let user">
+              <mat-slide-toggle class="example-margin" [color]="color"
+                                [checked]="user.enabled === true" (change)="toggleChange(user)"
+                                [disabled]="modifiyingUser">
+              </mat-slide-toggle>
+            </mat-cell>
+          </ng-container>
+
+          <!-- Modify or Delete Column -->
+          <ng-container matColumnDef="modifyOrDelete">
+            <mat-header-cell *matHeaderCellDef>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let user" class="actions-table">
+              <button class="i-delete" (click)="deleteUser(user)" [disabled]="modifiyingUser"></button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+
+    </mat-card>
+  </ng-container>
+
+</div>

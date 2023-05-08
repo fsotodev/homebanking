@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="15px" viewBox="0 0 12 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <title>ic_delete</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="edit-delete" transform="translate(-35.000000, -3.000000)" fill="#97999B">
+            <g id="ic_delete" transform="translate(35.000000, 3.000000)">
+                <path d="M1.03759398,13.2046784 C1.03759398,14.1052632 1.78195489,14.8421053 2.69172932,14.8421053 L9.30827068,14.8421053 C10.2180451,14.8421053 10.962406,14.1052632 10.962406,13.2046784 L10.962406,3.38011696 L1.03759398,3.38011696 L1.03759398,13.2046784 L1.03759398,13.2046784 Z M11.7894737,0.923976608 L8.89473684,0.923976608 L8.06766917,0.105263158 L3.93233083,0.105263158 L3.10526316,0.923976608 L0.210526316,0.923976608 L0.210526316,2.56140351 L11.7894737,2.56140351 L11.7894737,0.923976608 L11.7894737,0.923976608 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

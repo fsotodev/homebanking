@@ -1,0 +1,202 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> {{ id ? 'Actualizar' : 'Nueva' }}
+        <span class="title-highlighted">Categoria</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <div class="container-form" [formGroup]="categoryForm">
+        <section class="date-box benefit-header-box">
+          <section class="dates-info">
+            <section>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="ID de la categoría" formControlName="categoryId"
+                  [(ngModel)]="category.categoryId">
+                <mat-hint>Ej: palumbo.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Titulo de categoría" formControlName="categoryTitle"
+                [(ngModel)]="category.categoryTitle">
+                <mat-hint>Ej: ¿Cómo uso mi código?</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Nombre de la categoría" formControlName="name"
+                [(ngModel)]="category.name">
+                <mat-hint>Ej: palumbo.</mat-hint>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput [matDatepicker]="pickerEnd" placeholder="Fecha de expiración" formControlName="expirationDate"
+                [(ngModel)]="category.expirationDate">
+                <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                <mat-datepicker #pickerEnd></mat-datepicker>
+              </mat-form-field>
+              <div class="user-location">
+                <mat-checkbox [(ngModel)]="category.active" [ngModelOptions]="{standalone: true}">Active
+                </mat-checkbox>
+              </div>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Texto del botón para seleccionar la categoría"
+                  formControlName="actionSelectProduct" [(ngModel)]="category.actionSelectProduct">
+                <mat-hint>Ej: Selecciona tu promoción Palumbo.</mat-hint>
+              </mat-form-field>
+              <!-- <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Tipo de código" formControlName="codeType"
+                  [(ngModel)]="category.codeType">
+              </mat-form-field> -->
+              <mat-form-field>
+                <mat-label>Elige un tipo de código</mat-label>
+                <mat-select formControlName="codeType" [(ngModel)]="category.codeType">
+                  <mat-option value="normal">Alfanumérico</mat-option>
+                  <mat-option value="barcode">Barras</mat-option>
+                  <mat-option value="">Ninguno</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Título de confirmación de producto seleccionado"
+                  formControlName="confirmationSelectedTitle" [(ngModel)]="category.confirmationSelectedTitle">
+                <mat-hint>Ej: Estás canjeando una Gift Card de:.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="number" placeholder="Orden" formControlName="order" [(ngModel)]="category.order">
+                <mat-hint>Ej: 1.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Mensaje de éxito" formControlName="successTitle"
+                  [(ngModel)]="category.successTitle">
+                <mat-hint>Ej: ¡Listo, úsala en cualquier tienda Ripley!.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Mensaje de banner vista detalle" formControlName="bannerText"
+                  [(ngModel)]="category.bannerText">
+                <mat-hint>Ej: Usa tus Ripley Puntos Go para sorprender a alguien especial</mat-hint>
+              </mat-form-field>
+            </section>
+            <section class="date-box">
+              <span class="title-section">Imágen de la Categoría</span>
+              <div class="special-info">
+                <div class="buttons-box">
+                  <div class="upload-button-quaternaty">
+                    <button mat-raised-button class="button-quaternaty">subir imagen</button>
+                    <input class="file-input" type="file" (change)="uploadImage($event.target.files)"
+                      accept=".png,.jpg,.svg" [disabled]="isUploadingImage">
+                    <div *ngIf="isUploadingImage" class="spinner-button">
+                      <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                    </div>
+                    <div class="name-archive" *ngIf="!isUploadingImage">
+                      {{ category.image ? category.image : 'Ningún archivo cargado.' }}</div>
+                    <span class="tip-image">Extensión imagen: .png .jpg .svg</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          </section>
+        </section>
+      </div>
+      <div class="container-form">
+        <section>
+          <span class="title-section">Instrucciones de Uso</span>
+          <br><br>
+
+          <div class="tips-container">
+            <div class="tip-input-line" *ngFor="let instruction of category.categoryInstructions; let i = index">
+              
+              <app-load-file-button class="load-file-button"
+                [fileFirebaseUrl]=""
+                [fileUrl]="" 
+                [text]="'Cargar icono'"
+                [extensions]="extensions" 
+                [emitUrl]="true"
+                [showUrl]="false"
+                [showImage]="true"
+                [showExtensions]="false"
+                (url)="receiveUrl($event, i, 'instruction')" 
+                [isLoading]="isUploadingImage"
+                [inputUrl]="category.categoryInstructions[i].iconURL">                
+              </app-load-file-button>
+
+              <div class="inline">
+                <mat-form-field class="text-input">
+                  <input matInput placeholder="Texto" [(ngModel)]="category.categoryInstructions[i].text">
+                </mat-form-field>
+  
+                <button mat-icon-button (click)="category.categoryInstructions.splice(i, 1)" class="delete-tip">
+                  <mat-icon aria-label="Eliminar" class="i-trash-alt icon-small"></mat-icon>
+                  Eliminar
+                </button>
+              </div>
+
+            </div>
+          </div>
+    
+          <button mat-raised-button class="button-add" (click)="addArrayOf('inst')">Agregar instrucción
+            <mat-icon aria-label="Agregar" class="i-plus"></mat-icon>
+          </button>
+        </section>
+
+        <br><br>
+        <section>
+          <span class="title-section">Condiciones de Categoría</span>
+          <br><br>
+
+          <div class="tips-container">
+            <div class="tip-input-line" *ngFor="let instruction of category.categoryTips; let i = index">
+              
+              <app-load-file-button class="load-file-button"
+                [fileFirebaseUrl]=""
+                [fileUrl]="" 
+                [text]="'Cargar icono'"
+                [extensions]="extensions" 
+                [emitUrl]="true"
+                [showUrl]="false"
+                [showImage]="true"
+                [showExtensions]="false"
+                (url)="receiveUrl($event, i, 'tip')" 
+                [isLoading]="isUploadingImage"
+                [inputUrl]="category.categoryTips[i].iconURL">                
+              </app-load-file-button>
+
+              <div class="inline">
+                <mat-form-field class="text-input">
+                  <input matInput placeholder="Titulo" [(ngModel)]="category.categoryTips[i].title">
+                </mat-form-field>
+                
+                <mat-form-field class="text-input">
+                  <input matInput placeholder="Subtitulo" [(ngModel)]="category.categoryTips[i].subtitle">
+                </mat-form-field>
+                
+                <button mat-icon-button (click)="category.categoryTips.splice(i, 1)" class="delete-tip">
+                  <mat-icon aria-label="Eliminar" class="i-trash-alt icon-small"></mat-icon>
+                  Eliminar
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <button mat-raised-button class="button-add" (click)="addArrayOf('tips')">Agregar condición
+            <mat-icon aria-label="Agregar" class="i-plus"></mat-icon>
+          </button>
+        </section>
+      </div>
+
+      <!-- <div *ngIf="product" class="container-view-mobile" id="sticky">
+        <app-product-viewer [product]="product" [expirationDate]="expirationDate"></app-product-viewer>
+      </div> -->
+    </mat-card-content>
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">volver</button>
+      <div *ngIf="!id" class="main-buttons">
+        <button mat-raised-button (click)="saveCategory()" class="button-primary"
+          [disabled]="!categoryForm.valid">Crear</button>
+      </div>
+      <div *ngIf="id" class="main-buttons">
+        <button mat-raised-button (click)="updateCategory()" class="button-primary"
+                [disabled]="!categoryForm.valid">Actualizar</button>
+      </div>
+    </div>
+  </mat-card>
+</div>

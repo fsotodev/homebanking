@@ -1,0 +1,23 @@
+@import '../../../../global.scss';
+
+.i-add {
+    background-size: 18px auto;
+    width: 22px;
+    height: 22px;
+    margin-right: 4px;
+    border: 0;
+    opacity: 0.8;
+    background-color: transparent;
+
+    &:hover {
+        cursor: pointer;
+        color: $purple;
+        outline-color: $white;
+        opacity: 1;
+    }
+
+    &:focus {
+        outline-color: $white;
+    }
+
+}

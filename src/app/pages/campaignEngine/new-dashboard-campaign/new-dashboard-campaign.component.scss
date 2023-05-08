@@ -1,0 +1,38 @@
+.banners-container {
+  display: flex;
+  flex-direction: row;
+}
+
+#sticky {
+  position: sticky;
+  position: -webkit-sticky;
+  width: fit-content;
+  height: fit-content;
+  top: 100px;
+  display: flex;
+}
+
+.image-preview {
+  width: 400px;
+  height: 200px;
+  background-size: cover;
+}
+
+// mat-form-field {
+//   margin-right: 100px;
+// }
+
+.params-object-input-container {
+  display: flex;
+  flex-direction: row;
+  width: 380px;
+  justify-content: space-between;
+
+}
+
+.main-container .main-container-form .container-info-form .container-form .params-object-input-container .input-info {
+  width: 184px;
+  margin-right: 0;
+}
+
+

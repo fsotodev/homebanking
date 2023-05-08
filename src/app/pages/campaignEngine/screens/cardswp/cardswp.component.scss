@@ -1,0 +1,31 @@
+.checkbox-container {
+  margin-bottom: 20px;
+  * {
+    padding: 0 10px;
+  }
+}
+
+.checkbox-container mat-checkbox {
+  margin-left: 0px;
+  display: block;
+}
+
+#sticky {
+  position: sticky;
+  position: -webkit-sticky;
+  height: fit-content;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 80px;
+}
+
+.banners-container {
+  width: 414px;
+  height: 100%;
+}
+
+button.save-btn { margin-top: 20px; }
+
+button.no-w { width: unset; }

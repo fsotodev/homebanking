@@ -1,0 +1,19 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+/*
+Import para variables de colores globales o de un componente
+*/
+@import "abstracts/variables";
+@import "abstracts/accordion";
+@import "abstracts/input";
+
+/*
+Import Styles para componentes html
+*/
+@import "components/buttons";
+@import "components/input";
+@import "components/buttons";
+@import "components/commons";
+@import "components/tabs";
+@import "components/paginator";
+@import "./node_modules/bootstrap/scss/bootstrap";

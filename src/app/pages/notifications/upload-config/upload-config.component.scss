@@ -1,0 +1,113 @@
+@import '../../../../global.scss';
+
+.mat-column-menu {
+  width: 32px;
+  text-align: center;
+}
+
+.mat-column-idDocument {
+  font-weight: bold;
+}
+
+.container-new-config {
+  width: 210px;
+  padding: 24px 0;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  bottom: 0;
+  z-index: 1;
+  float: right;
+  display: block;
+  margin-top: 1%;
+}
+
+.button-new-benefit {
+  background-color: $purple !important;
+  margin-left: 16px;
+
+  ::ng-deep {
+    .mat-button-wrapper {
+      font-size: 40px;
+      font-family: $font-light;
+    }
+  }
+}
+
+.dates-table {
+  .empty-message {
+    color: $grey;
+    font-size: 12.5px;
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .mat-header-row {
+    padding: 0 18px;
+    text-align: center;
+  }
+
+  .mat-header-cell {
+    color: $purple;
+    text-transform: uppercase;
+    font-family: $font-semibold;
+  }
+
+  .mat-cell {
+    color: $grey-ms;
+    font-size: 12.5px;
+    letter-spacing: 0.2px;
+    text-align: center;
+  }
+}
+
+.actions-table {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+
+  .i-edit {
+    background-size: 18px auto;
+  }
+
+  .i-calendar-edit {
+    background-size: 18px auto;
+  }
+
+  .i-delete {
+    background-size: 15px auto;
+  }
+
+  .i-edit,
+  .i-delete,
+  .i-copy,
+  .i-calendar-edit {
+    width: 22px;
+    height: 22px;
+    margin-right: 4px;
+    border: 0;
+    opacity: 0.8;
+    background-color: transparent;
+
+    &:hover {
+      cursor: pointer;
+      color: $purple;
+      outline-color: $white;
+      opacity: 1;
+    }
+
+    &:focus {
+      outline-color: $white;
+    }
+  }
+
+  .i-copy {
+    background-size: 20px auto;
+    margin-right: 0px;
+  }
+}

@@ -1,0 +1,66 @@
+@import '../../../global.scss';
+
+.main-container {
+  .main-container-form {
+    display: flex;
+    flex-wrap: wrap;
+    width: 1070px;
+    background-color: $white;
+    padding: 0 30px;
+    margin: 2px auto;
+    font-family: $font-bold;
+
+    .container-info-form {
+      display: flex;
+      flex-direction: row;
+      padding: 0;
+      width: 33%;
+
+      .container-form {
+        .date-box {
+          margin: 15px 0;
+        }
+      }
+    }
+
+    .spinner {
+      margin: 0 auto;
+    }
+
+    ::ng-deep {
+
+      .mat-progress-spinner circle,
+      .mat-spinner circle {
+        stroke: $purple;
+      }
+
+      .mat-slide-toggle-content {
+        width: 200px;
+      }
+
+    }
+  }
+}
+
+::ng-deep {
+  .spinner-button {
+    width: 84px;
+    height: 18px;
+    display: inline-block;
+    vertical-align: middle;
+
+    mat-progress-spinner.spinner.mat-progress-spinner.mat-progress-spinner-indeterminate-animation.mat-accent {
+      width: 18px !important;
+      height: 18px !important;
+
+      svg {
+        width: 18px !important;
+        height: 18px !important;
+
+        circle {
+          stroke: $purple;
+        }
+      }
+    }
+  }
+}

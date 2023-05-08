@@ -1,0 +1,114 @@
+.banners-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+#sticky {
+  position: sticky;
+  position: -webkit-sticky;
+  height: fit-content;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 80px;
+}
+
+.main-container .main-container-form .container-info-form .container-form .date-box .dates-info .date {
+  width: 49%;
+}
+
+.main-container .main-container-form .container-info-form .container-form {
+  width: unset;
+}
+
+//screen container
+.screen-container {
+  box-shadow: inset 0 -30px 40px -55px rgb(51, 51, 51);
+  overflow: scroll;
+  overflow-x: hidden;
+  border-radius: 10px;
+  background-color: gray;
+
+  &.desktop {
+    overflow: hidden;
+    height: 167px;
+    width: 320px;
+    margin-left: 10px;
+  }
+
+  &.mobile {
+    height: 368px;
+    width: 236px;
+  }
+
+  &.minime-container {
+    background-size: cover;
+    background-position: center;
+    box-shadow: unset;
+
+    .modal-close {
+      padding: 8px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .button-close {
+        width: 16px;
+        height: 16px;
+        background-size: contain;
+        border-radius: 100%;
+        background-size: 50%;
+        background-position: center;
+        border: 0;
+
+        &.desktop {
+          width: 12px;
+        height: 12px;
+        }
+      }
+    }
+
+    .brand-button {
+      position: absolute;
+      bottom: unset;
+      top: 374px;
+      left: 115px;
+      width: 150px;
+
+      &.desktop {
+        left: 400px;
+        width: 180px;
+        top: 195px;
+        bottom: unset;
+      }
+    }
+
+    .brand-button-confirmation {
+      position: absolute;
+      bottom: 35px;
+      left: 115px;
+      width: 150px;
+
+      &.desktop {
+        left: 400px;
+        width: 180px;
+        top: 676px;
+        bottom: unset;
+      }
+    }
+  }
+}
+
+.button-quaternaty {
+  &.disabled {
+    opacity: 0.8;
+  }
+}
+
+.error-msg { color: red; }
+
+.text-size-hint {
+  font-size: 10.5px;
+}

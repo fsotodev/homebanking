@@ -1,0 +1,4 @@
+<div *ngIf="timer" [ngClass]="getState.color" class="notification mt-4">
+    <span [ngClass]="getState.icon"></span>
+    <div [innerHTML]="getState.text" class="text"></div>
+</div>

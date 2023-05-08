@@ -1,0 +1,332 @@
+@import '../../../../../global.scss';
+
+.main-container-mobile {
+  background: $deep-blue;
+  height: 638px;
+  width: 360px;
+  float: right;
+  border-radius: 16px;
+  margin-top: 10%;
+
+  .draw-reciever {
+    height: 14px;
+    width: 90px;
+    background: $grey;
+    margin: 17px auto;
+    border-radius: 6px;
+  }
+
+  .draw-display {
+    height: 510px;
+    width: 320px;
+    background: $white;
+    margin: 0 auto;
+
+    .i-bar-phone {
+      height: 15px;
+      width: auto;
+      background-size: 320px;
+    }
+
+    .menu-app {
+      height: 25px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      padding: 10px 16px 0;
+
+      .i-back {
+        width: 20px;
+        height: 20px;
+        color: $purple;
+        float: left;
+        background-size: 16px;
+      }
+
+      .header-app {
+        text-align: center;
+        color: $purple;
+        font-size: 14px;
+        font-family: $font-semibold;
+      }
+
+      .i-menu {
+        width: 20px;
+        height: 20px;
+        color: $purple;
+        float: right;
+        background-size: 16px;
+      }
+    }
+
+    .info-app {
+      overflow-y: auto;
+      height: 460px;
+      cursor: default;
+
+      .container-photo {
+        background-color: $grey-soft;
+        height: 182px;
+        overflow: hidden;
+        position: relative;
+
+        img {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          height: 100%;
+          width: auto;
+          -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+          height: 100%;
+          color: $purple;
+          content: "";
+
+          &.primary-photo {
+            height: 60%;
+            -o-object-fit: cover;
+            object-fit: cover;
+          }
+        }
+      }
+
+      .container-info-benefits {
+        padding: 0 24px;
+        text-align: center;
+
+        .description {
+          height: 100%;
+
+          h2 {
+            font-size: 12px;
+            font-family: $font-regular;
+            color: $grey-darker;
+            margin-bottom: 2px;
+          }
+
+          .title {
+            font-size: 14px;
+            font-family: $font-bold;
+            color: $pink;
+            margin-bottom: 2px;
+            margin-top: 6px;
+          }
+
+          .action-select {
+            font-size: 12px;
+            font-family: $font-bold;
+            color: $pink;
+            margin-bottom: 2px;
+            margin-top: 6px;
+          }
+
+          .subtitle {
+            font-size: 9.5px;
+            font-family: $font-regular;
+            color: $pink;
+          }
+        }
+
+        .text-validation {
+          font-size: 12px;
+          font-family: $font-regular;
+          color: $grey-mid;
+          display: block;
+          text-align: center;
+          background-size: 11px;
+        }
+
+        .i-ticket {
+          background-size: 10px;
+        }
+
+        .i-card {
+          background-size: 14px;
+        }
+
+        .text-card {
+          padding-bottom: 0;
+        }
+
+        .container-local-nearby {
+          margin-bottom: 17px;
+          height: auto;
+          margin-top: 20px;
+
+          .title {
+            font-size: 10px;
+            font-family: $font-semibold;
+            color: $purple;
+            display: block;
+            margin-bottom: 8px;
+          }
+
+          .box-direction {
+            background: $white;
+            border: 0 solid $grey-soft;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            height: 36px;
+            border: 1px solid $grey-soft;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: 7px;
+
+            .box-distance {
+              -webkit-box-flex: 1;
+              -ms-flex-positive: 1;
+              flex-grow: 1;
+              line-height: 20px;
+
+              .text-distance {
+                font-size: 9.5px;
+                font-family: $font-semibold;
+                margin-left: 24px;
+              }
+            }
+
+            .box-location {
+              -webkit-box-flex: 1;
+              -ms-flex-positive: 1;
+              flex-grow: 1;
+              text-align: left;
+
+              .place {
+                font-size: 12px;
+                font-family: $font-regular;
+                color: $grey-darker;
+                line-height: 19px;
+              }
+
+              .direction-place {
+                font-size: 11px;
+                font-family: $font-regular;
+                color: $grey;
+                margin: 0;
+              }
+            }
+
+            .icon-next {
+              -webkit-box-flex: 1;
+              -ms-flex-positive: 1;
+              flex-grow: 1;
+              width: auto;
+              height: 20px;
+              background-position: right;
+              background-size: 7px;
+            }
+          }
+        }
+
+        .button-container {
+          margin-bottom: 30px;
+          bottom: 0;
+          color: $pink;
+          margin: 0 auto;
+          border: 1px solid $grey-soft;
+          padding: 11px;
+
+          .button.alternative {
+            margin: 0px;
+            text-align: center;
+            height: 30px;
+            font-size: 10px;
+            font-family: $font-semibold;
+          }
+
+          .purple-button {
+            background-color: $purple;
+            color: white;
+            text-align: center;
+            padding: 15px;
+          }
+        }
+      }
+    }
+  }
+
+  .draw-home-button {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: $grey-midlight;
+    margin: 12px auto;
+    border: 0.6px solid $grey-darker;
+  }
+}
+
+
+
+.box-day-benefits {
+  box-shadow: 0 1px 8px 0 rgba(228, 228, 228, 0.50);
+  border-radius: 6px;
+  min-height: 76px;
+  margin-top: 12px;
+  padding: 10px;
+  display: flex;
+  float: right;
+  align-items: center;
+  width: 329px;
+
+  .box-image-company {
+    padding: 0 9px;
+    // width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .image-day-company {
+      margin: 0 auto;
+      max-width: 80px;
+    }
+  }
+
+  .box-info-benefit {
+    width: 65%;
+
+    .day-benefit {
+      font: 12px $font-semibold;
+      color: $purple;
+      line-height: 16px;
+      margin: 0px 0px 6px 0px;
+    }
+
+    .discount-benefit {
+      font: 16px $font-bold;
+      color: $pink;
+      line-height: 15px;
+      margin: 0px 0px 2px 0px;
+    }
+
+    .subtitle-benefit {
+      font: 0.8em $font-regular;
+      color: $grey-mid;
+      line-height: 15px;
+      margin-top: 3px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      line-height: 16px;
+      max-height: 30px;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      margin: 0px 0px 0px 0px;
+    }
+  }
+
+  .i-arrow {
+    height: 13px;
+    width: 5%;
+    color: $purple;
+    background-position: right;
+  }
+}

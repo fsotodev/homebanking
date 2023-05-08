@@ -1,0 +1,82 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title">
+        <span class="title-highlighted"> Carga de RUT`s</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <div class="full-width mt-3">
+        <div class="upload-image">
+          <input class="custom-file-input" type="file" (change)="uploadBenefitRuts($event.target.files, false, $event.target)" accept=".csv">
+          <div class="name-archive">
+            {{ listBenefitPathRut.length ? '' : 'Ningún archivo cargado.' }}</div>
+        </div>
+        <div *ngIf="loader" class="overlay">
+          <div class="center">
+            <mat-progress-spinner diameter=50 mode="indeterminate" color="accent">
+            </mat-progress-spinner>
+          </div>
+        </div>
+        <span class="tip-image">Ejemplo CSV: IdBeneficio,Rut</span><br />
+        <span class="tip-image">Rut con digito verificador, sin guión</span><br />
+        <span class="tip-image">Sin títulos en la primera fila del CSV, solo datos</span><br />
+      </div>
+
+      <div>
+        <h3>{{benefitData.title}}</h3>
+        <img class="company-benefit-img" [src]="sanitizeUrl(benefitData.cardImageUrl)">
+        <p>{{benefitData.subtitle}}</p>
+        <p>{{benefitData.coverage}}</p>
+      </div>
+      <br>
+    </mat-card-content>
+    <mat-card-content class="container-info-form">
+
+      <span class="title-section" *ngIf=" listBenefitPathRut.length > 0">Historial
+        de Ruts
+        <ul class="table table-bordered table-condensed table-striped" fixed-header>
+          <li *ngFor="let item of listBenefitPathRut.slice().reverse(); let i = index">
+            {{item}}
+          </li>
+        </ul>
+      </span>
+
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <section class="date-box">
+        <div class="special-info">
+          <div class="buttons-box">
+            <div class="upload-button-quaternaty">
+              <button mat-raised-button class="button-quaternaty">des-asignar ruts</button>
+              <input id="uploadInputRut" class="file-input" type="file"
+                (change)="uploadBenefitRuts($event.target.files, true, $event.target)" accept=".csv">
+              <div class="name-archive">
+                {{ rutsUnassignFilePath.length ? '' : 'Ningún archivo cargado.' }}</div>
+              <span class="tip-image">Ejemplo CSV: IdBeneficio,Rut</span><br />
+              <span class="tip-image">Rut con digito verificador, sin guión</span><br />
+              <span class="tip-image">Sin títulos en la primera fila del CSV, solo datos</span><br />
+            </div>
+          </div>
+        </div>
+        <br>
+        <button mat-raised-button class="button-quaternaty"
+          onclick="window.history.go(-1); return false;">Regresar</button>
+      </section>
+      <section>
+        <span class="title-section" *ngIf=" rutsUnassignFilePath.length > 0">Historial
+          de Ruts
+          <ul class="table table-bordered table-condensed table-striped file-paths" fixed-header>
+            <li *ngFor="let item of rutsUnassignFilePath.slice().reverse(); let i = index">
+              {{item}}
+            </li>
+          </ul>
+        </span>
+      </section>
+    </mat-card-content>
+  </mat-card>
+</div>

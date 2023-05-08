@@ -1,0 +1,249 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> Notificaciones Push
+        <span class="title-highlighted">Campañas</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <div class="container-form" [formGroup]="campaignForm">
+        <section class="dates-info">
+          <mat-form-field class="input-info field-text">
+            <input matInput type="text" placeholder="Nombre de la campaña" formControlName="name" required>
+            <mat-hint>Ej: DescuentoPetrobras</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field  class="input-info field-text">
+            <input #notificationTitle matInput type="text" placeholder="Título de la campaña" formControlName="title" ng-maxlength="100" char-count required>
+            <mat-hint align="end">{{notificationTitle.value.length}} caracteres</mat-hint>
+            <mat-hint>
+              Ej: 30% de descuento en Petrobras <br>
+              El máximo de caracteres para el título en MacOS es 34, para Windows es 49 <br>
+              para Android es 47
+            </mat-hint>
+          </mat-form-field>
+
+
+          <mat-form-field class="input-info field-text">
+            <input #notificationDescription matInput type="text" placeholder="Descripción de la campaña" formControlName="subtitle" required>
+            <mat-hint align="end">{{notificationDescription.value.length}} caracteres</mat-hint>
+            <mat-hint>
+              Ej: Paga con las Tarjeta de Ripley para obtener un 30% de descuento <br>
+              El máximo de caracteres para la descripción en MacOS es 39, <br>
+              para Windows es 126 y para Android es 49
+            </mat-hint>
+          </mat-form-field><br>
+
+          <section class="date-box">
+            <span class="title-section">Imagen de notificación</span>
+            <div class="special-info">
+              <div class="buttons-box">
+                <div class="upload-button-quaternaty">
+                  <button mat-raised-button class="button-quaternaty">Subir imagen</button>
+                  <input class="file-input" type="file" (change)="uploadNotificationImage($event.target.files, 'small')"
+                         accept=".png,.jpg,.svg" [disabled]="isUploadingImage">
+                  <div *ngIf="isUploadingImage" class="spinner-button">
+                    <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                  </div>
+                  <div class="name-archive" *ngIf="!isUploadingImage">
+                    {{ campaign.options.pushImg ? campaign.options.pushImg : 'Ningún archivo cargado.' }}</div>
+                  <span class="tip-image">Formato: 50x50. Extensión imagen: .png .jpg .svg</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="date-box benefit-header-box">
+            <section class="dates-info">
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" maxlength="50" placeholder="Acción de redirección"
+                       [(ngModel)]="campaign.redirectType" formControlName="redirectType">
+                <mat-hint>Esta acción puede ser hacia un link externo (openLink) o una vista interna de la app (openApp).
+                </mat-hint>
+                <mat-hint align="end">{{ campaign?.redirectType ? campaign?.redirectType.length : 0 }} / 50
+                </mat-hint>
+              </mat-form-field>
+              <div class="available-pages-section">
+                <p class="subtitle-section">Redirección de notificación al clickear:</p>
+                <mat-chip-list>
+                  <mat-chip (click)="campaign.redirectType = 'openApp'">Interno</mat-chip>
+                  <mat-chip (click)="campaign.redirectType = 'openLink'">Externo</mat-chip>
+                </mat-chip-list>
+              </div>
+            </section>
+          </section>
+
+          <section class="date-box benefit-header-box">
+            <section class="dates-info">
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" maxlength="50" placeholder="Ruta de redirección"
+                       [(ngModel)]="campaign.redirectPath" formControlName="redirectPath">
+                <mat-hint>Ruta a la cual la notificación hara la redirección. Debe tener concordancia con la opción previamente seleccionada.
+                </mat-hint>
+                <mat-hint align="end">{{ campaign?.redirectPath ? campaign?.redirectPath.length : 0 }} / 50
+                </mat-hint>
+              </mat-form-field>
+              <div class="available-pages-section">
+                <p class="subtitle-section">Vista a redirigir</p>
+                <mat-chip-list>
+                  <mat-chip (click)="campaign.redirectPath = 'advance'">Avances</mat-chip>
+                  <mat-chip (click)="campaign.redirectPath = 'transfer'">Transferencias</mat-chip>
+                  <mat-chip (click)="campaign.redirectPath = 'benefits'">Beneficio</mat-chip>
+                  <mat-chip (click)="campaign.redirectPath = 'pay'">Pagar</mat-chip>
+                  <mat-chip (click)="campaign.redirectPath = 'benefitsWithoutLogin'">Listado de Beneficios</mat-chip>
+                  <mat-chip (click)="campaign.redirectPath = 'dashboard'">Dashboard Ripley Puntos</mat-chip>
+                  <mat-chip (click)="campaign.redirectPath = 'redeemCategory'">Canje</mat-chip>
+                  <mat-chip (click)="campaign.redirectPath = 'pursuit'">Perseguidora</mat-chip>
+                  <mat-chip (click)="campaign.redirectPath = 'reissue'">Reemisión</mat-chip>
+                  <mat-chip (click)="campaign.redirectPath = 'branchOffice'">Sucursales</mat-chip>
+                  <mat-chip (click)="campaign.redirectPath = 'ripleypoints'">Canje Giftcards</mat-chip>
+                </mat-chip-list>
+              </div>
+            </section>
+          </section>
+
+          <section>
+            <span class="title-section">Fecha de expiración</span>
+            <section class="dates-info">
+              <div class="date">
+                <input [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2" formControlName="expirationDate" placeholder="Ingrese fecha">
+                <owl-date-time #dt2></owl-date-time>
+              </div>
+            </section>
+            <section>
+              <mat-hint>
+                Luego de esta fecha la notificación no será mostrada en el buzón de notificaciones del dispositivo.
+              </mat-hint>
+            </section>
+          </section><br>
+
+          <mat-form-field>
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="status" (selectionChange)="select()" required>
+              <mat-option value="draft">Borrador</mat-option>
+              <mat-option value="scheduled">Programado</mat-option>
+              <mat-option value="immediate">Inmediato</mat-option>
+              <mat-option disabled value="completed">Completado</mat-option>
+              <mat-option disabled value="error">Error</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <section class="send-method-box">
+            <span class="title-section">Método de envío de la notificación</span>
+            <div class="send-method-checkboxes" formGroupName="checkboxes">
+              App: <input id="checkboxApp" formControlName="checkboxApp" type="checkbox" (change)="toggleAllowedSystems($event)" />
+              PWA: <input id="checkboxPWA" formControlName="checkboxPWA" type="checkbox" (change)="toggleWebUrlInput($event)" />
+            </div>
+          </section>
+
+          <section class="send-method-box">
+            <span class="title-section">Modalidad de carga</span>
+            <div class="send-method-checkboxes">
+              Automática: <input id="checkboxTypeSend" formControlName="isAutomaticCharge" type="checkbox"
+                [(ngModel)]="campaign.isAutomaticCharge" />
+            </div>
+          </section>
+
+          <section class="date-box" *ngIf="isPushAPP">
+            <section class="send-method-box">
+              <span class="title-section">Método de envío de la notificación</span>
+              <div class="send-method-checkboxes" formGroupName="checkboxes">
+                Apple: <input id="checkboxApple" formControlName="checkboxApple" type="checkbox" />
+                Android: <input id="checkboxAndroid" formControlName="checkboxAndroid" type="checkbox" />
+              </div>
+            </section>
+          </section>
+
+          <section class="date-box benefit-header-box" *ngIf="isPushPWA">
+            <section class="dates-info">
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" maxlength="100" placeholder="Ruta de redirección para Notificación Web"
+                       [(ngModel)]="campaign.redirectWebPush" formControlName="redirectWebPush">
+                <mat-hint>Ruta a la cual la notificación hara la redirección.
+                </mat-hint>
+                <mat-hint align="end">{{ campaign?.redirectWebPush ? campaign?.redirectWebPush.length : 0 }} / 100
+                </mat-hint>
+              </mat-form-field>
+
+              <span class="title-section">Imagen de Push Web</span>
+              <div class="special-info">
+                <div class="buttons-box">
+                  <div class="upload-button-quaternaty">
+                    <button mat-raised-button class="button-quaternaty">Subir imagen</button>
+                    <input class="file-input" type="file"
+                      (change)="uploadNotificationImage($event.target.files, 'small', true)" accept=".png,.jpg,.svg"
+                      [disabled]="isUploadingImage">
+                    <div *ngIf="isUploadingImage" class="spinner-button">
+                      <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                    </div>
+                    <div class="name-archive" *ngIf="!isUploadingImage">
+                      {{ campaign.imgWebPush ? campaign.imgWebPush : 'Ningún archivo cargado.' }}</div>
+                    <span class="tip-image">Extensión imagen: .png .jpg .svg</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </section>
+
+          <section *ngIf=hasToShowDateBox id='date-box'>
+            <span class="title-section">Día de ejecución</span>
+            <section class="dates-info">
+              <div class="date">
+                <input [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" formControlName="performAt" placeholder="Ingrese fecha">
+                <owl-date-time #dt1></owl-date-time>
+              </div>
+            </section>
+            <section>
+              <mat-hint>
+                Las notificaciones programadas se envian a las 00 de la hora siguiente. <br>
+                Ej: Si se programa una campaña a las 13:24, se enviarán las notificaciones a las 14:00 de ese mismo día.
+              </mat-hint>
+            </section>
+          </section>
+
+          <section class="date-box" *ngIf="showTestButton && !campaign.isAutomaticCharge">
+            <div class="special-info">
+              <div class="buttons-box">
+                <div class="upload-button-quaternaty">
+                  <button (click)="sendTestNotification()" mat-raised-button class="button-quaternaty">Testear notificaciones</button><br>
+                  <span class="tip-image">Enviar notificaciones de prueba para RUTs registrados en Firebase. Estas pueden tardar un poco en llegar dependiendo de la cantidad de usuarios de prueba</span><br>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="date-box" *ngIf="showRutsButton && !campaign.isAutomaticCharge">
+            <span class="title-section">Ruts</span>
+            <div class="special-info">
+              <div class="buttons-box">
+                <div class="upload-button-quaternaty">
+                  <span id='fileName'></span><br>
+                  <button mat-raised-button class="button-quaternaty">Subir ruts</button>
+                  <input id="uploadInputRut" class="file-input" type="file"
+                         (input)="showModalConfirmation($event.target.files, true)" accept=".csv"
+                         [disabled]="isUploadingRuts">
+                  <div *ngIf="isUploadingRuts" class="spinner-button">
+                    <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                  </div>
+                  <div class="name-archive" *ngIf="!isUploadingRuts"></div>
+                  <span class="tip-image">Debe ser un archivo .CSV con el mismo nombre de archivo que el nombre de esta campaña. </span><br />
+                  <span class="tip-image">El CSV no debe tener títulos en la primera fila, solo ruts sin puntos ni guión. </span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+
+        </section>
+      </div>
+    </mat-card-content>
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">Volver</button>
+      <div class="main-buttons">
+        <button id='saveButton' mat-raised-button (click)="newRedirect()" class="button-primary"
+                [disabled]="!campaignForm.valid || saving">Guardar</button>
+      </div>
+    </div>
+  </mat-card>
+</div>

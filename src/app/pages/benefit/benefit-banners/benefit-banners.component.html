@@ -1,0 +1,200 @@
+<div class="main-container">
+    <mat-card class="container-info">
+        <div class="container-title">
+            <p class="title"> Banners
+                <span class="title-highlighted">Beneficios</span>
+            </p>
+        </div>
+    </mat-card>
+    <mat-card class="main-table">
+        <div class="tab-content">
+            <mat-accordion class="example-headers-align">
+                <mat-expansion-panel *ngFor="let banner of benefitBannerList; index as i;" [expanded]="step === i"
+                    (opened)="setStep(i)" (closed)="closeStep(i)" hideToggle>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <button *ngIf="editedBanner !== i" class="i-caret-down-square"></button>
+                            <button *ngIf="editedBanner === i" class="i-arrow "></button>
+                            Banner {{i+1}}
+                        </mat-panel-title>
+
+                        <mat-panel-description>
+                            <div class="redeemTitle">
+                                {{banner.title}}   
+                                <span class="title-description">({{banner.description}})</span>
+                            </div>
+                            <div class="redeemStatus">
+                                {{banner.active | statusPipe}}
+                            </div>
+                            <div class="statusToggle">
+                                <mat-slide-toggle [color]="color"
+                                    [checked]="banner.active" (change)="toggleStatus(banner,i)"
+                                    class="statusButton">
+                                </mat-slide-toggle>
+                            </div>
+                            <div class="up-order-button">
+                                <button *ngIf="editedBanner === i && i > 0" mat-raised-button class="up-button" (click)="upOrder(i)">Subir</button>
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <mat-divider></mat-divider>
+
+                    <div class="editForm formPadding">
+                        <div class="titleField">
+                            <div *ngIf="!editingTitle">
+                                <div class="formFieldTitle">Título Banner {{i+1}}</div>
+                                <div class="formField">{{banner.title}}
+                                    <button class="i-edit icon-style" (click)="activeEditTitle(i, true)"> </button>
+                                </div>
+                            </div>
+                            <div [formGroup]="form" *ngIf="editingTitle && editedBanner === i" class="example-form">
+                                <mat-form-field class="example-full-width" appearance="standard">
+                                    <mat-label>Título Banner {{i+1}}</mat-label>
+                                    <input type="text" [attr.disabled]="isLoading" formControlName="title" matInput>
+                                    <br />
+                                    <mat-hint [class.warning-hint] = "form.controls.title?.value.length > MAX_TITLE">{{ titleMaxLength }}.
+                                       Largo actual: {{form.controls.title?.value.length}}
+
+                                    </mat-hint>
+                                    <mat-error *ngIf="form.controls.title.invalid">
+                                        {{getErrorMessage(form.controls.title)}}</mat-error>
+                                </mat-form-field>
+                                <button class="i-done icon-style" (click)="save(i,form.controls.title)"> </button>
+                                <button class="i-close icon-style" (click)="activeEditTitle(i, false)"> </button>
+                            </div>
+                        </div>
+
+                        <div class="titleField">
+                            <div *ngIf="!editingDescription">
+                                <div class="formFieldTitle">Descripción Banner  {{i+1}}</div>
+                                <div class="formField">{{banner.description}}
+                                    <button class="i-edit icon-style" (click)="activeEditDescription(i, true)"> </button>
+                                </div>
+                            </div>
+                            <div [formGroup]="form" *ngIf="editingDescription && editedBanner === i" class="example-form">
+                                <mat-form-field class="example-full-width" appearance="standard">
+                                    <mat-label>Descripción Banner</mat-label>
+                                    <input type="text" [attr.disabled]="isLoading" formControlName="description" matInput>
+                                    <mat-hint [class.warning-hint] = "form.controls.description?.value.length > MAX_DESCRIPTION">{{ descriptionMaxLength }}. Largo actual: {{form.controls.description?.value.length}}</mat-hint>
+                                    <mat-error *ngIf="form.controls.description.invalid">
+                                        {{getErrorMessage(form.controls.description)}}</mat-error>
+                                </mat-form-field>
+                                <button class="i-done icon-style" (click)="save(i, form.controls.description)"> </button>
+                                <button class="i-close icon-style" (click)="activeEditDescription(i, false)"> </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <mat-divider></mat-divider>
+
+                    <div class="uploadImagesSegment formPadding">
+                        <div class="imagesList">
+                            <table class="imgTable">
+                                <tr>
+                                    <th class="font">Imagen </th>
+                                    <th class="font">Formato</th>
+                                    <th class="font">Nueva Imagen</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a class="font clicable"   matTooltip="Ver imagen" (click)="openDialog(banner.imageXS)" >Móvil</a>
+                                    </td>
+                                    <td>
+                                        <div class="img-info font">
+                                            {{config.mobileResolution}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input class="custom-file-input font" type="file"
+                                            matTooltip="Nueva imagen formato Móviles" 
+                                            (change)="uploadImage($event.target.files, i,'imageXS')"
+                                            accept=".png,.jpg,.svg">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a class="font clicable"   matTooltip="Ver imagen"  (click)="openDialog(banner.imageLG)">Desktop</a>
+                                        
+                                    </td>
+                                    <td>
+                                        <div class="img-info font">
+                                            {{config.desktopResolution}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input class="custom-file-input font" type="file"
+                                            matTooltip="Nueva imagen formato Desktop" 
+                                            (change)="uploadImage($event.target.files, i,'imageLG')"
+                                            accept=".png,.jpg,.svg">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="previewSegment">
+                            <div class="box-tablet">
+                                <div class="slide-img-desktop"
+                                    [ngStyle]="{'background-image': 'url(' + banner.imageXS + ')'}">
+                                    <div _ngcontent-esh-c21="" class="box-elem-desktop">
+                                        <div _ngcontent-esh-c21="" class="box-text">
+                                            <div _ngcontent-esh-c21="" class="box-text-title"> {{ form.controls.title?.value || banner.title }}
+                                            </div>
+                                            <div _ngcontent-esh-c21="" class="box-text-subtitle"> {{ form.controls.description?.value || banner.description }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div class="redirection-section">
+                        <div class="formFieldTitle redirection-title">Banner {{i+1}} Redirección: </div>
+
+                        <div class="redirection-form" [formGroup]="form">
+
+                            <div class="formField"  *ngIf="!editingRedirection">
+                                {{banner.internal?'Interna':'Externa'}}: {{banner.path}}
+                                <button class="i-edit icon-style" (click)="activeEditRedirection(i, true)"> </button>
+                            </div>
+
+                            <p><mat-checkbox formControlName="internal"  *ngIf="editingRedirection && editedBanner === i" >Redirección interna</mat-checkbox></p>
+
+
+                            <div *ngIf="editingRedirection && editedBanner === i && form.controls.internal.value">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Redirigir</mat-label>
+                                    <mat-select formControlName="links" required>
+                                      <mat-option>--</mat-option>
+                                      <mat-option *ngFor="let link of links" [value]="link.path">
+                                        {{link.text}}
+                                      </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div  *ngIf="editingRedirection && editedBanner === i && !form.controls.internal.value" class="redirection-input-container">
+
+
+                                <mat-form-field class="example-full-width" appearance="standard" *ngIf="!form.controls.internal.value">
+                                    <mat-label>Redirección Banner</mat-label>
+                                    <input type="text" [attr.disabled]="isLoading" formControlName="redirection" matInput>
+                                    <mat-hint>Campo obligatorio</mat-hint>
+                                    <mat-error *ngIf="form.controls.redirection.invalid">
+                                        {{getErrorMessage(form.controls.redirection)}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div  *ngIf="editingRedirection && editedBanner === i" class="redirection-input-container">
+                                <button class="i-done icon-style" (click)="save(i, form.controls.internal)"> </button>
+                                <button class="i-close icon-style" (click)="activeEditRedirection(i, false)"> </button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+
+            </mat-accordion>
+
+        </div>
+    </mat-card>
+</div>

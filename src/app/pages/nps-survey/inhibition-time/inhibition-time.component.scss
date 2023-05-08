@@ -1,0 +1,49 @@
+@import '../../../../global.scss';
+
+.input-survey {
+  border: 0;
+  border-bottom: 1px solid $purple;
+  width: 30px;
+  font-size: 12.5px;
+  font-family: $font-semibold;
+  color: $purple;
+  text-align: center;
+
+  &:hover {
+    cursor: auto;
+  }
+
+  &:focus {
+    outline-color: $white;
+  }
+}
+
+.main-buttons {
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mat-header-cell {
+  &.mat-column-flowType {
+    flex: 0 0 200px;
+  }
+
+  &.mat-column-days {
+    flex: 0 0 100px;
+  }
+}
+
+.subtitle-font {
+  font-size: 12.5px;
+}
+
+.mat-cell {
+  &.mat-column-flowType {
+    flex: 0 0 200px;
+  }
+
+  &.mat-column-days {
+    flex: 0 0 100px;
+  }
+}

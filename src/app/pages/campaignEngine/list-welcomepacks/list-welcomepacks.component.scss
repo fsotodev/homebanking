@@ -1,0 +1,302 @@
+@import '../../../../global.scss';
+
+.main-table {
+  width: 1130px;
+  background-color: $white;
+  padding: 0;
+  margin: 0px auto;
+  font-family: $font-bold;
+
+  .spinner {
+    margin: 0 auto;
+  }
+
+  .search {
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    right: 0;
+    margin: 0 26px;
+
+    .input-search {
+      width: 174px;
+      height: 32px;
+      outline-color: $white;
+      border: 0;
+      padding-left: 30px;
+      font-size: 11.5px;
+      font-family: $font-regular;
+      letter-spacing: 0.3px;
+    }
+  }
+
+  .i-search {
+    background-position: 10px center;
+    background-size: 12px;
+  }
+
+  ::ng-deep {
+
+    .mat-progress-spinner circle,
+    .mat-spinner circle {
+      stroke: $purple;
+    }
+
+  }
+
+  .tab-content {
+    ::ng-deep {
+      .mat-tab-list {
+        background-color: $grey-softer;
+      }
+
+      .mat-tab-label-content {
+        color: $purple;
+        text-transform: uppercase;
+        font-size: 10px;
+        font-family: $font-bold;
+        letter-spacing: 0.5px;
+      }
+
+      .mat-ink-bar {
+        background-color: $purple !important;
+      }
+
+      .mat-tab-label {
+        background-color: $white;
+        min-width: 90px;
+      }
+
+      .mat-tab-disabled {
+        background-color: $grey-soft !important;
+      }
+    }
+
+    .dates-table {
+      .empty-message {
+        color: $grey;
+        font-size: 12.5px;
+        text-align: center;
+        margin-top: 40px;
+      }
+
+      .mat-header-row {
+        padding: 0 24px;
+      }
+
+      .mat-header-cell {
+        color: $purple;
+        text-transform: uppercase;
+        font-family: $font-semibold;
+      }
+
+      .mat-cell {
+        color: $grey-ms;
+        font-size: 12.5px;
+        letter-spacing: 0.2px;
+      }
+
+      .mat-column-priority {
+        min-width: 85px;
+        max-width: 95px;
+        border: 0;
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+
+        .input-order {
+          border: 0;
+          border-bottom: 1px solid $purple;
+          width: 30px;
+          font-size: 12.5px;
+          font-family: $font-semibold;
+          color: $purple;
+          text-align: center;
+
+          &:hover {
+            cursor: auto;
+          }
+
+          &:focus {
+            outline-color: $white;
+          }
+
+        }
+      }
+
+      %standard-column {
+        min-width: 120px;
+        padding-right: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        cursor: default;
+      }
+
+      .mat-column-category {
+        min-width: 85px;
+        @extend %standard-column;
+      }
+
+      .mat-column-description {
+        min-width: 270px;
+        @extend %standard-column;
+      }
+
+      .mat-column-expirationDate {
+        min-width: 180px;
+        padding-right: 16px;
+        @extend %standard-column;
+      }
+
+      .mat-column-status {
+        min-width: 92px;
+        cursor: default;
+        text-align: left;
+        margin-right: 6px;
+        text-transform: uppercase;
+      }
+
+      .mat-column-modifyOrDelete {
+        min-width: 100px;
+
+        &:focus {
+          outline-color: $white;
+        }
+      }
+
+      .actions-table {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+
+        .i-edit {
+          background-size: 18px auto;
+        }
+
+        .i-calendar-edit {
+          background-size: 18px auto;
+        }
+
+        .i-delete {
+          background-size: 15px auto;
+        }
+
+        .i-download-gray {
+          background-size: 18px auto;
+        }
+
+        .text-button {
+          align-self: center;
+        }
+
+        .i-edit,
+        .i-delete,
+        .i-copy,
+        .i-calendar-edit,
+        .i-download-gray,
+        .text-button {
+          width: 22px;
+          height: 22px;
+          margin-right: 4px;
+          border: 0;
+          opacity: 0.8;
+
+          &.text-button {
+            width: 38px;
+            ;
+            height: unset;
+          }
+
+          background-color: transparent;
+
+          &:hover {
+            cursor: pointer;
+            color: $purple;
+            outline-color: $white;
+            opacity: 1;
+          }
+
+          &:focus {
+            outline-color: $white;
+          }
+        }
+
+        .i-copy {
+          background-size: 20px auto;
+          margin-right: 0px;
+        }
+      }
+    }
+  }
+}
+
+.container-new-category {
+  width: 210px;
+  padding: 24px 0;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  bottom: 0;
+  z-index: 1;
+  float: right;
+  display: block;
+  margin-top: 2%;
+
+  .title-button {
+    color: $grey-darker;
+    font-size: 14px;
+    font-family: $font-semibold;
+    -ms-flex-item-align: center;
+    align-self: center;
+    display: contents;
+  }
+
+  .button-new-category {
+    background-color: $purple !important;
+    margin-left: 16px;
+
+    ::ng-deep {
+      .mat-button-wrapper {
+        font-size: 40px;
+        font-family: $font-light;
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .spinner-button {
+    width: 84px;
+    height: 18px;
+    display: inline-block;
+    vertical-align: middle;
+
+    mat-progress-spinner.spinner.mat-progress-spinner.mat-progress-spinner-indeterminate-animation.mat-accent {
+      width: 18px !important;
+      height: 18px !important;
+
+      svg {
+        width: 18px !important;
+        height: 18px !important;
+
+        circle {
+          stroke: $purple;
+        }
+      }
+    }
+  }
+}

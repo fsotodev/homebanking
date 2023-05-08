@@ -1,0 +1,18 @@
+steps: 
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Decrypt npm registry config
+  args: ['kms', 'decrypt', '--ciphertext-file=npmrc.enc', '--plaintext-file=.npmrc', '--location=global', '--keyring=npm-keyring', '--key=npm-key']
+- name: 'alpine'
+  id: 'Decrypt result'
+  args: ['sh',
+         '-c',
+         'cat .npmrc']
+- name: 'gcr.io/cloud-builders/npm:node-10.10.0'
+  id: INSTALL
+  args: ['ci']
+- name: 'gcr.io/cloud-builders/npm:node-10.10.0'
+  id: BUILD
+  args: ['run', 'build:${_ENV}']
+- name: 'gcr.io/$PROJECT_ID/firebase'
+  id: DEPLOY
+  args: ['deploy', '--project', '$PROJECT_ID', '--only', 'hosting']

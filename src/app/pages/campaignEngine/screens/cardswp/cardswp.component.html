@@ -1,0 +1,158 @@
+<div class="main-container">
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <form class="container-form" [formGroup]="cardsForm">
+        <section class="dates-info">
+          <mat-form-field class="input-info field-text">
+            <input matInput type="text" placeholder="Id de la pantalla" formControlName="id" required maxlength="2000">
+            <mat-hint>Ej: cardsWP-TR-SA</mat-hint>
+            <mat-hint class="input-length" align="end">{{ cardsWP.cardId ? cardsWP.cardId?.length : 0 }} / 2000
+            </mat-hint>
+            <mat-error *ngIf="cardsForm.get('id').hasError('screenExistance')">El id ya está en uso</mat-error>
+          </mat-form-field>
+          <div formGroupName="secondaryTitle">
+            <mat-form-field class="input-info field-text">
+              <input matInput type="text" placeholder="Título tarjeta singular" formControlName="singular" required
+                maxlength="2000">
+              <mat-hint>Ej: bienvenido al mundo de tu tarjeta</mat-hint>
+              <mat-hint class="input-length" align="end">{{ cardsWP.secondaryTitle.singular ?
+                cardsWP.secondaryTitle.singular?.length : 0 }} / 2000</mat-hint>
+            </mat-form-field>
+            <mat-form-field class="input-info field-text">
+              <input matInput type="text" placeholder="Título tarjeta plural" formControlName="plural" required
+                maxlength="2000">
+              <mat-hint>Ej: bienvenido al mundo de tu tarjeta</mat-hint>
+              <mat-hint class="input-length" align="end">{{ cardsWP.secondaryTitle.plural ?
+                cardsWP.secondaryTitle.plural?.length : 0 }} / 2000</mat-hint>
+            </mat-form-field>
+            <mat-checkbox [(ngModel)]="shouldShowAdvancedConfig" [ngModelOptions]="{ standalone: true }">
+              Mostrar opciones avanzadas
+            </mat-checkbox>
+            <br><br>
+            <div *ngIf="shouldShowAdvancedConfig">
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Título tarjeta ripley" formControlName="tr" required
+                  maxlength="2000">
+                <mat-hint>Ej: ¡bienvenido al mundo de tu tarjeta ripley!</mat-hint>
+                <mat-hint class="input-length" align="end">{{ cardsWP.secondaryTitle.tr ?
+                  cardsWP.secondaryTitle.tr?.length : 0 }} / 2000</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Título tarjeta mastercard ripley" formControlName="trm" required
+                  maxlength="2000">
+                <mat-hint>Ej: ¡bienvenido al mundo de tu tarjeta ripley mastercard!</mat-hint>
+                <mat-hint class="input-length" align="end">{{ cardsWP.secondaryTitle.trm ?
+                  cardsWP.secondaryTitle.trm?.length : 0 }} / 2000</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Título cuenta vista" formControlName="sa" required
+                  maxlength="2000">
+                <mat-hint>Ej: ¡bienvenido al mundo de tu cuenta vista zero!</mat-hint>
+                <mat-hint class="input-length" align="end">{{ cardsWP.secondaryTitle.sa ?
+                  cardsWP.secondaryTitle.sa?.length : 0 }} / 2000</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Título tarjeta de crédito y cuenta vista zero" formControlName="sa_tr" required
+                  maxlength="2000">
+                <mat-hint>Ej: ¡bienvenido al mundo de tu tarjeta de crédito y cuenta vista zero banco ripley!</mat-hint>
+                <mat-hint class="input-length" align="end">{{ cardsWP.secondaryTitle.sa_tr ?
+                  cardsWP.secondaryTitle.sa_tr?.length : 0 }} / 2000</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Título tarjeta de crédito Mastercard y cuenta vista zero" formControlName="sa_trm" required
+                  maxlength="2000">
+                <mat-hint>Ej: ¡bienvenido al mundo de tu tarjeta de crédito y cuenta vista zero banco ripley!</mat-hint>
+                <mat-hint class="input-length" align="end">{{ cardsWP.secondaryTitle.sa_trm ?
+                  cardsWP.secondaryTitle.sa_trm?.length : 0 }} / 2000</mat-hint>
+              </mat-form-field>
+            </div>
+            <!-- <mat-form-field class="input-info field-text">
+              <input matInput type="text" placeholder="Título tarjeta de débito mastercard banco ripley" formControlName="sam" required
+                maxlength="2000">
+              <mat-hint>Ej: ¡bienvenido al mundo de tu tarjeta débito mastercard banco ripley!</mat-hint>
+              <mat-hint class="input-length" align="end">{{ cardsWP.secondaryTitle.sam ?
+                cardsWP.secondaryTitle.sam?.length : 0 }} / 2000</mat-hint>
+            </mat-form-field>
+            <mat-form-field class="input-info field-text">
+              <input matInput type="text" placeholder="Título tarjeta de crédito y débito mastercard banco ripley" formControlName="sam_tr" required
+                maxlength="2000">
+              <mat-hint>Ej: ¡bienvenido al mundo de tu tarjeta de crédito y débito mastercard banco ripley!</mat-hint>
+              <mat-hint class="input-length" align="end">{{ cardsWP.secondaryTitle.sam_tr ?
+                cardsWP.secondaryTitle.sam_tr?.length : 0 }} / 2000</mat-hint>
+            </mat-form-field>
+            <mat-form-field class="input-info field-text">
+              <input matInput type="text" placeholder="Título tarjeta de crédito y débito mastercard banco ripley" formControlName="sam_trm" required
+                maxlength="2000">
+              <mat-hint>Ej: ¡bienvenido al mundo de tu tarjeta de crédito y débito mastercard banco ripley!</mat-hint>
+              <mat-hint class="input-length" align="end">{{ cardsWP.secondaryTitle.sam_trm ?
+                cardsWP.secondaryTitle.sam_trm?.length : 0 }} / 2000</mat-hint>
+            </mat-form-field> -->
+          </div>
+          <mat-form-field class="input-info field-text" formGroupName="subTitle">
+            <input matInput type="text" placeholder="Sub-título" formControlName="text" required maxlength="2000">
+            <mat-hint>Ej: ahora podrás disfrutar de: </mat-hint>
+            <mat-hint class="input-length" align="end">{{ cardsWP.subTitle.text ?
+              cardsWP.subTitle.text?.length : 0 }} / 2000</mat-hint>
+          </mat-form-field>
+          <h4>Listado de descripciones de beneficios</h4>
+          <section formArrayName="items" *ngFor="let item of cardsItems['controls']; let i=index">
+            <div [formGroupName]="i">
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Descripción elemento" formControlName="description"
+                  required maxlength="2000">
+                <mat-hint class="input-length" align="end">{{ item.get('description') ?
+                  item.get('description')?.value.length : 0 }} / 2000</mat-hint>
+              </mat-form-field>
+              <app-load-file-button [text]="'Cargar ícono del elemento'" [extensions]="extensions" [emitUrl]="true"
+                [showUrl]="false" [folder]="uploadFolder" (url)="receiveUrl($event, item)"
+                [isLoading]="isUploadingImage" [inputUrl]="item.get('iconURL').value"
+                [description]="'Dimensiones: 20 x 20 px'">
+              </app-load-file-button>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Color elemento" formControlName="color" required>
+                <mat-hint>Ej: #4f2d7f</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="text" placeholder="Orden elemento" formControlName="order" required
+                  maxlength="2000">
+                <mat-hint>Ej: 1</mat-hint>
+              </mat-form-field>
+              <div class="checkbox-container">
+                <mat-checkbox formControlName="forTR">
+                  TR
+                </mat-checkbox>
+                <mat-checkbox formControlName="forTRM">
+                  TRM
+                </mat-checkbox>
+                <mat-checkbox formControlName="forSA">
+                  SA
+                </mat-checkbox>
+                <mat-checkbox formControlName="forSA_TR">
+                  SA_TR
+                </mat-checkbox>
+                <mat-checkbox formControlName="forSA_TRM">
+                  SA_TRM
+                </mat-checkbox>
+              </div>
+              <button class="button-primary add-remove-buttons" (click)="removeCardItem(i)">
+                Remover elemento
+              </button>
+            </div>
+          </section>
+          <br>
+          <button mat-button class="button-quaternaty no-w mat-button" type="button" (click)="addCardsItem()">
+            Agregar elemento
+          </button><br />
+          <button mat-button (click)="saveScreen()" class="button-quaternaty no-w save-btn" [disabled]="isLoading">
+            {{ isEditing ? 'Actualizar pantalla de productos' : 'Crear pantalla de productos'}}
+          </button>
+        </section>
+      </form>
+
+      <div class="banners-container">
+        <app-cardswp-preview [screen]='cardsForm.value' [itemList]='itemsValue'>
+        </app-cardswp-preview>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

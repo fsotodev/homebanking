@@ -1,0 +1,70 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> Cargar
+        <span class="title-highlighted">Usuarios Datos de Tarjeta</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+
+      <div class="upload-button-quaternaty">
+        <button mat-raised-button class="button-quaternaty" [disabled]="loading">Subir archivo
+          <input #inputFile class="file-input" type="file" (change)="uploadFile($event.target.files)" accept=".csv"
+                 [disabled]="loading">
+        </button>
+        <div class="info-section">
+          <div *ngIf="file"> {{ file[0]?.name }}
+            {{ loading && !validFile? '(Validando archivo...)' : validFile ? '(Archivo válido)': '(Archivo no válido)'}}
+          </div>
+          <div *ngIf="!validFile" class="tip-image">Formato de archivo: .csv</div>
+          <div class="upload-instructions">
+          <span class="title-instructions">IMPORTANTE A CONSIDERAR PARA CARGA DE ARCHIVOS </span><br>
+          - Archivo <span class="text-bold">formato .csv</span>.<br>
+          - <span class="text-bold">Una sola columna</span>.<br>
+          - Sin cabecera, es decir, el archivo debe contener <span class="text-bold">únicamente ruts</span>.<br>
+          - Formato de <span class="text-bold"> ruts con dv, sin puntos, sin guión y con k minúscula</span>.<br>
+          - Una vez que termine la carga, se recomienda <span class="text-bold">buscar ruts de la base para confirmar</span> si quedaron correctamente cargados.<br>
+          - La columna contenedora de los ruts, no debe tener ningún tipo de <span class="text-bold">formato especial aplicado</span>.<br>
+          - El archivo debe contener<span class="text-bold">máximo 1.000.000 de ruts</span>.<br>
+        </div>
+        </div>
+        <div *ngIf="!!loading && validFile" class="upload-info-section">
+          <span class="title-section">Subiendo códigos: {{ percUsersCommited}}%</span>
+          <section class="progress-bar-section">
+            <mat-progress-bar color="primary" mode="determinate" [value]="percUsersCommited">
+            </mat-progress-bar>
+          </section>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-content class="container-info-form search-rut-container">
+      <span class="special-text">Consultar si el rut se encuentra cargado</span>
+      <mat-form-field class="input-info field-text">
+        <input matInput maxlength="20" placeholder="Ingrese Rut" [(ngModel)]="userRutToSearch" required>
+        <mat-hint>Ej: 12343454k (Sin puntos ni guiones).</mat-hint>
+      </mat-form-field>
+      <div class="input-info field-text">
+        <button mat-raised-button class="search-rut-button" (click)="searchRutInCollection()" color="primary"
+          [disabled]="!userRutToSearch || loading">Consultar rut</button>
+      </div>
+    </mat-card-content>
+    <mat-card-content class="container-info-form record-section">
+      <span class="special-text">Consultar historial de carga de archivos</span>
+      <div class="input-info field-text">
+        <button mat-raised-button class="search-rut-button" (click)="openDatacardRecordModal()" color="primary">
+          Consultar
+        </button>
+      </div>
+    </mat-card-content>
+
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">Volver</button>
+      <div class="main-buttons">
+        <button mat-raised-button (click)="uploadCodes(); inputFile.value = ''" class="button-primary"
+                [disabled]="!validFile || loading === true">Cargar</button>
+      </div>
+    </div>
+  </mat-card>
+</div>

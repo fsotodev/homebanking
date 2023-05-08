@@ -1,0 +1,57 @@
+<div class="modal-container">
+    <div class="box-info-modal">
+      <h2 class="title-modal title-modal-{{modalData?.titleColor}}" mat-dialog-title [innerHTML]="modalData?.title"></h2>
+      <p class="message-modal">Historial de archivos.</p>
+      <div class="table-header" *ngIf="!!dataSource && !loading">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro">
+        </mat-form-field>
+      </div>
+      <div *ngIf="!dataSource && !loading">
+        <p>Sin resultados.</p>
+      </div>
+      <div *ngIf="loading" class="loading-bar">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      <p class="message-modal sort-instructions">Puedes ordenar tus resultados por fecha y total de ruts cargados, 
+        haciendo click sobre el campo Fecha y Total de ruts respectivamente</p>
+    </div>
+    <mat-dialog-content class="dialog-content">
+      <div class="table-container mat-elevation-z8">
+        <mat-table #table [dataSource]="dataSource" matSort>
+
+            <ng-container matColumnDef="fileName">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre del archivo </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.fileName}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="loadedRuts">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Total de Ruts </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.loadedRuts}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="uploadedAt">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.uploadedAt}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="userAccount">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Usuario </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.userAccount}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+          </mat-table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="box-button-modal">
+      <button class="mat-raised-button button-tertiary" *ngIf="!!modalData?.leftButton" (click)="closeModal('left')">
+        {{ modalData?.leftButton }}</button>
+      <button class="mat-raised-button button-primary" (click)="closeModal('right')">{{ modalData?.rightButton }}</button>
+    </mat-dialog-actions>
+</div>

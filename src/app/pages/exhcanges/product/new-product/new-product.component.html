@@ -1,0 +1,292 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> {{ id ? 'Actualizar' : 'Nuevo' }}
+        <span class="title-highlighted">Producto</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form" *ngIf="product">
+    <mat-card-content class="container-info-form">
+      <div class="container-form" [formGroup]="productForm">
+        <section class="date-box benefit-header-box">
+          <section class="dates-info">
+            <mat-form-field>
+              <mat-label>Categoría</mat-label>
+              <mat-select formControlName="categoryMap" [(ngModel)]="product.category" (change)="cleanCategoryFields()">
+                <mat-option *ngFor="let category of categories" value="{{category.categoryId}}">{{ category.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <section>
+              <section>
+                <mat-form-field>
+                  <mat-label>Grupo</mat-label>
+                  <mat-select formControlName="groupMap" [(ngModel)]="product.productGroupId">
+                    <mat-option *ngFor="let group of productGroups" value="{{group.id}}">{{ group.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </section>
+              <mat-form-field>
+                <mat-label>Elige un tipo de código</mat-label>
+                <mat-select formControlName="codeType" [(ngModel)]="product.codeType">
+                  <mat-option *ngIf="productForm.get('categoryMap').value!=='gift-card'" value="normal">Codigo alfanumérico</mat-option>
+                  <mat-option *ngIf="productForm.get('categoryMap').value!=='gift-card'" value="barcode">Codigo barras</mat-option>
+                  <mat-option value="normalmasclave">Codigo alfanumérico mas clave</mat-option>
+                  <mat-option value="">Ninguno</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div *ngIf="product.category === 'latam'" class="user-location">
+                <mat-checkbox [(ngModel)]="product.isLatamActive" [ngModelOptions]="{standalone: true}">isLatamActive
+                </mat-checkbox>
+              </div>
+              <div *ngIf="product.category === 'palumbo'" class="user-location">
+                <mat-checkbox [(ngModel)]="product.isPalumboActive" [ngModelOptions]="{standalone: true}">
+                  isPalumboActive</mat-checkbox>
+              </div>
+              <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': validLength(product.fullName, 150)}">
+                <input matInput type="text" placeholder="Nombre del producto" formControlName="fullName" maxlength="150"
+                  [(ngModel)]="product.fullName" required>
+                <mat-hint>Ej: Gift Card $5.000.</mat-hint>
+                <mat-hint class="input-length" align="end">{{ product.fullName ? product.fullName.length : 0 }} / 150</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': validLength(product.selectedTitle, 150)}">
+                <input matInput type="text" placeholder="Título de producto seleccionado" maxlength="150"
+                  formControlName="selectedTitle" [(ngModel)]="product.selectedTitle" required>
+                <mat-hint>Ej: $5.000 = 3.000 Puntos.</mat-hint>
+                <mat-hint class="input-length" align="end">{{ product.selectedTitle ? product.selectedTitle.length : 0 }} / 150</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': validLength(product.selectedSubtitle, 150)}">
+                <input matInput type="text" placeholder="Subtítulo de producto seleccionado" maxlength="150"
+                  formControlName="selectedSubtitle" [(ngModel)]="product.selectedSubtitle">
+                <mat-hint>Ej: Y multiplica hasta x2 el valor de tus Puntos Ripley GO.</mat-hint>
+                <mat-hint class="input-length" align="end">{{ product.selectedSubtitle ? product.selectedSubtitle.length : 0 }} / 150</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': validLength(product.confirmationSelectedTitle, 150)}">
+                <input matInput type="text" placeholder="Título de confirmación de producto seleccionado" maxlength="150"
+                  formControlName="confirmationSelectedTitle" [(ngModel)]="product.confirmationSelectedTitle" required>
+                <mat-hint>Ej: Estás canjeando una Gift Card de:.</mat-hint>
+                <mat-hint class="input-length" align="end">{{ product.confirmationSelectedTitle ? product.confirmationSelectedTitle.length : 0 }} / 150</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': validLength(product.actionSelectProduct, 150)}">
+                <input matInput type="text" placeholder="Mensaje de confirmación de canje" maxlength="150"
+                  formControlName="actionSelectProduct" [(ngModel)]="product.actionSelectProduct">
+                <mat-hint>Ej: Selecciona la Gift Card que quieres canjear.</mat-hint>
+                <mat-hint class="input-length" align="end">{{ product.actionSelectProduct ? product.actionSelectProduct.length : 0 }} / 150</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': validLength(product.successMessage, 150)}">
+                <input matInput type="text" placeholder="Mensaje de éxito" formControlName="successMessage" maxlength="150"
+                  [(ngModel)]="product.successMessage" required>
+                <mat-hint>Ej: Has canjeado una Gift Card de $5.000 por 30.000 Ripley Puntos Go.</mat-hint>
+                <mat-hint class="input-length" align="end">{{ product.successMessage ? product.successMessage.length : 0 }} / 150</mat-hint>
+              </mat-form-field>
+            </section>
+            <section class="date-box">
+              <span class="title-section">Imagen del producto</span>
+              <div class="special-info">
+                <div class="buttons-box">
+                  <div class="upload-button-quaternaty">
+                    <button mat-raised-button class="button-quaternaty">subir imagen</button>
+                    <input class="file-input" type="file" (change)="uploadImage($event.target.files, 'image')"
+                      accept=".png,.jpg,.svg" [disabled]="isUploadingImage">
+                    <div *ngIf="isUploadingImage" class="spinner-button">
+                      <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                    </div>
+                    <div class="name-archive" *ngIf="!isUploadingImage">
+                      {{ product.image ? product.image : 'Ningún archivo cargado.' }}</div>
+                    <span class="tip-image">Formato: [PENDIENTE]. Extensión imagen: .png .jpg .svg</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="date-box">
+              <span class="title-section">Imagen de Banner Desktop</span>
+              <div class="special-info">
+                <div class="buttons-box">
+                  <div class="upload-button-quaternaty">
+                    <button mat-raised-button class="button-quaternaty">subir imagen</button>
+                    <input class="file-input" type="file" (change)="uploadImage($event.target.files, 'imageBannerDesktop')"
+                      accept=".png,.jpg,.svg" [disabled]="isUploadingImage">
+                    <div *ngIf="isUploadingImage" class="spinner-button">
+                      <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                    </div>
+                    <div class="name-archive" *ngIf="!isUploadingImage">
+                      {{ product.imageBannerDesktop ? product.imageBannerDesktop : 'Ningún archivo cargado.' }}</div>
+                    <span class="tip-image">Formato: [PENDIENTE]. Extensión imagen: .png .jpg .svg</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="date-box">
+              <span class="title-section">Imagen de Banner Mobile</span>
+              <div class="special-info">
+                <div class="buttons-box">
+                  <div class="upload-button-quaternaty">
+                    <button mat-raised-button class="button-quaternaty">subir imagen</button>
+                    <input class="file-input" type="file" (change)="uploadImage($event.target.files, 'imageBannerMobile')"
+                      accept=".png,.jpg,.svg" [disabled]="isUploadingImage">
+                    <div *ngIf="isUploadingImage" class="spinner-button">
+                      <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                    </div>
+                    <div class="name-archive" *ngIf="!isUploadingImage">
+                      {{ product.imageBannerMobile ? product.imageBannerMobile : 'Ningún archivo cargado.' }}</div>
+                    <span class="tip-image">Formato: [PENDIENTE]. Extensión imagen: .png .jpg .svg</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="number" placeholder="Valor" formControlName="value" [(ngModel)]="product.value"
+                  onkeydown="return event.keyCode !== 69" required>
+                <mat-hint>Ej: 5000.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="number" placeholder="Puntos" formControlName="points" [(ngModel)]="product.points"
+                  onkeydown="return event.keyCode !== 69" required>
+                <mat-hint>Ej: 3000.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="number" placeholder="Límite" formControlName="limit" [(ngModel)]="product.limit"
+                  onkeydown="return event.keyCode !== 69" required>
+                <mat-hint>Ej: 50.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="number" placeholder="Stock" formControlName="stock" [(ngModel)]="product.stock"
+                  onkeydown="return event.keyCode !== 69" required>
+                <mat-hint>Ej: 10.</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': validLength(product.stockMessage, 150)}">
+                <input matInput type="text" placeholder="Mensaje de stock" formControlName="stockMessage" maxlength="150"
+                  [(ngModel)]="product.stockMessage" required>
+                <mat-hint>Ej: Stock disponible: </mat-hint>
+                <mat-hint class="input-length" align="end">{{ product.stockMessage ? product.stockMessage.length : 0 }} / 150</mat-hint>
+              </mat-form-field>
+              <mat-form-field class="input-info field-text">
+                <input matInput type="number" placeholder="Vigencia de Códigos (dias)" formControlName="deltaForTechnicalDateInDays"
+                [(ngModel)]="product.deltaForTechnicalDateInDays" onkeydown="return event.keyCode !== 69">
+                <mat-hint>Ej: 30.</mat-hint>
+              </mat-form-field>
+              <div class="user-location">
+                <mat-checkbox [(ngModel)]="product.stockActive" [ngModelOptions]="{standalone: true}">Activar stock
+                </mat-checkbox>
+              </div>
+            </section>
+            <section>
+              <span *ngIf="product.category === 'gift-card'" class="title-section">GiftCard</span>
+              <section *ngIf="product.category === 'gift-card'">
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text" placeholder="Color GiftCard" formControlName="giftcardColor"
+                    [(ngModel)]="product.giftcardColor" value="#">
+                  <mat-hint>Ej: #4f2d7f.</mat-hint>
+                </mat-form-field>
+
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="product.hasMultiplier" [ngModelOptions]="{standalone: true}">Tiene
+                    multiplicador</mat-checkbox>
+                </div>
+
+                <mat-form-field *ngIf="product.hasMultiplier" class="input-info field-text">
+                  <input matInput type="number" placeholder="Multiplicador" formControlName="giftcardMultiplier"
+                    [(ngModel)]="product.giftcardMultiplier">
+                  <mat-hint>Ej: 2.</mat-hint>
+                </mat-form-field>
+              </section>
+            </section>
+            <section>
+              <span class="title-section">Texto botón de redirección</span>
+              <section>
+                <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': product.button && product.button['text'] && validLength(product.button['text'], 150)}">
+                  <input matInput type="text" placeholder="Texto del botón" formControlName="text" maxlength="150"
+                    [(ngModel)]="product.button['text']">
+                  <mat-hint>Ej: Usa tu código en Ripley.com.</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ product.button && product.button['text'] ? product.button['text'].length : 0 }} / 150</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': product.button && product.button['url'] && validLength(product.button['url'], 2000)}">
+                  <input matInput type="text" placeholder="Url de redirección" formControlName="url" maxlength="2000"
+                    [(ngModel)]="product.button['url']">
+                    <mat-hint class="input-length" align="end">{{ product.button && product.button['url'] ? product.button['url'].length : 0 }} / 2000</mat-hint>
+                </mat-form-field>
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="product.button['show']" [ngModelOptions]="{standalone: true}">Activar botón
+                  </mat-checkbox>
+                </div>
+              </section>
+            </section>
+            <section>
+              <span class="title-section">Mensajes de error</span>
+              <section>
+                <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': product.errorMessages && product.errorMessages['url'] && validLength(product.errorMessages['url'], 150)}">
+                  <input matInput type="text" placeholder="Límite excedido" formControlName="limitExceeded" maxlength="150"
+                    [(ngModel)]="product.errorMessages['limitExceeded']" required>
+                  <mat-hint>Ej: Has canjeado la cantidad máxima para este producto.</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ product.errorMessages && product.errorMessages['limitExceeded'] ? product.errorMessages['limitExceeded'].length : 0 }} / 150</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': product.errorMessages && product.errorMessages['outOfStock'] && validLength(product.errorMessages['outOfStock'], 150)}">
+                  <input matInput type="text" placeholder="Sin stock" formControlName="outOfStock" maxlength="150"
+                    [(ngModel)]="product.errorMessages['outOfStock']" required>
+                  <mat-hint>Ej: Este producto solo se puede canjear en tiendas Ripley.</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ product.errorMessages && product.errorMessages['outOfStock'] ? product.errorMessages['outOfStock'].length : 0 }} / 150</mat-hint>
+                </mat-form-field>
+              </section>
+            </section>
+            <section class="date-box benefit-header-box">
+              <span class="title-section">Términos y Condiciones</span><br>
+              <span class="title-section">(llenar al menos uno de los campos)</span>
+              <section class="dates-info">
+                <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': validLength(product.termsAndConditionsPDF, 2000)}">
+                  <input matInput type="text" placeholder="termsAndConditionsPDF" maxlength="2000"
+                    [(ngModel)]="product.termsAndConditionsPDF" value="{{ urlPdf }}" formControlName="termsAndConditionsPDF" required>
+                    <mat-hint class="input-length" align="end">{{ product.termsAndConditionsPDF ? product.termsAndConditionsPDF.length : 0 }} / 2000</mat-hint>
+                </mat-form-field>
+                <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': validLength(product.termsAndConditionsText, 2000)}">
+                  <textarea matInput matTextareaAutosize type="text" maxlength="2000"
+                    placeholder="termsAndConditionsText" [(ngModel)]="product.termsAndConditionsText"
+                    formControlName="termsAndConditionsText"></textarea>
+                  <mat-hint class="input-length" align="end">{{ product.termsAndConditionsText ? product.termsAndConditionsText.length : 0 }} / 2000</mat-hint>
+                </mat-form-field>
+                <mat-form-field class="input-info field-text" [ngClass]="{'input-invalid': validLength(product.termsAndConditionsURL, 2000)}">
+                  <input matInput type="text" placeholder="termsAndConditionsURL" maxlength="2000"
+                    [(ngModel)]="product.termsAndConditionsURL" formControlName="termsAndConditionsURL">
+                    <mat-hint class="input-length" align="end">{{ product.termsAndConditionsURL ? product.termsAndConditionsURL.length : 0 }} / 2000</mat-hint>
+                </mat-form-field>
+              </section>
+            </section>
+            <section>
+              <app-load-file-button 
+                [fileFirebaseUrl]="fileFirebaseUrl"
+                [fileUrl]="fileUrl" 
+                [text]="text" [extensions]="extensions" 
+                [emitUrl]="emitUrl" (url)="receiveUrlPdf($event)" 
+                [isLoading]="isUploadingImage">                
+              </app-load-file-button>
+            </section>
+            <section>
+              <div class="user-location">
+                <mat-checkbox [(ngModel)]="product.active" [ngModelOptions]="{standalone: true}">Activar producto
+                </mat-checkbox>
+              </div>
+            </section>
+          </section>
+        </section>
+      </div>
+      <div *ngIf="product" class="container-view-mobile" id="sticky">
+        <app-product-viewer [product]="product" [expirationDate]="expirationDate"></app-product-viewer>
+      </div>
+    </mat-card-content>
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">volver</button>
+      <div *ngIf="!id" class="main-buttons">
+        <button mat-raised-button (click)="saveProduct()" class="button-primary"
+          [disabled]="!productForm.valid || !termsAndConditionsValidator() || !giftCardFieldsValidator()">Crear</button>
+      </div>
+      <div *ngIf="id" class="main-buttons">
+        <button mat-raised-button (click)="updateProduct()" class="button-primary"
+                [disabled]="!productForm.valid || !termsAndConditionsValidator() || !giftCardFieldsValidator()">Actualizar</button>
+      </div>
+    </div>
+  </mat-card>
+</div>

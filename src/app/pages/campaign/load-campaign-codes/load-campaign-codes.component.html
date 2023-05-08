@@ -1,0 +1,46 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> Cargar códigos de
+        <span class="title-highlighted">Campañas</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+
+    <mat-card-content class="container-info-form">
+      <div class="upload-button-quaternaty">
+        <button mat-raised-button class="button-quaternaty" [disabled]="isUploading">Subir archivo
+          <input #inputFile class="file-input" type="file" (change)="uploadFile($event.target.files)" accept=".csv"
+            [disabled]="isUploading">
+        </button>
+        <ng-container *ngIf="file"> {{ file[0]?.name }} </ng-container>
+        <div class="tip-image">Formato de archivo: .csv</div>
+        <div class="container-form" [formGroup]="formGroup">
+          <mat-form-field class="input-info field-text">
+            <input matInput type="text" placeholder="Campaign ID" formControlName="campaignId" required>
+            <mat-hint>Ej: CABIFYENERO.</mat-hint>
+          </mat-form-field>
+          <mat-form-field class="input-info field-text">
+            <input matInput type="text" placeholder="Campaign Code" formControlName="code" required>
+            <mat-hint>Ej: RE0197VY54LE.</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">Volver</button>
+      <div class="main-buttons">
+
+        <button [disabled]="!file || formGroup.invalid || isUploading" mat-raised-button class="button-primary"
+          (click)="uploadToFirebase()">
+          Subir Códigos
+          <div *ngIf="isUploading" class="spinner-button">
+            <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+          </div>
+        </button>
+      </div>
+    </div>
+  </mat-card>
+</div>

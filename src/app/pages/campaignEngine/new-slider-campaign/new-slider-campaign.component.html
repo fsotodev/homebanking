@@ -1,0 +1,588 @@
+<div class="main-container">
+    <mat-card class="container-info">
+      <div class="container-title">
+        <p class="title"> {{ id ? 'Actualizar' : 'Nueva' }}
+          <span class="title-highlighted">Campaña: Slider banner home</span>
+        </p>
+      </div>
+    </mat-card>
+    <mat-card class="main-container-form">
+      <mat-card-content class="container-info-form">
+        <div class="container-form" [formGroup]="campaignForm">
+          <section class="date-box benefit-header-box">
+            <section class="dates-info">
+
+              <!-- Core -->
+              <section>
+                <div class="user-location">
+                  <mat-slide-toggle formControlName="checkCustom"
+                                    [checked]="campaign.isCustom"
+                                    (change)="toggleCustomSliderChange($event)"
+                                    [(ngModel)]="campaign.isCustom"
+                                    [disabled]="id"
+                                    [ngModelOptions]="{ standalone: true }">¿Es Custom?
+                  </mat-slide-toggle>
+                </div>
+
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.activePWA" [ngModelOptions]="{ standalone: true }">Activo en PWA
+                  </mat-checkbox>
+                </div>
+
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.totem" [ngModelOptions]="{ standalone: true }">Mostrar en Totem
+                  </mat-checkbox>
+                </div>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text" [readonly]="id"
+                    (keydown)="utilsService.onKeyPress($event)"
+                    (blur)="initializeCampaignById()"
+                    placeholder="Id de campaña"
+                    formControlName="id"
+                    [(ngModel)]="campaign.id"
+                    required
+                    maxlength="35">
+                  <mat-hint>Sin espacios, Ej: banner-AvSav-2.5mm</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.id ? campaign.id.length : 0 }} / 35</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Prioridad"
+                    formControlName="priority"
+                    [(ngModel)]="campaign.priority"
+                    onkeydown="return event.keyCode !== 69" required>
+                  <mat-hint>Ej: 2</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input
+                    matInput
+                    type="number"
+                    placeholder="Máximo de visualizaciones"
+                    formControlName="maxViews"
+                    [(ngModel)]="campaign.maxViews"
+                    onkeydown="return event.keyCode !== 69"
+                  />
+                  <mat-hint>Ej: 3</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text input-head">
+                  <mat-select formControlName="goalType" placeholder="Tipo de meta (goals) *" [(ngModel)]="campaign.goalType">
+                    <mat-option value="gotoview">Ir a la vista</mat-option>
+                    <mat-option value="submit">Submit</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </section>
+
+              <mat-form-field class="input-info field-text">
+                <input matInput type="number"
+                       placeholder="Máximo de goals (clicks)"
+                       formControlName="maxGoals"
+                       [(ngModel)]="campaign.maxGoals">
+                <mat-hint>Ej: 1</mat-hint>
+              </mat-form-field>
+              <!-- Visual -->
+              <section>
+                <mat-form-field class="input-info field-text input-color">
+                  <input matInput type="text"
+                    placeholder="Color del texto (desktop)"
+                    formControlName="textColor"
+                    [(ngModel)]="campaign.textColor"
+                    required
+                    maxlength="7">
+                  <input matInput type="color"
+                    placeholder="Color del botón"
+                    formControlName="textColor"
+                    [(ngModel)]="campaign.textColor"
+                    required
+                    maxlength="7">
+                  <mat-hint>Ej: #ffffff</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.textColor ? campaign.textColor.length : 0 }} / 7</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text input-color">
+                  <input matInput type="text"
+                    placeholder="Color del botón (desktop)"
+                    formControlName="buttonColor"
+                    [(ngModel)]="campaign.buttonColor"
+                    required
+                    maxlength="7">
+                  <input matInput type="color"
+                    placeholder="Color del botón"
+                    formControlName="buttonColor"
+                    [(ngModel)]="campaign.buttonColor"
+                    required
+                    maxlength="7">
+                  <mat-hint>Ej: #ffffff</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.buttonColor ? campaign.buttonColor.length : 0 }} / 7</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text"
+                    placeholder="Texto del botón"
+                    formControlName="buttonText"
+                    [(ngModel)]="campaign.buttonText"
+                    required
+                    maxlength="20">
+                  <mat-hint>Ej: Simular avance</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.buttonText ? campaign.buttonText.length : 0 }} / 20</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <mat-label>Redirección interna</mat-label>
+                  <mat-select formControlName="page" [(ngModel)]="campaign.page">
+                    <mat-option value="av">Simular Avance</mat-option>
+                    <mat-option value="sav">Simular Super Avance</mat-option>
+                    <mat-option value="avsav">Avances</mat-option>
+                    <mat-option value="sg">Beneficios de categoria</mat-option>
+                    <mat-option value="nsa">Promoción nueva cuenta vista</mat-option>
+                    <mat-option value="benefit-detail">Beneficio [Parametro: id del beneficio]</mat-option>
+                    <mat-option value="sa">Cuenta vista</mat-option>
+                    <mat-option value="acc">Tarjeta adicional</mat-option>
+                    <mat-option value="cc">Tarjeta de crédito</mat-option>
+                    <mat-option value="hdap">Home DAP</mat-option>
+                    <mat-option value="sdap">Simulación DAP</mat-option>
+                    <mat-option value="update">Actualiza Datos</mat-option>
+                    <mat-option value="credit">Crédito de Consumo</mat-option>
+                    <mat-option value="pay">Pago de Tarjeta</mat-option>
+                    <mat-option value="reissue">Reemisión de Tarjeta</mat-option>
+                    <mat-option value="dashboard-rpgo">Dashboard Ripley Puntos</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <input matInput type="text"
+                    placeholder="Pagina de redirección"
+                    formControlName="page"
+                    [(ngModel)]="campaign.page"
+                    required
+                    maxlength="2000">
+                  <mat-hint>Ej: https://www.google.com</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.page ? campaign.page.length : 0 }} / 2000</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <input matInput type="text"
+                    placeholder="Parametro de redirección"
+                    formControlName="params"
+                    [(ngModel)]="campaign.params"
+                    maxlength="2000">
+                  <mat-hint>Ej: 2GX1emzFXFsBTjGD0Y1G</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.params ? campaign.params.length : 0 }} / 2000</mat-hint>
+                </mat-form-field>
+
+                <mat-hint *ngIf="emptyMobile" class="text-size-hint-danger">Debes subir una imagen*</mat-hint>
+                <app-load-file-button *ngIf="campaign"
+                  [fileFirebaseUrl]="fileFirebaseUrl"
+                  [fileUrl]="fileUrl"
+                  [text]="'Cargar imagen Mobile*'"
+                  [extensions]="extensions"
+                  [emitUrl]="true"
+                  [showUrl]="false"
+                  [folder]="uploadFolder"
+                  (url)="receiveUrl($event, 'mobileUrl')"
+                  [isLoading]="isUploadingImage"
+                  [inputUrl]="campaign.mobileUrl"
+                  [description]="'Dimensiones: 250 x 158 px'">
+                </app-load-file-button>
+                
+
+                <mat-hint *ngIf="emptyDesktop" class="text-size-hint-danger">Debes subir una imagen*</mat-hint>
+                <app-load-file-button *ngIf="campaign"
+                  [fileFirebaseUrl]="fileFirebaseUrl"
+                  [fileUrl]="fileUrl"
+                  [text]="'Cargar imagen Desktop*'"
+                  [extensions]="extensions"
+                  [emitUrl]="true"
+                  [showUrl]="false"
+                  [folder]="uploadFolder"
+                  (url)="receiveUrl($event, 'desktopUrl')"
+                  [isLoading]="isUploadingImage"
+                  [inputUrl]="campaign.desktopUrl"
+                  [description]="'Dimensiones: 350 x 450 px'">
+                </app-load-file-button>
+
+                <div class="special-info" *ngIf="!campaign.isCustom">
+                  <div class="buttons-box">
+                    <div class="upload-button-quaternaty">
+                      <button mat-raised-button class="button-quaternaty">Subir ruts</button>
+                      <input id="uploadInputCampaignRut" class="file-input" type="file"
+                        (change)="showConfirmationModal($event.target.files, true)" accept=".csv"
+                        [disabled]="uploadingRuts">
+                      <div *ngIf="uploadingRuts" class="spinner-button">
+                        <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                      </div><br><br>
+                      <mat-progress-bar color="primary" mode="determinate" [value]="rutUploadingProgress">
+                      </mat-progress-bar>
+                      <span class="tip-image">Seleccionar un archivo CSV con el nombre de la campaña</span><br />
+                      <span class="tip-image">Ejemplo CSV: Rut</span><br />
+                      <span class="tip-image">Sin títulos en la primera fila del CSV, solo datos </span><br />
+                      <div *ngIf="!!uploadingRuts" class="upload-info-section">
+                        <span class="title-section">Subiendo Ruts a la campaña, esto puede tardar varios minutos</span>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div *ngIf="rutsFilePath && rutsFilePath.length > 0" class="title-section">Historial de Ruts
+                    <ul class="table table-bordered table-condensed table-striped">
+                      <div *ngIf="noToggle">
+                        <li *ngFor="let rut of rutsFilePath">
+                        {{rut}}
+                        </li>
+                      </div>
+                      <div *ngIf="toggleRutListShort && !noToggle">
+                        <li *ngFor="let rut of rutsArrayShort">
+                        {{rut}}
+                        </li>
+                        <li>... <a href="#" (click)="toggleRutListMethod()">[ver mas]</a></li>
+
+                      </div>
+                      <div *ngIf="!toggleRutListShort && !noToggle">
+                        <li *ngFor="let rut of rutsFilePath">
+                        {{rut}}
+                        </li>
+                        <a href="#" (click)="toggleRutListMethod()">[ver menos]</a>
+                      </div>
+                    </ul>
+                  </div>
+                </div>
+              </section>
+
+              <section *ngIf="campaign.isCustom">
+                <div class="special-info">
+                  <div class="buttons-box">
+                    <div class="upload-button-quaternaty">
+                      <button mat-raised-button class="button-quaternaty"
+                      [class.disabled]="!campaign.id">Subir Campañas</button>
+                      <input id="uploadCustomCampaign" class="file-input" type="file"
+                        (change)="uploadCustomCampaign($event.target.files)" accept=".csv"
+                        [disabled]="uploadingCustomCampaigns || !campaign.id">
+                        <div *ngIf="uploadingCustomCampaigns" class="spinner-button">
+                        <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                      </div>
+                      <br>
+                      <mat-hint class="error-msg" *ngIf="!campaign.id">Ingresa un id de campaña antes del archivo</mat-hint>
+                      <br>
+                      <mat-progress-bar color="primary" mode="determinate" [value]="customCampaignsUploadingProgress">
+                      </mat-progress-bar>
+                      <span class="tip-image">Seleccionar un archivo CSV con los datos de las campañas</span><br />
+                      <span class="tip-image">Ejemplo CSV: Rut</span><br />
+                      <span class="tip-image">Sin títulos en la primera fila del CSV, solo datos </span><br />
+                      <div *ngIf="!!uploadingCustomCampaigns" class="upload-info-section">
+                        <span class="title-section">Subiendo datos de la campaña, esto puede tardar varios minutos</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Devices -->
+              <div *ngIf="!campaign.isCustom">
+                <mat-label [ngStyle]="{'color': isValidDevices ? 'unset' : 'red' }"
+                           matTooltip="Debe seleccionar al menos uno"
+                           matTooltipDisabled="{{isValidDevices}}"
+                           matTooltipPosition="right">Dispositivos*</mat-label> <br><br>
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.devices.mobile"
+                                (change)="checkDevices()"
+                                [ngModelOptions]="{ standalone: true }">
+                    Mobile
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.devices.desktop"
+                                (change)="checkDevices()"
+                                [ngModelOptions]="{ standalone: true }">
+                    Desktop
+                  </mat-checkbox>
+                </div>
+              </div>
+              <input type="hidden" formControlName="fieldCheckDevices" *ngIf="!campaign.isCustom"/>
+              <!-- Filters -->
+              <section *ngIf="!campaign.isCustom">
+                <br>
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.allUsers" [ngModelOptions]="{ standalone: true }">Sin rutero
+                  </mat-checkbox>
+                </div>
+
+                <!-- Av -->
+                <div class="user-location" *ngIf="!campaign.isCustom">
+                  <mat-checkbox [(ngModel)]="campaign.filters.av.active"
+                                (change)="checkFilters('av')"
+                                [ngModelOptions]="{ standalone: true }"
+                                matTooltip="Debe ingresar montos"
+                                matTooltipDisabled="{{!campaign.filters.av.active}}"
+                                matTooltipPosition="right">
+                    Filtro de avance activo
+                  </mat-checkbox>
+                </div>
+
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <input matInput type="number"
+                    placeholder="Monto máximo de avance"
+                    formControlName="avMax"
+                    [(ngModel)]="campaign.filters.av.max"
+                    (change)="checkFilters('av')"
+                    onkeydown="return event.keyCode !== 69"
+                    [required]="campaign.filters.av.active"
+                    >
+                  <mat-hint>Ej: 2500000</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <input matInput type="number"
+                    placeholder="Monto mínimo de avance"
+                    formControlName="avMin"
+                    (change)="checkFilters('av')"
+                    [(ngModel)]="campaign.filters.av.min"
+                    onkeydown="return event.keyCode !== 69"
+                    [required]="campaign.filters.av.active"
+                    >
+                  <mat-error *ngIf="this.campaignForm.controls['avMin'] && this.campaignForm.controls['avMin'].invalid">
+                    {{this.campaignForm.controls['avMin'].errors['error']}}
+                  </mat-error>
+                  <mat-hint>Ej: 100000</mat-hint>
+                </mat-form-field>
+
+                <!-- Sav -->
+                <div class="user-location" *ngIf="!campaign.isCustom">
+                  <mat-checkbox [(ngModel)]="campaign.filters.sav.active" (change)="checkFilters('sav')" [ngModelOptions]="{ standalone: true }">Filtro de super avance activo
+                  </mat-checkbox>
+                </div>
+
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <input matInput type="number"
+                    placeholder="Monto máximo de super avance"
+                    formControlName="savMax"
+                    (change)="checkFilters('sav')"
+                    [(ngModel)]="campaign.filters.sav.max"
+                    onkeydown="return event.keyCode !== 69"
+                    [required]="campaign.filters.sav.active"
+                    >
+                  <mat-hint>Ej: 2500000</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <input matInput type="number"
+                    placeholder="Monto mínimo de super avance"
+                    formControlName="savMin"
+                    (change)="checkFilters('sav')"
+                    [(ngModel)]="campaign.filters.sav.min"
+                    onkeydown="return event.keyCode !== 69"
+                    [required]="campaign.filters.sav.active"
+                    >
+                  <mat-error *ngIf="this.campaignForm.controls['savMin'] && this.campaignForm.controls['savMin'].invalid">
+                    {{this.campaignForm.controls['savMin'].errors['error']}}
+                  </mat-error>
+                  <mat-hint>Ej: 100000</mat-hint>
+                </mat-form-field>
+
+                <!-- Consumo -->
+                <div class="user-location" *ngIf="!campaign.isCustom">
+                  <mat-checkbox [(ngModel)]="campaign.filters.consumer.active" (change)="checkFilters('consumer')" [ngModelOptions]="{ standalone: true }">Filtro de consumo activo
+                  </mat-checkbox>
+                </div>
+
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <input matInput type="number"
+                     placeholder="Monto máximo de consumo"
+                     formControlName="consumerMax"
+                     (change)="checkFilters('consumer')"
+                     [(ngModel)]="campaign.filters.consumer.max"
+                     onkeydown="return event.keyCode !== 69"
+                     [required]="campaign.filters.consumer.active"
+                     >
+                  <mat-hint>Ej: 2500000</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <input matInput type="number"
+                     placeholder="Monto mínimo de consumo"
+                     formControlName="consumerMin"
+                     (change)="checkFilters('consumer')"
+                     [(ngModel)]="campaign.filters.consumer.min"
+                     onkeydown="return event.keyCode !== 69"
+                     [required]="campaign.filters.consumer.active"
+                     >
+                  <mat-error *ngIf="this.campaignForm.controls['consumerMin'] && this.campaignForm.controls['consumerMin'].invalid">
+                    {{this.campaignForm.controls['consumerMin'].errors['error']}}
+                  </mat-error>
+                  <mat-hint>Ej: 100000</mat-hint>
+                </mat-form-field>
+
+                <!-- Monto y cuota -->
+                <div class="user-location" *ngIf="!campaign.isCustom">
+                  <mat-checkbox [(ngModel)]="campaign.details.active"
+                                (change)="checkFilters('details')"
+                                [ngModelOptions]="{ standalone: true }">Monto y cuota
+                  </mat-checkbox>
+                </div>
+                <!-- Quota and ammount -->
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <input matInput type="number"
+                     placeholder="Monto del Avance / SuperAvance / Consumo"
+                     formControlName="amount"
+                     (change)="checkFilters('details')"
+                     [(ngModel)]="campaign.details.amount"
+                     onkeydown="return event.keyCode !== 69"
+                     [required]="campaign.details.active"
+                     >
+                  <mat-hint>Ej: 800000</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <input matInput type="number"
+                     placeholder="Número de cuotas"
+                     formControlName="quota"
+                     (change)="checkFilters('details')"
+                     [(ngModel)]="campaign.details.quota"
+                     onkeydown="return event.keyCode !== 69"
+                     [required]="campaign.details.active"
+                     >
+                  <mat-hint>Ej: 18</mat-hint>
+                </mat-form-field>
+
+                <!-- Segment -->
+                <div class="user-location" *ngIf="!campaign.isCustom">
+                  <mat-checkbox [(ngModel)]="campaign.filters.segment" [ngModelOptions]="{ standalone: true }">Filtro por categoría activo
+                  </mat-checkbox>
+                </div>
+                <div class="user-location" *ngIf="!campaign.isCustom">
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentRipley"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Ripley
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentOne"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría One
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentBronze"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Plus
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentSilver"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Silver
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentGold"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Gold
+                  </mat-checkbox>
+                </div>
+
+                <!-- Product -->
+                <mat-form-field class="input-info field-text" *ngIf="!campaign.isCustom">
+                  <mat-label>Condición de filtro de productos*</mat-label>
+                  <mat-select formControlName="haveProductCondition"
+                              (selectionChange)="checkProducts()"
+                              [(ngModel)]="campaign.filters.haveProductCondition">
+                    <mat-option value="or">ó / or / ||</mat-option>
+                    <mat-option value="and">y / and / &&</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <input type="hidden" formControlName="fieldCheckProducts" *ngIf="!campaign.isCustom"/>
+
+                <!-- Product -->
+                <div *ngIf="!campaign.isCustom">
+                  <mat-label [ngStyle]="{'color': isValidProducts ? 'unset' : 'red' }"
+                             matTooltip="Debe seleccionar al menos uno"
+                             matTooltipDisabled="{{isValidProducts}}"
+                             matTooltipPosition="right">Tipo de productos <span *ngIf="!!this.campaign.filters.haveProductCondition">*</span>
+                  </mat-label>
+                  <div class="user-location">
+                    <mat-checkbox [(ngModel)]="campaign.filters.hasCA" (change)="checkProducts()" [ngModelOptions]="{ standalone: true }">Cuenta Corriente
+                    </mat-checkbox>
+                    <br>
+                    <mat-checkbox [(ngModel)]="campaign.filters.hasSA" (change)="checkProducts()" [ngModelOptions]="{ standalone: true }">Cuenta Vista
+                    </mat-checkbox>
+                    <br>
+                    <mat-checkbox [(ngModel)]="campaign.filters.hasTR" (change)="checkProducts()" [ngModelOptions]="{ standalone: true }">Tarjeta Ripley
+                    </mat-checkbox>
+                    <br>
+                    <mat-checkbox [(ngModel)]="campaign.filters.hasTRM" (change)="checkProducts()" [ngModelOptions]="{ standalone: true }">Tarjeta Ripley Mastercard
+                    </mat-checkbox>
+                  </div>
+                </div>
+
+                <!-- Platform and NFC -->
+                <div class="platform-filter" *ngIf="!campaign.isCustom">
+                  <div>
+                    <mat-checkbox [(ngModel)]="campaign.filters.platform.on"
+                      (change)="platformFilterChange($event)"
+                      [ngModelOptions]="{ standalone: true }">
+                      Filtro por plataforma activo
+                    </mat-checkbox>
+                  </div>
+                  <div>
+                    <mat-checkbox [(ngModel)]="campaign.filters.platform.nfc"
+                      [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!campaign.filters.platform.on">
+                      Filtro por NFC activo
+                    </mat-checkbox>
+                  </div>
+                  <mat-form-field class="input-info field-text">
+                    <mat-label>Selección de Plataformas</mat-label>
+                    <mat-select multiple [(ngModel)]="campaign.filters.platform.allowedPlatforms" [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!campaign.filters.platform.on">
+                      <mat-option *ngFor="let platform of platformsList" [value]="platform">{{ platform }}</mat-option>
+                    </mat-select>
+                    <mat-hint>Puedes seleccionar más de una</mat-hint>
+                  </mat-form-field>
+                </div>
+              </section>
+
+            </section>
+          </section>
+        </div>
+        <div *ngIf="campaign && !campaign.isCustom" class="container-view-mobile" id="sticky">
+          <div class="banners-container">
+
+            <div class="mobile-banner-container">
+              <div class="card-box">
+                <div class="card-img credit-card" [ngStyle]="{'background-image': utils.getScssUrl(campaign.mobileUrl)}"></div>
+              </div>
+              <div class="dots-container">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              <button class="brand-button primary"> {{ campaign.buttonText ? campaign.buttonText : '' }} </button>
+            </div>
+
+            <div class="slider-card box-style banner-container" [ngStyle]="{'background-image': utils.getScssUrl(campaign.desktopUrl)}">
+              <div class="buttons-container">
+                <button
+                  class="brand-button primary"
+                  [ngStyle]="{'background': campaign.buttonColor, 'color': campaign.textColor}">
+                  {{ campaign.buttonText ? campaign.buttonText : '' }}
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </mat-card-content>
+      <div class="container-buttons">
+        <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">volver</button>
+        <div *ngIf="!id" class="main-buttons">
+          <button mat-raised-button (click)="saveCampaign()" class="button-primary"
+            >Crear</button>
+        </div>
+        <div *ngIf="id" class="main-buttons">
+          <button mat-raised-button (click)="updateCampaign()" class="button-primary"
+                  >Actualizar</button>
+        </div>
+      </div>
+    </mat-card>
+  </div>

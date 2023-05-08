@@ -1,0 +1,31 @@
+
+.select-section {
+  display: flex;
+  flex-direction: column;
+  .label-element { margin-bottom: 10px; }
+  .select-element { max-width: 50%; }
+}
+
+.available-pages-section {
+  display: flex;
+  flex-direction: column;
+  .subtitle-section { 
+    margin-bottom: 10px;
+    &.benefit-text { margin-bottom: unset; }
+  }
+  .select-element { max-width: 50%; }
+  .input-benefit { margin-top: 10px; }
+}
+.button-quaternaty{
+  color: white;
+  margin-bottom: 10px;
+}
+
+.button-primary{ color: white; }
+
+.buttons-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview img { max-width: 50%; }

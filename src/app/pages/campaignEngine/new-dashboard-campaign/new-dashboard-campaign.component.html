@@ -1,0 +1,224 @@
+<div class="main-container">
+    <mat-card class="container-info">
+      <div class="container-title">
+        <p class="title"> {{ id ? 'Actualizar' : 'Nueva' }}
+          <span class="title-highlighted">Campaña: Dashboard RipleyPuntos Go</span>
+        </p>
+      </div>
+    </mat-card>
+    <mat-card class="main-container-form">
+      <mat-card-content class="container-info-form">
+        <div class="container-form" [formGroup]="campaignForm">
+          <section class="date-box benefit-header-box">
+            <section class="dates-info">
+
+              <!-- Core -->
+              <section>
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.activePWA" [ngModelOptions]="{ standalone: true }">Activo en PWA
+                  </mat-checkbox>
+                </div>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text" [readonly]="id"
+                    placeholder="Id de campaña"
+                    formControlName="id"
+                    [(ngModel)]="campaign.id"
+                    required
+                    maxlength="35">
+                  <mat-hint>Sin espacios, Ej: banner-play5</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.id ? campaign.id.length : 0 }} / 35</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Prioridad"
+                    formControlName="priority"
+                    [(ngModel)]="campaign.priority"
+                    onkeydown="return event.keyCode !== 69" required>
+                  <mat-hint>Ej: 2</mat-hint>
+                </mat-form-field>
+
+              </section>
+
+              <!-- Visual -->
+              <section>
+                <mat-form-field class="input-info field-text">
+                  <mat-label>Redirección interna</mat-label>
+                  <mat-select formControlName="page" [(ngModel)]="campaign.page">
+                  	<mat-option value="dashboard-rpgo">Dashboard Ripley Puntos</mat-option>
+                    <mat-option value="pursuer">Perseguidora - puntos de categoría</mat-option>
+                    <mat-option value="categoryBenefits">Beneficios de Categoría [Parametro: silver | gold]</mat-option>
+                    <mat-option value="clientBenefits">Beneficios Alianzas [Parametro: id del beneficio]</mat-option>
+                    <mat-option value="redeem">Canje [Parametros: id categoía, id producto]</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="text"
+                    placeholder="Pagina de redirección"
+                    formControlName="page"
+                    [(ngModel)]="campaign.page"
+                    required
+                    maxlength="2000">
+                  <mat-hint>Ej: https://www.google.com</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.page ? campaign.page.length : 0 }} / 2000</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text" *ngIf="campaign.page !== 'redeem' && campaign.page !== 'pursuer'">
+                  <input matInput type="text"
+                    placeholder="Parametro de redirección"
+                    formControlName="params"
+                    [(ngModel)]="campaign.params"
+                    maxlength="2000">
+                  <mat-hint>Ej: 2GX1emzFXFsBTjGD0Y1G</mat-hint>
+                  <mat-hint class="input-length" align="end">{{ campaign.params ? campaign.params.length : 0 }} / 2000</mat-hint>
+                </mat-form-field>
+
+                <div class="params-object-input-container" *ngIf="campaign.redeemParams && campaign.page === 'redeem'">
+                  <mat-form-field class="input-info">
+                    <mat-label>Categoría</mat-label>
+                    <mat-select formControlName="paramsId" [(ngModel)]="campaign.redeemParams.id" (change)="changeSelectCategory()">
+                      <mat-option *ngFor="let c of categories" value="{{c.categoryId}}">{{ c.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="input-info">
+                    <mat-label>Producto</mat-label>
+                    <mat-select formControlName="paramsRef" [(ngModel)]="campaign.redeemParams.ref">
+                      <mat-option *ngFor="let product of getProductsByCategory()" value="{{product.sku}}">
+                        {{product.fullName}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <app-load-file-button *ngIf="campaign"
+                  [fileFirebaseUrl]="fileFirebaseUrl"
+                  [fileUrl]="fileUrl"
+                  [text]="'Cargar imagen'"
+                  [extensions]="extensions"
+                  [emitUrl]="true"
+                  [showUrl]="false"
+                  [folder]="uploadFolder"
+                  (url)="receiveUrl($event)"
+                  [isLoading]="isUploadingImage"
+                  [inputUrl]="campaign.imageUrl"
+                  [description]="'Dimensiones: 800 x 400 px'">
+                </app-load-file-button>
+
+                <div class="special-info">
+                  <div class="buttons-box">
+                    <div class="upload-button-quaternaty">
+                      <button mat-raised-button class="button-quaternaty">Subir ruts</button>
+                      <input id="uploadInputCampaignRut" class="file-input" type="file"
+                        (change)="showModalConfirmation($event.target.files, true)" accept=".csv"
+                        [disabled]="uploadingRuts">
+                      <div *ngIf="uploadingRuts" class="spinner-button">
+                        <mat-progress-spinner color="accent" mode="indeterminate" class="spinner"></mat-progress-spinner>
+                      </div><br><br>
+                      <mat-progress-bar color="primary" mode="determinate" [value]="rutUploadingProgress">
+                      </mat-progress-bar>
+                      <span class="tip-image">Seleccionar un archivo CSV con el nombre de la campaña</span><br />
+                      <span class="tip-image">Ejemplo CSV: Rut</span><br />
+                      <span class="tip-image">Sin títulos en la primera fila del CSV, solo datos </span><br />
+                      <div *ngIf="!!uploadingRuts" class="upload-info-section">
+                        <span class="title-section">Subiendo Ruts a la campaña, esto puede tardar varios minutos</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Filters -->
+              <section>
+                <br>
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.allUsers" [ngModelOptions]="{ standalone: true }">Sin rutero
+                  </mat-checkbox>
+                </div>
+
+                <!-- Points -->
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.points.active" [ngModelOptions]="{ standalone: true }">Filtro de RipleyPuntos activo
+                  </mat-checkbox>
+                </div>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Máximo de puntos"
+                    formControlName="pointsMax"
+                    [(ngModel)]="campaign.filters.points.max"
+                    onkeydown="return event.keyCode !== 69"
+                    required>
+                  <mat-hint>Ej: 25000</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="input-info field-text">
+                  <input matInput type="number"
+                    placeholder="Mínimo de puntos"
+                    formControlName="pointsMin"
+                    [(ngModel)]="campaign.filters.points.min"
+                    onkeydown="return event.keyCode !== 69"
+                    required>
+                  <mat-hint>Ej: 1000</mat-hint>
+                </mat-form-field>
+
+                <!-- Segment -->
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.segment" [ngModelOptions]="{ standalone: true }">Filtro por categoría activo
+                  </mat-checkbox>
+                </div>
+                <div class="user-location">
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentRipley"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Ripley
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentOne"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría One
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentBronze"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Plus
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentSilver"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Silver
+                  </mat-checkbox>
+                  <br>
+                  <mat-checkbox [(ngModel)]="campaign.filters.segmentGold"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!campaign.filters.segment">
+                    Categoría Gold
+                  </mat-checkbox>
+                </div>
+
+              </section>
+
+            </section>
+          </section>
+        </div>
+        <div *ngIf="campaign" class="container-view" id="sticky">
+            <div class="image-preview" [ngStyle]="{'background-image': utils.getScssUrl(campaign.imageUrl)}"></div>
+        </div>
+      </mat-card-content>
+      <div class="container-buttons">
+        <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">volver</button>
+        <div *ngIf="!id" class="main-buttons">
+          <button mat-raised-button (click)="saveCampaign()" class="button-primary"
+            [disabled]="!campaignForm.valid || idValidator()">Crear</button>
+        </div>
+        <div *ngIf="id" class="main-buttons">
+          <button mat-raised-button (click)="updateCampaign()" class="button-primary"
+                  [disabled]="!campaignForm.valid">Actualizar</button>
+        </div>
+      </div>
+    </mat-card>
+  </div>

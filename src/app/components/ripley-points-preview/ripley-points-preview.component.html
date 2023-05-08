@@ -1,0 +1,48 @@
+<div class="main-screen" [ngStyle]="{'background': ripleyPointsWP.backgroundColor}">
+  <div class="container-top" [ngStyle]="{'background': ripleyPointsWP.wave.show ? ripleyPointsWP.backgroundColorTop : ripleyPointsWP.backgroundColor}">
+    <div *ngIf="ripleyPointsWP.exitButton.show" class="exit-button-container" [ngClass]="{'right': !!ripleyPointsWP.exitButton.right}">
+      <div class="exit-button" [innerHtml]="utils.sanitizeHtml(ripleyPointsWP.exitButton.text)" [ngStyle]="{'color': ripleyPointsWP.exitButton.color}">
+      </div>
+    </div>
+    <div *ngIf="ripleyPointsWP.logo.show && !!ripleyPointsWP.logo.class" class="screen-logo" [ngClass]="ripleyPointsWP.logo.class"></div>
+    <img *ngIf="ripleyPointsWP.logo.show && !!ripleyPointsWP.logo.imageURL" class="preview-img" [src]="ripleyPointsWP.logo.imageURL" alt="Logo de ripley" [ngStyle]="{'width': ripleyPointsWP.logo.imageWidth}">
+    <p *ngIf="ripleyPointsWP.mainTitle.show" 
+      class="main-title" 
+      [innerHTML]="utils.sanitizeHtml(ripleyPointsWP.mainTitle.text)" 
+      [ngClass]="ripleyPointsWP.mainTitle.class" 
+      [ngStyle]="{'color': ripleyPointsWP.mainTitle.color}">
+    </p>
+    <img *ngIf="ripleyPointsWP.image && ripleyPointsWP.image.show" class="image" [ngClass]="ripleyPointsWP.image.class" [src]="ripleyPointsWP.image.url" alt="Ripley logo">
+    <p 
+      *ngIf="ripleyPointsWP.secondaryTitle && ripleyPointsWP.secondaryTitle.show" 
+      class="secondary-title" 
+      [innerHtml]="utils.sanitizeHtml(ripleyPointsWP.secondaryTitle.text)"
+      [ngStyle]="{'color': ripleyPointsWP.secondaryTitle.color}"
+      [ngClass]="ripleyPointsWP.secondaryTitle.class">
+    </p>
+  </div>
+  <div class="wave-container" [ngStyle]="waveStyle"></div>
+  <div class="container-bottom" [ngClass]="{'with-footer': showFixedButton}">
+    <p *ngIf="ripleyPointsWP.subTitle.show"
+      class="sub-title"
+      [innerHTML]="utils.sanitizeHtml(ripleyPointsWP.subTitle.text)"
+      [ngStyle]="{'color': ripleyPointsWP.subTitle.color}"
+      [ngClass]="ripleyPointsWP.subTitle.class">
+    </p>
+    <div *ngIf="ripleyPointsWP.infoBox.show" class="info-box">
+      <img *ngIf="!!ripleyPointsWP.infoBox.iconURL" class="icon" [src]="ripleyPointsWP.infoBox.iconURL">
+      <p *ngIf="!!ripleyPointsWP.infoBox.text" class="text" [innerHTML]="utils.sanitizeHtml(ripleyPointsWP.infoBox.text)"></p>
+    </div>
+    <ul class="benefits">
+      <li *ngFor="let benefit of ripleyPointsWP.items; let i=index">
+        <div class="benefits-item" [ngStyle]="{'color': benefit.color}">
+          <img *ngIf="!!benefit.iconURL" [src]="benefit.iconURL" alt="benefit icon" class="benefits-item__logo ">
+          <div>
+            <p *ngIf="benefit.title" class="benefits-item__title" [innerHTML]="utils.sanitizeHtml(benefit.title)"></p>
+            <p *ngIf="benefit.description" class="benefits-item__description" [innerHtml]="utils.sanitizeHtml(benefit.description)"></p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

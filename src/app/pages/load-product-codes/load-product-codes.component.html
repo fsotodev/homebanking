@@ -1,0 +1,118 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> Cargar
+        <span class="title-highlighted">Códigos de Producto</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <mat-form-field *ngIf="!selectedProduct">
+        <input matInput (keyup)="applyFilterProduct($event.target.value)" placeholder="Filtrar productos ...">
+      </mat-form-field>
+      <mat-checkbox *ngIf="!selectedProduct" (change)="setActiveProducts($event.checked)" [checked]="true">Solo activos</mat-checkbox>
+      <div class="table-container">
+        <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+        <mat-table [dataSource]="productsDataSource" #table  *ngIf="!loading && !selectedProduct">
+          <ng-container matColumnDef="category">
+            <mat-header-cell *matHeaderCellDef> CATEGORÍA </mat-header-cell>
+            <mat-cell *matCellDef="let c" matTooltip=""> {{c.category}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="fullName">
+            <mat-header-cell *matHeaderCellDef> NOMBRE PRODUCTO </mat-header-cell>
+            <mat-cell *matCellDef="let c" matTooltip=""> {{c.fullName}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="sku">
+            <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
+            <mat-cell *matCellDef="let c" matTooltip=""> {{c.sku}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="active">
+            <mat-header-cell *matHeaderCellDef> ESTADO </mat-header-cell>
+            <mat-cell *matCellDef="let c" matTooltip=""> {{c.active? 'activo':'inactivo'}} </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedProductsColumns"></mat-header-row>
+          <mat-row (click)="selectProduct(row)" *matRowDef="let row; columns: displayedProductsColumns;">
+          </mat-row>
+        </mat-table>
+      </div>
+
+      <div class="form-product" *ngIf="selectedProduct">
+        <mat-card class="example-card">
+          <mat-card-subtitle>Producto seleccionado: {{ selectedProduct.sku }}</mat-card-subtitle>
+          <mat-card-title>{{ selectedProduct.fullName }}</mat-card-title>
+          <mat-card-content>
+
+            <div style="display: flex">
+              <div>
+                <p>Ingrese la fecha de vencimiento</p>
+                <div class="container-form" [formGroup]="formGroup">
+                  <section class="dates-info">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="pickerStart" placeholder="Fecha de vencimiento"
+                        formControlName="technicalDate">
+                      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerStart></mat-datepicker>
+                    </mat-form-field>
+                  </section>
+                </div>
+                <div class="upload-button-quaternaty">
+                  <input type="file" class="file-input" (change)="uploadFile($event.target.files)" #fileUpload
+                    accept=".csv">
+                  <button mat-raised-button class="button-quaternaty" [disabled]="!formGroup.valid && !loading"
+                    (click)="fileUpload.click()">Subir archivo
+                  </button>
+                </div>
+              </div>
+              <div>
+                <img class="card-image" [hidden]="!isImgLoaded"  [src]="selectedProduct.image"  (load)="isImgLoaded = true" alt="">
+              </div>
+            </div>
+
+            <div class="info-section">
+              <div *ngIf="file" [ngClass]="{'invalid-file': !validFile}"> {{ file[0]?.name }}
+                {{ loading && !validFile? '(Validando archivo...)' : validFile ? '(Archivo válido)': '(Archivo inválido!)'}}
+              </div>
+              <div *ngIf="!validFile" class="tip-image">Formato de archivo: .csv</div>
+              <div *ngIf="isGifcard" class="tip-image">* El orden de los datos
+                debe ser código, clave, folio (número de tarjeta).</div>
+              <div *ngIf="isExperienceKey" class="tip-image">* El orden de los datos
+                debe ser código, clave.</div>
+              <div *ngIf="!isExperienceKey && !isGifcard" class="tip-image">* Sólo es necesario el código
+                en la primera fila, no tomará en cuenta otros datos.</div>
+              <div class="tip-image">Importante: No dejar datos innecesarios en el archivo para que la
+                validación de este sea mas rápida.
+                Todas las celdas deben estar sin formato ya que puede afectar el dato de la
+                celda al momento de ser guardado.</div>
+            </div>
+            <div *ngIf="!!loading && validFile" class="upload-info-section">
+              <span class="title-section">Subiendo códigos: {{ percCodesCommited}}%:  {{ uploadedCodes }} de  {{ csvData.length}}</span>
+              <section class="progress-bar-section">
+                <mat-progress-bar color="primary" mode="determinate" [value]="percCodesCommited">
+                </mat-progress-bar>
+              </section>
+            </div>
+            <div class="input-info field-text">
+              <button mat-raised-button (click)="showProductCodes()" color="primary">
+                Consultar códigos
+              </button>
+            </div>
+          </mat-card-content>
+          <mat-divider inset></mat-divider>
+          <mat-card-actions>
+            <button mat-stroked-button color="accent" class="footer-button" (click)="returnToProduct()"
+              *ngIf="selectedProduct && productsDataSource.data.length > 1">
+              Volver a seleccionar producto
+            </button>
+            <button mat-raised-button (click)="uploadCodes(); inputFile.value = ''" class="button-primary"
+              [disabled]="!formGroup.valid || !validFile || loading === true">Cargar</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-card-content>
+
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">Volver al inicio</button>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,74 @@
+@import '../../../../../global.scss';
+
+.field-text { display: block; }
+
+button.no-w { width: unset; }
+
+#sticky {
+  height: fit-content;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 100px;
+}
+
+button.save-btn { margin-top: 20px; }
+
+.preview-btn { margin-bottom: 20px; }
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.products-container {
+  padding: 15px 0;
+  mat-label {
+    padding-bottom: 10px;
+  }
+  mat-checkbox {
+    ::ng-deep {
+      .mat-checkbox-label {
+        font-size: 12.5px;
+        font-family: $font-regular;
+        color: $grey;
+        margin-right: 11px;
+      }
+
+      .mat-checkbox-inner-container {
+        height: 16px;
+        width: 16px;
+      }
+
+      span.mat-checkbox-label {
+        margin-right: 11px;
+      }
+    }
+  }
+}
+
+.container-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.delete-btn {
+  border-radius: 0;
+  font-size: 12.5px;
+  padding: 0 16px;
+  width: unset;
+  .delete-icon {
+    height: 14px;
+    width: 14px;
+  }
+}
+
+.benefits-radio-button {
+  margin: 15px 5px;
+}
+
+.benefits-radio-group {
+  margin: 5px;
+}
+
+:host ::ng-deep .mat-button-ripple-round { border-radius: 0; }

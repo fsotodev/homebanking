@@ -1,0 +1,80 @@
+<div class="main-container">
+    <mat-card class="container-info group-flex">
+        <div class="container-title">
+            <p class="title"> Grupos de
+                <span class="title-highlighted">Canje</span>
+            </p>
+        </div>
+        <div class="container-actions">
+            <button *ngIf="!isEditing" (click)="toggleEditing()" mat-raised-button  color="primary">Editar</button>
+            <button *ngIf="isEditing" mat-raised-button (click)="saveChanges()"  color="primary">Guardar</button>
+            <button *ngIf="isEditing" (click)="cancelEditing()" mat-raised-button  color="primary">Cancelar</button>
+
+        </div>
+    </mat-card>
+    <mat-card class="main-table">
+        <!-- <div class="search">
+            <input type="text" (keyup)="applyFilter($event.target.value)" placeholder="Buscar..."
+                class="input-search i-search">
+        </div> -->
+        <div class="tab-content">
+            <div class="dates-table">
+                <mat-table 
+                    #table
+                    [dataSource]="groupsDataSource"
+                    cdkDropList
+                    [cdkDropListData]="isEditing ? groupsDataSource : []"
+                    (cdkDropListDropped)="dropTable($event)"
+                >
+
+                    <ng-container matColumnDef="order">
+                        <mat-header-cell *matHeaderCellDef> Orden </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div *ngIf="!isEditing">{{element.order}}</div>
+                            <mat-icon 
+                                class="i-menu"
+                                *ngIf="isEditing" 
+                                (mouseenter)="dragEnabled = true"
+                                (mouseleave)="dragEnabled = false"
+                            ></mat-icon>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                        <mat-header-cell *matHeaderCellDef> Categoría </mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index;"> 
+                            <div *ngIf="!isEditing">{{element.name}}</div>
+                            <input *ngIf="isEditing" matInput type="string" placeholder="Nombre" [(ngModel)]="groupsDataSource[i].name"
+                             class="input-name">
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="icon">
+                        <mat-header-cell *matHeaderCellDef> Ícono </mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index;"> 
+                            <div *ngIf="!isEditing">{{element.icon }}</div>
+                            <input *ngIf="isEditing" matInput type="string" placeholder="Ícono" [(ngModel)]="groupsDataSource[i].icon"
+                             class="input-name">
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="active">
+                        <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.active ? 'Activo' : 'No Activo'}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="statusToogle">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index;">
+                          <mat-slide-toggle *ngIf="isEditing" class="example-margin" [color]="color"
+                            [checked]="element.active" (change)="toggleChange(i, element.active)"
+                            >
+                          </mat-slide-toggle>
+                        </mat-cell>
+                      </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row" [cdkDragDisabled]="!dragEnabled"></mat-row>
+                </mat-table>
+            </div>
+        </div>
+    </mat-card>
+</div>

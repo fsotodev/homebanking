@@ -1,0 +1,31 @@
+@import '../../../../../global.scss';
+
+.tip-input-line {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: white;
+  box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.2);
+
+  .inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+
+    .text-input {
+      width: 75%;
+    }
+
+    .delete-tip {
+      width: 20%;
+      padding-left: 10px;
+    }
+
+  }
+}
+
+.load-file-button {
+  margin-bottom: 20px;
+}

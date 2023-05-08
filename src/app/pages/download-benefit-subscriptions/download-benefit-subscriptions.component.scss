@@ -1,0 +1,25 @@
+@import '../../../global.scss';
+
+.main-container .main-container-form .container-info-form {
+  flex-direction: column;
+
+  .container-form {
+    width: 650px;
+  }
+}
+
+.progress-bar-section {
+  width: 25%;
+}
+
+.upload-info-section {
+  margin: 40px 0 0;
+}
+
+.button-quaternaty {
+  margin-top: 10px;
+}
+
+.warning {
+  color: red;
+}

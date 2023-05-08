@@ -1,0 +1,48 @@
+.banners-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  
+  .banner {
+    width: 80%;
+  }
+}
+
+#sticky {
+    position: sticky;
+    position: -webkit-sticky;
+    width: fit-content;
+    height: fit-content;
+    top: 100px;
+    display: flex;
+    width: 75%;
+}
+
+.img-container {
+  text-align: center;
+}
+
+.banner-img {
+  border-radius: 5px;
+  height: 420px;
+  max-width: 196px;
+
+  &.mobile {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+  }
+}
+
+.title {
+  margin-top: 40px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 13.5px;
+  font-family: 'Montserrat Bold';
+}
+
+.banner-footer {
+  width: 100%;
+}

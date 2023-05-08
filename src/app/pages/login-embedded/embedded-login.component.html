@@ -1,0 +1,59 @@
+<div class="main-container">
+  <mat-card *ngIf="!isLoading" class="container-info">
+    <div class="container-title">
+      <p class="title">Configuración <span class="title-highlighted">Login embebido</span></p>
+    </div>
+  </mat-card>
+  <mat-card class="main-container-form" *ngIf="!isLoading">
+    <section>
+      <mat-card-content>
+        <app-load-file-button
+          [text]="'Subir imagen de fondo'"
+          [extensions]="['jpg', 'png', 'svg']"
+          [description]="'Imagen de fondo para login embebido. Formato landscape, sin tamaño máximo (escala 2:1)'"
+          [showImage]="true"
+          [isLoading]="isLoadingImg"
+          [emitUrl]="true"
+          [showUrl]="false"
+          [keepChanging]="true"
+          [inputUrl]="localConfig.backgroundImg"
+          (url)="modifyConfig($event, 'backgroundImg')">
+        </app-load-file-button>
+      </mat-card-content>
+      <mat-card-content>
+        <app-load-file-button
+          [text]="'Subir imagen central'"
+          [extensions]="['jpg', 'png', 'svg']"
+          [description]="'Imagen de centro. Formato portrait, tamaño máximo: [Ancho: 366px, Alto: 546px] (escala 2:3)'"
+          [showImage]="true"
+          [isLoading]="isLoadingImg"
+          [emitUrl]="true"
+          [showUrl]="false"
+          [keepChanging]="true"
+          [inputUrl]="localConfig.centerOverlayImg"
+          (url)="modifyConfig($event,'centerOverlayImg')">
+        </app-load-file-button>
+      </mat-card-content>
+      <mat-card-content>
+        <app-load-file-button
+          [text]="'Subir imagen derecha'"
+          [extensions]="['jpg', 'png', 'svg']"
+          [description]="'Imagen lado derecho. Formato portrait, tamaño máximo: [Ancho: 366px, Alto: 546px] (escala 2:3)'"
+          [showImage]="true"
+          [isLoading]="isLoadingImg"
+          [emitUrl]="true"
+          [showUrl]="false"
+          [keepChanging]="true"
+          [inputUrl]="localConfig.rightOverlayImg"
+          (url)="modifyConfig($event, 'rightOverlayImg')">
+        </app-load-file-button>
+      </mat-card-content>
+    </section>
+    <div class="buttons-container">
+      <div class="main-buttons">
+        <button mat-raised-button (click)="resetConfig()" class="button-quaternaty">Reestablecer</button>
+        <button mat-raised-button (click)="saveConfig()" class="button-primary">Guardar</button>
+      </div>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,37 @@
+<nav class="paginator-custom" aria-label="...">
+  <ul class="pagination">
+    <li [ngClass]="pageActive === 1 ? 'disabled': ''" class="page-item ">
+      <a class="page-link button" (click)="previousPage()"><</a>
+    </li>
+
+    <ng-container *ngIf="totalPages.length > 1; else oneElement">
+      <ng-container *ngFor="let element of totalPages; let idx = index">
+        <ng-container *ngIf="idx < 9">
+          <li class="page-item" [ngClass]="(idx+1) === pageActive ? 'active': ''">
+            <a class="page-link" (click)="selectPage(idx+1)">{{idx+1}}</a>
+          </li>
+        </ng-container>
+        <!-- BLOCK same item over MAX_PAGES -->
+        <ng-container *ngIf="idx === MAX_PAGES">
+          <li class="page-item" [ngClass]="pageActive === counterPage ? 'active' : ''">
+            <a class="page-link" (click)="selectPage(counterPage)">{{counterPage}}</a>
+          </li>
+        </ng-container>
+        <!-- end -->
+        <ng-container *ngIf="totalPages.length>MAX_PAGES && (idx === MAX_PAGES-1)">
+          <li class="page-item">
+            <a class="page-link">...</a>
+          </li>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+    <ng-template #oneElement>
+      <li class="page-item active">
+        <a class="page-link" (click)="selectPage(1)">1</a>
+      </li>
+    </ng-template>
+    <li [ngClass]="pageActive === totalPages.length ? 'disabled': ''"  class="page-item">
+      <a class="page-link button" (click)="nextPage()">></a>
+    </li>
+  </ul>
+</nav>

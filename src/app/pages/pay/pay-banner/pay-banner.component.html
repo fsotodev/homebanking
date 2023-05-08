@@ -1,0 +1,64 @@
+<div class="main-container">
+  <mat-card class="container-info">
+    <div class="container-title">
+      <p class="title"> Editar
+        <span class="title-highlighted">Banner</span>
+      </p>
+    </div>
+  </mat-card>
+
+  <mat-card class="main-container-form">
+    <mat-card-content class="container-info-form">
+      <div class="container-form" [formGroup]="bannerForm">
+
+        <section class="date-box">
+          <mat-checkbox class="example-margin" [(ngModel)]="bannerInfo.bannerActive" formControlName="bannerActive">
+            Activo
+          </mat-checkbox>
+        </section>
+        <section class="date-box">
+          <span class="title-section">Imágen del banner</span>
+          <div class="special-info">
+            <div class="buttons-box">
+              <app-load-file-button [description]="description" [showUrl]="false" [text]="text" [extensions]="extensions" [isLoading]="isUploading" (file)="uploadMainImage($event)"></app-load-file-button>
+              <div class="preview" *ngIf="bannerInfo.bannerImageURL">
+                <p class="title-section">Imágen preview</p>
+                <img [src]="bannerInfo.bannerImageURL" alt="preview">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="dates-info">
+          <mat-form-field class="input-info field-text">
+            <input matInput type="text" maxlength="50" placeholder="Acción del banner"
+              [(ngModel)]="bannerInfo.bannerAction" formControlName="bannerAction" required>
+            <mat-hint>Esta acción puede ser hacia una página interna.
+            </mat-hint>
+            <mat-hint align="end">{{ bannerInfo.bannerAction ? bannerInfo.bannerAction.length : 0 }} / 50
+            </mat-hint>
+          </mat-form-field>
+          <div class="available-pages-section">
+            <p class="subtitle-section">Vistas internas disponibles:</p>
+            <mat-chip-list>
+              <mat-chip (click)="bannerInfo.bannerAction = 'avances'">Avances</mat-chip>
+              <mat-chip (click)="bannerInfo.bannerAction = 'av'">Página Avance</mat-chip>
+              <mat-chip (click)="bannerInfo.bannerAction = 'sav'">Página SuperAvance</mat-chip>
+              <mat-chip (click)="bannerInfo.bannerAction = 'beneficios'">Lista de Beneficios</mat-chip>
+              <mat-chip (click)="bannerInfo.bannerAction = 'dashboardPuntos'">Dashboard Ripley Puntos</mat-chip>
+            </mat-chip-list>
+          </div>
+        </section>
+      </div>
+    </mat-card-content>
+
+    <div class="container-buttons">
+      <button mat-button (click)="goBack()" class="i-left-arrow button-tertiary">volver</button>
+      <div class="main-buttons">
+        <button mat-raised-button (click)="save()" class="button-primary"
+          [disabled]="!bannerForm.valid || saving">Guardar</button>
+      </div>
+    </div>
+  </mat-card>
+
+</div>

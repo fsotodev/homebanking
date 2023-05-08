@@ -1,0 +1,40 @@
+<div class="modal-container">
+  <div class="box-info-modal">
+    <h2 class="title-modal title-modal-normal" mat-dialog-title innerHTML="Tags"></h2>
+    <p class="message-modal">Tags.</p>
+  </div>
+  <mat-dialog-content class="dialog-content">
+
+  <mat-card-content *ngIf="loadingTagList || loadingBenefitTagRelationShip || savingTag">
+    <mat-progress-spinner mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+  </mat-card-content>
+
+  <div *ngIf="!loadingTagList && !loadingBenefitTagRelationShip">
+      <mat-chip-list>
+        <mat-chip
+          *ngFor="let tag of tagList"
+          [color]="evaluateColor(tag.id)"
+          selected>
+          <label class="tag-name">{{ tag.tagName }}</label>
+          <mat-slide-toggle class="example-margin"
+            [checked]="tagInRelationship(tag.id)" (click)="toggleTagId(tag.id)">
+          </mat-slide-toggle>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="box-button-modal">
+
+    <button [ngClass]="{'none-event': savingTag }" class="button-tertiary button-secondary mat-button" ng-reflect-disabled="false" (click)="save()">
+      <span class="mat-button-wrapper">Guardar</span>
+      <div class="mat-button-ripple mat-ripple" ng-reflect-centered="false" ng-reflect-disabled="false"></div>
+      <div class="mat-button-focus-overlay"></div>
+    </button>
+
+    <button class="mat-raised-button button-tertiary" (click)="closeModal()">
+      cerrar
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,81 @@
+<div class="main-container">
+  <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" class="spinner home-spinner"></mat-progress-spinner>
+  <mat-card *ngIf="!isLoading" class="container-info">
+    <div class="container-title">
+      <p class="title"> Productos para
+        <span class="title-highlighted">Canje</span>
+      </p>
+    </div>
+  </mat-card>
+  <mat-card class="main-table">
+    <div class="search">
+      <input type="text" (keyup)="applyFilter($event.target.value)" placeholder="Buscar..."
+        class="input-search i-search">
+    </div>
+    <div *ngIf="!isLoading" class="tab-content">
+      <div class="dates-table">
+        <mat-table [dataSource]="productsDataSource">
+          <ng-container matColumnDef="category">
+            <mat-header-cell *matHeaderCellDef> Categoría </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.category}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="product">
+            <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.fullName}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element.selectedTitle }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="points">
+            <mat-header-cell *matHeaderCellDef> Puntos </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element.points }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="stock">
+            <mat-header-cell *matHeaderCellDef> Stock </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element.stock }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="successfulExchanges">
+            <mat-header-cell *matHeaderCellDef> Canjes Exitosos </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element.successfulExchanges }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="group">
+            <mat-header-cell *matHeaderCellDef> Grupo </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element.groupName }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="statusToggle">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <mat-slide-toggle class="example-margin" [color]="color"
+                                [checked]="element.active" (change)="toggleChange(element)"
+                                [disabled]="modifyingProduct || element.order === null || element.order === 0">
+              </mat-slide-toggle>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="modifyOrDelete">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element" class="actions-table">
+              <button (click)="editProduct(element)" class="i-edit" [disabled]="modifyingProduct"></button>
+              <button (click)="deleteProduct(element)" class="i-delete" [disabled]="modifyingProduct"></button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+  </mat-card>
+  <div *ngIf="!isLoading" class="container-new-product">
+    <span class="title-button">Nuevo Producto</span>
+    <button mat-fab class="button-new-product" (click)="addProduct()">+</button>
+  </div>
+</div>

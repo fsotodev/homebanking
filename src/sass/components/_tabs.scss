@@ -1,0 +1,63 @@
+html *{
+    font-family: 'Montserrat';
+    font-style: normal;
+}
+
+.container-tabs{
+    background:$br-gray-prod;
+}
+
+.mat-tab-label-content{
+    color: $br-gray-600;
+}
+
+.mat-ink-bar {
+    background-color: $br-purple-600!important;
+}
+
+.container-search{
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    right: 0;
+    margin: 10px 26px;
+}
+
+.input-search{
+    background:$br-gray-prod;
+    border: 0px;
+    border-block-end: revert;
+    border-color: $br-gray-500;
+    width: 312px;
+    height: 24px;
+}
+
+.input-search:focus{
+    outline: none !important;
+    border: none;
+    border-block-end: revert;
+    border-color: $br-purple-800;
+}
+
+.i-search {
+    background-position: 95% center;
+    background-size: 18px;
+    background-position-y: -1px;
+}
+
+.mat-tab-label-active{
+    background-color: $br-base-white;
+    
+    .mat-tab-label-content {
+        color: $br-purple-800;
+    }
+}
+
+.mat-tab-label-content {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+}
+.mat-tab-body-content {
+    background-color: $br-base-white; 
+}

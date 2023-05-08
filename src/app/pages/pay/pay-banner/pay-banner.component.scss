@@ -1,0 +1,21 @@
+.button-quaternaty{
+  color: white;
+  margin-bottom: 10px;
+}
+
+.button-primary{
+  color: white;
+}
+
+.buttons-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview img {
+  max-width: 50%;
+}
+
+.mat-chip:not(.mat-basic-chip)+.mat-chip:not(.mat-basic-chip) {
+  margin: 0 0 8px 8px;
+}
